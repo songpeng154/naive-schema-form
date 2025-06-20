@@ -1,5 +1,5 @@
 {
-  "name": "vue-components-starter",
+  "name": "naive-schema-form",
   "version": "0.0.1",
   "packageManager": "pnpm@10.11.0",
   "description": "A starter for creating a Vue component library.",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/sxzz/vue-components-starter.git"
   },
-  "author": "三咲智子 Kevin Deng <sxzz@sxzz.moe>",
+  "author": "songpeng <419626398@qq.com>",
   "funding": "https://github.com/sponsors/sxzz",
   "files": [
     "dist"
