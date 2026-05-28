@@ -1,4 +1,4 @@
-﻿import type { DefineSchema } from '../../../src'
+import type { DefineSchema } from '../../../src'
 import { reactive, ref } from 'vue'
 import { cityOptions } from './options'
 
@@ -14,7 +14,8 @@ export const popupModel = reactive({
   remark: '',
 })
 
-export const popupSchema = ref<DefineSchema<typeof popupModel>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const popupSchema = reactive<DefineSchema<typeof popupModel>[]>([
   { field: 'title', label: '标题', component: 'input', showRequireMark: true, gridItemProps: { span: 12 } },
   { field: 'city', label: '城市', component: 'select', options: cityOptions, gridItemProps: { span: 12 } },
   { field: 'owner', label: '负责人', component: 'input', gridItemProps: { span: 12 } },
@@ -28,4 +29,3 @@ export const popupSchema = ref<DefineSchema<typeof popupModel>[]>([
     gridItemProps: 24,
   },
 ])
-

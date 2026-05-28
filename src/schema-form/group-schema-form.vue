@@ -1,53 +1,28 @@
 <script setup lang="ts">
 import type { GridProps } from '@/grid/types'
-import type { Recordable } from '@/types/shared'
 import type {
-  GroupCallbackSchema,
   DefineGroupSchema,
+  GroupCallbackSchema,
   GroupSchemaFormExpose,
   GroupSchemaFormProps,
   GroupSchemaFormSlots,
   RuntimeGroupSchema,
   UnwrapGroupSchema,
 } from '@/schema-form/types/group.ts'
+import type { Recordable } from '@/types/shared'
 import { isBoolean, isFunction } from 'es-toolkit'
 import { NButton, NTooltip } from 'naive-ui'
 import { computed, reactive } from 'vue'
+import { useResolvedSchemaFormProps } from '@/config/resolve'
+import { mergeConfig } from '@/config/utils'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/schema-form/components/schema-form-wrap/index.vue'
 import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
 
-const props = withDefaults(defineProps<GroupSchemaFormProps>(), {
-  autoPlaceholder: true,
-  autoRequiredRule: true,
-  autoLabelWidth: true,
-  scrollToFirstError: true,
-  showActions: true,
-  showLabel: true,
-  showFeedback: true,
-  showRequireMark: undefined,
-  labelOverflowOmitted: false,
-  labelPlacement: 'top',
-  submitText: '提交',
-  resetText: '重置',
-  showReset: true,
-  defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeFormat: 'HH:mm:ss',
-  defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeValueFormat: 'HH:mm:ss',
-  gridProps: () => ({
-    cols: 24,
-    yGap: 12,
-  }),
-  gridItemProps: 24,
-  collapsedText: '展开',
-  expandedText: '收起',
-  defaultCollapsed: true,
-  defaultCollapsedRows: 2,
-})
+const rawProps = defineProps<GroupSchemaFormProps>()
 const slots = defineSlots<GroupSchemaFormSlots>()
-
+const props = useResolvedSchemaFormProps('group', rawProps)
 const model = defineModel<Recordable>('model', { required: true })
 const schema = defineModel<DefineGroupSchema[]>('schema', { required: true })
 
@@ -74,7 +49,7 @@ function createRuntimeGroupSchema(item: UnwrapGroupSchema, index: number): Runti
     hide: item.hide,
     form: item.form,
     collapsed,
-    collapsedRows: item.collapsedRows ?? props.defaultCollapsedRows,
+    collapsedRows: item.collapsedRows ?? props.defaultCollapsedRows ?? 2,
     hideCollapseButton: item.hideCollapseButton,
     disabled: item.disabled,
     gridItemProps: item.gridItemProps,
@@ -138,12 +113,15 @@ function isCollapseButtonVisible(config: RuntimeGroupSchema) {
 }
 
 function handleGridPropsMap(config: RuntimeGroupSchema): GridProps {
-  return {
-    ...props.gridProps,
-    ...config.gridProps,
-    collapsed: config.collapsed,
-    notCollapsedRows: config.collapsedRows,
-  }
+  return mergeConfig<GridProps>(
+    {},
+    props.gridProps || {},
+    config.gridProps,
+    {
+      collapsed: config.collapsed,
+      notCollapsedRows: config.collapsedRows,
+    },
+  )
 }
 
 function setFormRef(instance: any) {
@@ -156,7 +134,7 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
 </script>
 
 <template>
-  <schema-form-wrap
+  <SchemaFormWrap
     :ref="setFormRef"
     v-bind="formProps"
     :model="model"
@@ -169,12 +147,12 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
               <span class="schemaForm-groupHeader-title-placeholder" />
               <span class="schemaForm-groupHeader-title-name">{{ config.title }}</span>
             </slot>
-            <n-tooltip v-if="config.helpMessage" trigger="hover">
+            <NTooltip v-if="config.helpMessage" trigger="hover">
               <template #trigger>
                 <span class="schemaForm-groupHeader-help">?</span>
               </template>
               {{ config.helpMessage }}
-            </n-tooltip>
+            </NTooltip>
           </div>
           <slot
             v-if="isCollapseButtonVisible(config)"
@@ -183,17 +161,17 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
             :overflow="groupOverflowMap.get(config.key) === true"
             :toggle-collapsed="toggleCollapse"
           >
-            <n-button
+            <NButton
               :disabled="false"
               text
               type="primary"
               @click="toggleCollapse(config)"
             >
               {{ getGroupExpandCollapseText(config) }}
-            </n-button>
+            </NButton>
           </slot>
         </div>
-        <schema-form-content
+        <SchemaFormContent
           class="px-5px"
           :schema="config.form"
           :disabled="config.disabled"
@@ -204,7 +182,7 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
           <template v-for="(_, key) in formContentSlots" #[key]="scope">
             <slot :name="key" v-bind="scope || {}" />
           </template>
-        </schema-form-content>
+        </SchemaFormContent>
       </template>
     </template>
     <SchemaFormActions
@@ -222,10 +200,10 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
         <slot name="actionsAfter" />
       </template>
     </SchemaFormActions>
-  </schema-form-wrap>
+  </SchemaFormWrap>
 </template>
 
-<style scoped >
+<style scoped>
 .schemaForm-groupHeader {
   width: 100%;
   display: flex;

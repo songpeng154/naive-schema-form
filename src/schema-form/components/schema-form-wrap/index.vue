@@ -44,7 +44,7 @@ defineExpose<SchemaFormCommonExpose>(commonExpose)
 </script>
 
 <template>
-  <n-form
+  <NForm
     ref="formRef"
     :class="formClass"
     :style="props.formStyle"
@@ -52,9 +52,9 @@ defineExpose<SchemaFormCommonExpose>(commonExpose)
     :model="model"
   >
     <slot />
-  </n-form>
+  </NForm>
 </template>
 
-<style scoped >
+<style scoped>
 
 </style>

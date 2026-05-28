@@ -1,5 +1,5 @@
-import { defineConfig } from 'tsdown'
 import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig([
   {

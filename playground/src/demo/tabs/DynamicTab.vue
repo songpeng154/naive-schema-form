@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { SchemaForm } from '../../../../src'
 import { dynamicModel, dynamicSchema, showExtraField } from '../dynamic'
 import { message } from '../message'

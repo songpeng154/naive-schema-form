@@ -7,4 +7,3 @@ function useOmitProps<T extends Recordable, K extends keyof T>(value: T, keys: K
 }
 
 export default useOmitProps
-

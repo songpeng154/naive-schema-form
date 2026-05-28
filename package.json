@@ -1,24 +1,18 @@
 {
   "name": "naive-schema-form",
+  "type": "module",
   "version": "0.0.2",
   "packageManager": "pnpm@10.11.0",
   "description": "Schema-driven form components for Naive UI.",
-  "type": "module",
-  "license": "MIT",
-  "homepage": "",
-  "bugs": {},
-  "repository": {},
   "author": "songpeng <419626398@qq.com>",
+  "license": "MIT",
   "funding": "https://github.com/sponsors/sxzz",
-  "files": [
-    "dist"
-  ],
+  "homepage": "",
+  "repository": {},
+  "bugs": {},
   "sideEffects": [
     "**/*.css"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -27,6 +21,12 @@
     "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +38,6 @@
     "playground": "vite",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit",
-    "format": "prettier --cache --write .",
     "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
   },
@@ -52,7 +51,7 @@
     "type-fest": "^5.6.0"
   },
   "devDependencies": {
-    "@sxzz/prettier-config": "^2.3.1",
+    "@antfu/eslint-config": "^9.0.0",
     "@tsdown/css": "^0.22.0",
     "@types/node": "^25.6.2",
     "@vitejs/plugin-vue": "^6.0.6",
@@ -60,6 +59,7 @@
     "@vitest/browser-playwright": "^4.1.5",
     "@vue/test-utils": "^2.4.10",
     "bumpp": "^11.1.0",
+    "eslint": "^10.4.0",
     "happy-dom": "^20.9.0",
     "playwright": "^1.59.1",
     "tsdown": "^0.22.0",
@@ -69,6 +69,5 @@
     "vitest-browser-vue": "^2.1.0",
     "vue": "^3.5.34",
     "vue-tsc": "^3.2.8"
-  },
-  "prettier": "@sxzz/prettier-config"
+  }
 }

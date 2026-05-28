@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { SchemaForm } from '../../../../src'
 import { componentsModel, componentsSchema } from '../components'
 import { message } from '../message'

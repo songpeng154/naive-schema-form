@@ -1,5 +1,6 @@
+import type { Ref } from 'vue'
 import { useMutationObserver, useParentElement } from '@vueuse/core'
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 function elementIndex(el: Ref<HTMLElement | undefined>) {
   const index = ref(-1)
@@ -23,4 +24,3 @@ function elementIndex(el: Ref<HTMLElement | undefined>) {
 }
 
 export default elementIndex
-

@@ -1,59 +1,24 @@
 <script setup lang="ts">
 import type { DefineSchema } from '@/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared'
 import type {
   SearchSchemaFormExpose,
   SearchSchemaFormProps,
   SearchSchemaFormSlots,
 } from '@/schema-form/types/search.ts'
+import type { Recordable } from '@/types/shared'
 import { take } from 'es-toolkit'
 import { NButton } from 'naive-ui'
 import { computed } from 'vue'
+import { useResolvedSchemaFormProps } from '@/config/resolve'
+import GridItem from '@/grid/grid-item.vue'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/schema-form/components/schema-form-wrap/index.vue'
 import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
-import GridItem from '@/grid/grid-item.vue'
 
-const props = withDefaults(defineProps<SearchSchemaFormProps>(), {
-  autoPlaceholder: true,
-  autoRequiredRule: true,
-  autoLabelWidth: true,
-  showActions: true,
-  showLabel: true,
-  showFeedback: true,
-  showRequireMark: undefined,
-  labelAlign: 'right',
-  labelPlacement: 'left',
-  inline: true,
-  submitText: '搜索',
-  resetText: '重置',
-  showReset: true,
-  defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeFormat: 'HH:mm:ss',
-  defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeValueFormat: 'HH:mm:ss',
-  gridItemProps: () => ({
-    span: {
-      xs: 24,
-      sm: 12,
-      md: 8,
-      lg: 6,
-      xl: 4,
-    },
-  }),
-  gridProps: () => ({
-    cols: 24,
-    yGap: 12,
-    responsive: 'self',
-  }),
-  searchShowNumber: 3,
-  enableCollapsed: true,
-  collapsedText: '展开',
-  expandedText: '收起',
-})
+const rawProps = defineProps<SearchSchemaFormProps>()
 const slots = defineSlots<SearchSchemaFormSlots>()
-
+const props = useResolvedSchemaFormProps('search', rawProps)
 const model = defineModel<Recordable>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 const collapsed = defineModel<boolean>('collapsed', { default: true })
@@ -66,12 +31,12 @@ const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormCont
 const searchSchemas = computed(() => {
   if (!props.enableCollapsed || !collapsed.value)
     return schema.value
-  return take(schema.value, props.searchShowNumber)
+  return take(schema.value, props.searchShowNumber ?? 0)
 })
 
 const text = computed(() => !collapsed.value ? props.expandedText : props.collapsedText)
 
-const collapsedVisible = computed(() => props.enableCollapsed && schema.value.length > props.searchShowNumber)
+const collapsedVisible = computed(() => props.enableCollapsed && schema.value.length > (props.searchShowNumber ?? 0))
 
 function toggleCollapsed(isCollapsed?: boolean) {
   collapsed.value = isCollapsed ?? !collapsed.value
@@ -85,16 +50,16 @@ defineExpose<SearchSchemaFormExpose>(exposeSchemaForm<SearchSchemaFormExpose>(co
 </script>
 
 <template>
-  <schema-form-wrap
+  <SchemaFormWrap
     :ref="setFormRef"
     v-bind="formProps"
     :model="model"
   >
-    <schema-form-content :schema="searchSchemas" :grid-props="gridProps">
+    <SchemaFormContent :schema="searchSchemas" :grid-props="props.gridProps || {}">
       <template v-for="(_, key) in formContentSlots" #[key]="scope">
         <slot :name="key" v-bind="scope || {}" />
       </template>
-      <grid-item
+      <GridItem
         v-if="props.showActions"
         :span="4"
         suffix
@@ -111,23 +76,23 @@ defineExpose<SearchSchemaFormExpose>(exposeSchemaForm<SearchSchemaFormExpose>(co
             <slot name="actions" />
           </template>
           <template #extra>
-            <n-button
+            <NButton
               v-if="collapsedVisible"
               type="primary"
               text
               @click="toggleCollapsed()"
             >
               {{ text }}
-            </n-button>
+            </NButton>
           </template>
           <template #actionsAfter>
             <slot name="actionsAfter" />
           </template>
         </SchemaFormActions>
-      </grid-item>
-    </schema-form-content>
-  </schema-form-wrap>
+      </GridItem>
+    </SchemaFormContent>
+  </SchemaFormWrap>
 </template>
 
-<style scoped >
+<style scoped>
 </style>

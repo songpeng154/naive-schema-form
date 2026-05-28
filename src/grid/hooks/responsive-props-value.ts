@@ -1,44 +1,39 @@
+import type { Ref } from 'vue'
+import type { GridBreakpoints } from '@/config/types'
 import type { ResponsiveValue } from '@/grid/types'
 import type { Recordable } from '@/types/shared'
-import type { Ref } from 'vue'
 import { isObject } from 'es-toolkit/compat'
 import { computed } from 'vue'
 
-const DEFAULT_BREAKPOINTS = {
-  xs: 530,
-  sm: 768,
-  md: 992,
-  lg: 1200,
-  xl: 1920,
-}
-/*
-* 响应式道具值
-* xs < 530
-* sm > xs || sm > 730
-* md >= 992
-* lg >= 1200
-* xl >= 1920
-* */
-function responsivePropsValue<K extends Recordable>(width: Ref<number>, data: K, key: keyof K) {
+function responsivePropsValue<K extends Recordable>(
+  width: Ref<number>,
+  data: K,
+  key: keyof K,
+  breakpoints: GridBreakpoints,
+) {
   const getResponsiveValue = (record: ResponsiveValue) => {
-    const b = DEFAULT_BREAKPOINTS
     const { xs, sm, md, lg, xl } = record
     const w = width.value
-    if (xs && w <= b.xs)
-      return xs
-    let v: any
-    if (sm && (w > b.xs || w >= b.sm))
-      v = sm
-    if (md && w >= b.md)
-      v = md
-    if (lg && w >= b.lg)
-      v = lg
-    if (xl && w >= b.xl)
-      v = xl
-    return v
+    // Start from the first declared breakpoint so sparse configs still resolve deterministically.
+    let value = xs ?? sm ?? md ?? lg ?? xl
+
+    if (w > breakpoints.xs && sm !== undefined)
+      value = sm
+    if (w >= breakpoints.md && md !== undefined)
+      value = md
+    if (w >= breakpoints.lg && lg !== undefined)
+      value = lg
+    if (w >= breakpoints.xl && xl !== undefined)
+      value = xl
+
+    return value
   }
 
-  return computed(() => Number(isObject(data[key]) ? getResponsiveValue(data[key]) : data[key]))
+  return computed(() => {
+    const value = isObject(data[key]) ? getResponsiveValue(data[key]) : data[key]
+    // Preserve explicit zero values and fall back to 0 only when the prop is actually missing.
+    return typeof value === 'number' ? value : 0
+  })
 }
 
 export default responsivePropsValue

@@ -1,12 +1,12 @@
-import type { FormInst, FormItemProps, FormItemRule, FormRules } from 'naive-ui'
+import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 import type { Theme } from 'naive-ui/es/_mixins'
 import type { ExtractThemeOverrides } from 'naive-ui/es/_mixins/use-theme'
 import type { FormValidateMessages } from 'naive-ui/es/form/src/interface'
 import type { Paths } from 'type-fest'
 import type { MaybeRef, UnwrapRef, VNode } from 'vue'
 import type { GridItemProps, GridProps } from '@/grid/types'
+import type { SchemaComponentNameRef, SchemaComponentProps } from '@/schema-form/types/component'
 import type { Recordable, WrapWithMaybeRef } from '@/types/shared'
-import type { SchemaComponentName, SchemaComponentNameRef, SchemaComponentProps } from '@/schema-form/types/component'
 
 export interface SchemaItemData {
   // item 元素
@@ -22,9 +22,8 @@ export interface SchemaItemData {
 // 回调参数
 export interface CallbackParams<
   TForm extends Recordable = Recordable,
-  DComponentsName extends string = SchemaComponentName,
 > {
-  schema: UnwrapSchema<TForm, DComponentsName>
+  schema: CallbackSchemaSnapshot<TForm>
 
   value: any
 
@@ -36,10 +35,9 @@ export interface CallbackParams<
 // 回调参数
 export type CallbackParamsFunction<
   TForm extends Recordable = Recordable,
-  DComponentsName extends string = SchemaComponentName,
   R = never,
 >
-  = ((params: CallbackParams<TForm, DComponentsName>) => R)
+  = ((params: CallbackParams<TForm>) => R)
 
 // 插槽内容
 export type SlotsContent = string | VNode | VNode[]
@@ -74,10 +72,59 @@ export type RulePresetsType = Record<RulePresets, {
 
 export type SafeComponentProps<T> = T extends Recordable ? T : never
 
-export type FormItemPropsRefs = WrapWithMaybeRef<Omit<FormItemProps, 'label' | 'rule' | 'path' | 'required'>>
-
 // 通用的选项类型
 export type OptionType = Recordable
+
+/**
+ * Public schema-item level form-item props.
+ * Keep this list intentionally small so exported schema types stay portable.
+ * For less common low-level props, use `formItemProps`.
+ */
+export interface SchemaFormItemPublicProps {
+  first?: MaybeRef<boolean>
+  rulePath?: MaybeRef<string>
+  showRequireMark?: MaybeRef<boolean>
+  requireMarkPlacement?: MaybeRef<FormRequireMarkPlacement>
+  showFeedback?: MaybeRef<boolean>
+  size?: MaybeRef<FormSize>
+  ignorePathChange?: MaybeRef<boolean>
+  validationStatus?: MaybeRef<'error' | 'warning' | 'success'>
+  feedback?: MaybeRef<string>
+  feedbackClass?: MaybeRef<string>
+  showLabel?: MaybeRef<boolean>
+  labelWidth?: MaybeRef<string | number>
+  labelAlign?: MaybeRef<FormLabelAlign>
+  labelPlacement?: MaybeRef<FormLabelPlacement>
+  contentClass?: MaybeRef<string>
+  /**
+   * Escape hatch for uncommon low-level form-item props.
+   * This keeps runtime compatibility without pulling the entire NFormItem type graph into Schema.
+   */
+  formItemProps?: WrapWithMaybeRef<Recordable>
+}
+
+export type CallbackSchemaBase<
+  TForm extends Recordable = any,
+> = Omit<
+  Schema<TForm, MaybeRef<string>>,
+  'label' | 'hide' | 'disabled' | 'componentSlots' | 'componentProps'
+> & {
+  componentProps?: WrapWithMaybeRef<Recordable>
+}
+
+/**
+ * Lightweight schema snapshot exposed to callback params.
+ * It intentionally omits recursive callback-enabled fields so schema callbacks
+ * do not carry the entire schema type graph back into themselves.
+ */
+export interface CallbackSchemaSnapshot<
+  TForm extends Recordable = any,
+> extends CallbackSchemaBase<TForm> {
+  label?: MaybeRef<string> | SlotsContent
+  hide?: MaybeRef<boolean>
+  disabled?: MaybeRef<boolean>
+  componentSlots?: SlotsContent | ComponentSlots
+}
 
 // 常用组件属性映射
 export interface CommonComponentPropsMap<
@@ -98,19 +145,19 @@ export interface CommonComponentPropsMap<
 
   // TODO:未完成
   // 禁用
-  disabled?: MaybeRef<boolean> | CallbackParamsFunction<TForm, UnwrapRef<DComponentsName>, boolean>
+  disabled?: MaybeRef<boolean> | CallbackParamsFunction<TForm, boolean>
 }
 
 // Schema配置
 export interface Schema<
   TForm extends Recordable = any,
   DComponentsName extends MaybeRef<string> = SchemaComponentNameRef,
-> extends FormItemPropsRefs, CommonComponentPropsMap<TForm, DComponentsName> {
+> extends SchemaFormItemPublicProps, CommonComponentPropsMap<TForm, DComponentsName> {
   // 字段
   field?: MaybeRef<Paths<TForm> | (string & {})>
 
   // label 标签的文本
-  label?: MaybeRef<string> | SlotsContent | CallbackParamsFunction<TForm, UnwrapRef<DComponentsName>, SlotsContent>
+  label?: MaybeRef<string> | SlotsContent | CallbackParamsFunction<TForm, SlotsContent>
 
   // 双向绑定名称
   modelProp?: MaybeRef<string>
@@ -124,7 +171,7 @@ export interface Schema<
   // 组件内容
   componentSlots?: SlotsContent
     | ComponentSlots
-    | ((callbackParams: CallbackParams<TForm, UnwrapRef<DComponentsName>>) => SlotsContent | ComponentSlots)
+    | ((callbackParams: CallbackParams<TForm>) => SlotsContent | ComponentSlots)
 
   // 自定义插槽
   itemSlot?: MaybeRef<string>
@@ -139,18 +186,34 @@ export interface Schema<
   rules?: MaybeRef<RulePresets | FormItemRule | FormItemRule[]>
 
   // 该formItem是否隐藏
-  hide?: MaybeRef<boolean> | CallbackParamsFunction<TForm, UnwrapRef<DComponentsName>, boolean>
+  hide?: MaybeRef<boolean> | CallbackParamsFunction<TForm, boolean>
 
   // 帮助提示信息
   tooltip?: MaybeRef<string>
 }
 
-// 定义JSON 格式配置
+type DefineSchemaByComponent<
+  TForm extends Recordable,
+  DComponentsName extends MaybeRef<string>,
+> = DComponentsName extends MaybeRef<infer Name>
+  ? Name extends string
+    ? Schema<TForm, Name>
+    : never
+  : never
+
+/**
+ * Define a schema item.
+ * The default form expands into a component-discriminated union, so `componentProps`
+ * is checked against the selected `component` without passing a second generic.
+ * When you need a reactive schema list, prefer `reactive<DefineSchema<T>[]>(...)`.
+ * `ref<DefineSchema<T>[]>(...)` can trigger TS2883 in declaration emit because Vue
+ * deep-unwraps the exported ref type.
+ */
 export type DefineSchema<
   TForm extends Recordable = any,
   DComponentsName extends MaybeRef<string> = SchemaComponentNameRef,
 >
-  = DComponentsName extends MaybeRef<string> ? Schema<TForm, DComponentsName> : never
+  = DefineSchemaByComponent<TForm, DComponentsName>
 
 // 解包 JSON 格式配置
 export type UnwrapSchema<

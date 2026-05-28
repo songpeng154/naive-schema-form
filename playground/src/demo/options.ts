@@ -1,4 +1,4 @@
-﻿export const cityOptions = [
+export const cityOptions = [
   { label: '深圳', value: 'shenzhen' },
   { label: '广州', value: 'guangzhou' },
   { label: '杭州', value: 'hangzhou' },

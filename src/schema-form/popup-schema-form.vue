@@ -1,52 +1,23 @@
 <script setup lang="ts">
 import type { DefineSchema } from '@/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared'
 import type {
   PopupSchemaFormExpose,
   PopupSchemaFormProps,
   PopupSchemaFormSlots,
 } from '@/schema-form/types/popup.ts'
+import type { Recordable } from '@/types/shared'
 import { createReusableTemplate } from '@vueuse/core'
 import { NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
+import { useResolvedSchemaFormProps } from '@/config/resolve'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/schema-form/components/schema-form-wrap/index.vue'
 import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
 
-const props = withDefaults(defineProps<PopupSchemaFormProps>(), {
-  autoPlaceholder: true,
-  autoRequiredRule: true,
-  autoLabelWidth: true,
-  scrollToFirstError: true,
-  showActions: true,
-  showLabel: true,
-  showFeedback: true,
-  showRequireMark: undefined,
-  labelOverflowOmitted: false,
-  labelPlacement: 'top',
-  submitText: '提交',
-  resetText: '重置',
-  showReset: true,
-  defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeFormat: 'HH:mm:ss',
-  defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeValueFormat: 'HH:mm:ss',
-  gridProps: () => ({
-    cols: 24,
-    yGap: 12,
-  }),
-  gridItemProps: 24,
-  type: 'drawer',
-  maskClosable: true,
-  resetOnClose: true,
-  confirmOnClose: true,
-  confirmTitle: '关闭提示',
-  confirmContent: '您确定要关闭它吗？',
-  drawerContentProps: () => ({ closable: true }),
-  colProps: 24,
-})
-
+const rawProps = defineProps<PopupSchemaFormProps>()
 const slots = defineSlots<PopupSchemaFormSlots>()
+
+const props = useResolvedSchemaFormProps('popup', rawProps)
 
 const drawerDefaultWidth = '500px'
 const modalDefaultWidth = '800px'
@@ -135,20 +106,20 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
   </DefineActionButton>
 
   <DefineForm>
-    <schema-form-wrap
+    <SchemaFormWrap
       :ref="setFormRef"
       v-bind="formProps"
       :model="model"
     >
-      <schema-form-content :schema="schema" :grid-props="gridProps">
+      <SchemaFormContent :schema="schema" :grid-props="props.gridProps || {}">
         <template v-for="(_, key) in formContentSlots" #[key]="scope">
           <slot :name="key" v-bind="scope || {}" />
         </template>
-      </schema-form-content>
-    </schema-form-wrap>
+      </SchemaFormContent>
+    </SchemaFormWrap>
   </DefineForm>
 
-  <n-drawer
+  <NDrawer
     v-if="props.type === 'drawer'"
     :width="props.width || drawerDefaultWidth"
     :height="props.height"
@@ -157,7 +128,7 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
     :mask-closable="props.maskClosable"
     @update:show="onUpdateShow"
   >
-    <n-drawer-content v-bind="props.drawerContentProps">
+    <NDrawerContent v-bind="props.drawerContentProps">
       <template #header>
         <slot name="header">
           {{ props.title || props.drawerContentProps?.title }}
@@ -171,17 +142,17 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
           <ActionButton />
         </slot>
       </template>
-    </n-drawer-content>
-  </n-drawer>
+    </NDrawerContent>
+  </NDrawer>
 
-  <n-modal
+  <NModal
     v-else-if="props.type === 'modal'"
     v-bind="props.modalProps"
     :show="visible"
     :mask-closable="props.maskClosable"
     @update:show="onUpdateShow"
   >
-    <n-card
+    <NCard
       :style="{ width: props.width || modalDefaultWidth, height: props.height || modalDefaultHeight }"
       content-class="overflow-auto"
       v-bind="props.modalCardProps"
@@ -199,9 +170,9 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
           <ActionButton />
         </slot>
       </template>
-    </n-card>
-  </n-modal>
+    </NCard>
+  </NModal>
 </template>
 
-<style scoped >
+<style scoped>
 </style>

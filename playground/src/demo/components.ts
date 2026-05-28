@@ -1,6 +1,6 @@
-﻿import type { DefineSchema } from '../../../src'
+import type { DefineSchema } from '../../../src'
 import { NButton } from 'naive-ui'
-import { h, reactive, ref } from 'vue'
+import { h, reactive } from 'vue'
 import {
   cascaderOptions,
   cityOptions,
@@ -39,7 +39,8 @@ export const componentsModel = reactive({
   files: [],
 })
 
-export const componentsSchema = ref<DefineSchema<typeof componentsModel>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const componentsSchema = reactive<DefineSchema<typeof componentsModel>[]>([
   {
     field: 'input',
     label: 'Input',

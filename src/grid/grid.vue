@@ -2,14 +2,12 @@
 import type { CSSProperties } from 'vue'
 import type { GridProps } from '@/grid/types'
 import { computed, watchEffect } from 'vue'
+import { useResolvedGridProps } from '@/config/resolve'
 import { useProvideGridContext } from '@/grid/hooks/context.ts'
 import { setItemVisible } from '@/grid/utils'
 
-const props = withDefaults(defineProps<GridProps>(), {
-  cols: 24,
-  notCollapsedRows: 1,
-  responsive: 'self',
-})
+const rawProps = defineProps<GridProps>()
+const props = useResolvedGridProps(rawProps)
 
 const gridContext = useProvideGridContext(props)
 const { isOverflow, displayIndexList, itemDataList, responsiveCols, responsiveXGap, responsiveYGap } = gridContext
@@ -21,7 +19,12 @@ const gridStyle = computed<CSSProperties>(() => ({
 }))
 
 watchEffect(() => {
-  const itemVisible = setItemVisible(responsiveCols.value, props.collapsed, props.notCollapsedRows, itemDataList.value)
+  const itemVisible = setItemVisible(
+    responsiveCols.value,
+    props.collapsed ?? false,
+    props.notCollapsedRows ?? 1,
+    itemDataList.value,
+  )
   isOverflow.value = itemVisible.overflow
   displayIndexList.value = itemVisible.displayIndexList
 })
@@ -37,7 +40,7 @@ watchEffect(() => {
   </div>
 </template>
 
-<style scoped >
+<style scoped>
 .grid {
   width: 100%;
   display: grid;

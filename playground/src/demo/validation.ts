@@ -1,6 +1,6 @@
-﻿import type { FormItemRule } from 'naive-ui'
+import type { FormItemRule } from 'naive-ui'
 import type { DefineSchema } from '../../../src'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 
 export const validationModel = reactive({
   name: '',
@@ -38,7 +38,8 @@ export const validationRules = {
   } satisfies FormItemRule,
 }
 
-export const validationSchema = ref<DefineSchema<typeof validationModel>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const validationSchema = reactive<DefineSchema<typeof validationModel>[]>([
   { field: 'name', label: '姓名', component: 'input', showRequireMark: true, gridItemProps: { span: 8 } },
   { field: 'email', label: '邮箱预设', component: 'input', rules: 'mail', gridItemProps: { span: 8 } },
   { field: 'phone', label: '手机号预设', component: 'input', rules: 'phone', gridItemProps: { span: 8 } },

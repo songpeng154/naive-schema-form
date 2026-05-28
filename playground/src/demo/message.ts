@@ -1,3 +1,3 @@
-﻿import { createDiscreteApi } from 'naive-ui'
+import { createDiscreteApi } from 'naive-ui'
 
 export const { message } = createDiscreteApi(['message'])

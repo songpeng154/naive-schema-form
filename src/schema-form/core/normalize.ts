@@ -1,23 +1,25 @@
 import type { FormItemRule } from 'naive-ui'
 import type { GridItemProps } from '@/grid/types'
-import type { Recordable } from '@/types/shared'
-import type {
-  CallbackParams,
-  CallbackParamsFunction,
-  OptionType,
-  Schema,
-  SchemaFormCommonProps,
-  UnwrapSchema,
-} from '@/schema-form/types/common.ts'
-import type { SchemaComponentName } from '@/schema-form/types/component'
 import type {
   NormalizedSchema,
   NormalizeSchemaContext,
   NormalizeSchemaListContext,
   SchemaComponentAdapter,
 } from '@/schema-form/core/types'
+import type {
+  CallbackParams,
+  CallbackParamsFunction,
+  CallbackSchemaSnapshot,
+  OptionType,
+  Schema,
+  SchemaFormCommonProps,
+  UnwrapSchema,
+} from '@/schema-form/types/common.ts'
+import type { SchemaComponentName } from '@/schema-form/types/component'
+import type { Recordable } from '@/types/shared'
 import { isFunction, isString, omit } from 'es-toolkit'
 import { get, isArray, isNumber } from 'es-toolkit/compat'
+import { resolveSchemaComponentProps } from '@/config/resolve'
 import { getSchemaComponentAdapter } from '@/schema-form/core/registry'
 import { generatePlaceholder, generateRule, handleRulePresets } from '@/schema-form/core/rules'
 
@@ -37,21 +39,26 @@ const FORM_ITEM_OMIT_KEYS: (keyof Schema)[] = [
   'options',
   'disabled',
   'gridItemProps',
+  'formItemProps',
   'formItemSlot',
   'itemSlot',
 ]
 
-function callbackParamsFunction<TForm extends Recordable, R>(value: R | CallbackParamsFunction<TForm, any, R>, params: CallbackParams<TForm>): R {
+function callbackParamsFunction<TForm extends Recordable, R>(value: R | CallbackParamsFunction<TForm, R>, params: CallbackParams<TForm>): R {
   return isFunction(value)
     ? value(params)
     : value
+}
+
+function createCallbackSchemaSnapshot(schema: UnwrapSchema): CallbackSchemaSnapshot {
+  return schema as CallbackSchemaSnapshot
 }
 
 function normalizeGridItemProps(item?: number | GridItemProps): GridItemProps {
   return (isNumber(item) ? { span: item } : item || {}) as GridItemProps
 }
 
-function resolveRules<TForm extends Recordable>(schema: UnwrapSchema<TForm>, props: SchemaFormCommonProps): FormItemRule | FormItemRule[] | undefined {
+function resolveRules(schema: UnwrapSchema, props: SchemaFormCommonProps): FormItemRule | FormItemRule[] | undefined {
   const rules = schema.rules
   if (!rules) {
     const isRequire = Boolean(schema.showRequireMark ?? props.showRequireMark)
@@ -65,14 +72,23 @@ function resolveRules<TForm extends Recordable>(schema: UnwrapSchema<TForm>, pro
   return rules
 }
 
-function resolveComponentProps<TForm extends Recordable>(schema: UnwrapSchema<TForm>, adapter: SchemaComponentAdapter | undefined, ctx: NormalizeSchemaContext<TForm>, params: CallbackParams<TForm>) {
+function resolveComponentProps(
+  schema: UnwrapSchema,
+  adapter: SchemaComponentAdapter | undefined,
+  ctx: NormalizeSchemaContext,
+  params: CallbackParams,
+) {
   const { component, componentProps, placeholder, startPlaceholder, endPlaceholder, options, disabled } = schema
   const mapProps: Recordable = {}
+  // Merge global component defaults first so schema-level props can override them.
+  const props = resolveSchemaComponentProps(
+    component as SchemaComponentName | string | undefined,
+    componentProps as Recordable | undefined,
+    ctx.schemaFormComponentProps,
+  )
 
   if (!component || !adapter)
-    return { ...(componentProps as Recordable) }
-
-  const props = (componentProps as Recordable) || {}
+    return props
 
   if (adapter.valueType === 'date') {
     mapProps.format = ctx.schemaFormProps.defaultDateFormat
@@ -128,20 +144,27 @@ function resolveSchemaError(schema: UnwrapSchema, adapter: SchemaComponentAdapte
     return `SchemaForm: datePicker.type only supports ${adapter.dateTypes.join(', ')}.`
 }
 
-export function normalizeSchemaItem<TForm extends Recordable>(schema: UnwrapSchema<TForm>, ctx: NormalizeSchemaContext<TForm>): NormalizedSchema<TForm> {
+function normalizeSchemaItemInternal(schema: UnwrapSchema, ctx: NormalizeSchemaContext): NormalizedSchema {
   const field = schema.field as string | undefined
   const params = {
-    schema,
+    schema: createCallbackSchemaSnapshot(schema),
     model: ctx.model,
     value: field ? get(ctx.model, field) : undefined,
     field,
-  } as CallbackParams<TForm>
+  } as CallbackParams
 
   const componentName = schema.component as SchemaComponentName | string | undefined
   const adapter = getSchemaComponentAdapter(componentName)
-  const componentProps = resolveComponentProps(schema, adapter, ctx, params)
+  const componentProps = resolveComponentProps(
+    schema as UnwrapSchema,
+    adapter,
+    ctx as NormalizeSchemaContext,
+    params as CallbackParams,
+  )
   const error = resolveSchemaError(schema, adapter, componentProps)
-  const label = schema.label ? callbackParamsFunction(schema.label as any, params) : undefined
+  const label = schema.label
+    ? callbackParamsFunction<Recordable, NormalizedSchema['label']>(schema.label as any, params)
+    : undefined
 
   return {
     raw: schema,
@@ -154,8 +177,11 @@ export function normalizeSchemaItem<TForm extends Recordable>(schema: UnwrapSche
     component: adapter?.component,
     adapter,
     componentProps,
-    formItemProps: omit(schema, FORM_ITEM_OMIT_KEYS),
-    gridItemProps: normalizeGridItemProps(schema.gridItemProps || ctx.fallbackGridItemProps || ctx.schemaFormProps.gridItemProps),
+    formItemProps: {
+      ...omit(schema, FORM_ITEM_OMIT_KEYS),
+      ...((schema.formItemProps as Recordable | undefined) || {}),
+    },
+    gridItemProps: normalizeGridItemProps(schema.gridItemProps ?? ctx.fallbackGridItemProps ?? ctx.schemaFormProps.gridItemProps),
     rules: resolveRules(schema, ctx.schemaFormProps),
     itemSlot: schema.itemSlot as string | undefined,
     formItemSlot: schema.formItemSlot as string | undefined,
@@ -163,6 +189,23 @@ export function normalizeSchemaItem<TForm extends Recordable>(schema: UnwrapSche
   }
 }
 
+export function normalizeSchemaItem<TForm extends Recordable>(schema: UnwrapSchema<TForm>, ctx: NormalizeSchemaContext<TForm>): NormalizedSchema<TForm> {
+  return normalizeSchemaItemInternal(
+    schema as UnwrapSchema,
+    ctx as NormalizeSchemaContext,
+  ) as NormalizedSchema<TForm>
+}
+
 export function normalizeSchema<TForm extends Recordable>(schema: UnwrapSchema<TForm>[], ctx: NormalizeSchemaListContext<TForm>) {
-  return schema.map((item, index) => normalizeSchemaItem(item, { ...ctx, index }))
+  const result: NormalizedSchema<TForm>[] = []
+
+  for (let index = 0; index < schema.length; index += 1) {
+    const item = normalizeSchemaItemInternal(
+      schema[index] as UnwrapSchema,
+      { ...ctx, index } as NormalizeSchemaContext,
+    ) as NormalizedSchema<TForm>
+    result.push(item)
+  }
+
+  return result
 }

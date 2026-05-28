@@ -1,4 +1,4 @@
-﻿import type { SchemaFormCommonExpose } from '@/schema-form/types/common.ts'
+import type { SchemaFormCommonExpose } from '@/schema-form/types/common.ts'
 import { ref } from 'vue'
 
 function useCommonExpose() {

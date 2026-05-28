@@ -1,10 +1,10 @@
 /* --------------搜索表单-------------- */
 
 import type {
+  DefineSchema,
   SchemaFormCommonExpose,
   SchemaFormCommonProps,
   SchemaFormCommonSlots,
-  DefineSchema,
 } from '@/schema-form/types/common.ts'
 
 export interface SearchSchemaFormProps extends SchemaFormCommonProps {

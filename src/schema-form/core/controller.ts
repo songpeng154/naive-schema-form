@@ -1,6 +1,6 @@
-﻿import type { ModelRef } from 'vue'
-import type { SchemaFormCommonExpose, SchemaFormCommonProps } from '@/schema-form/types/common.ts'
+import type { ModelRef } from 'vue'
 import type { SchemaFormCoreOptions } from '@/schema-form/core/types'
+import type { SchemaFormCommonExpose, SchemaFormCommonProps } from '@/schema-form/types/common.ts'
 import type { Recordable } from '@/types/shared'
 import { useProvideSchemaFormContext } from '@/schema-form/hooks/context.ts'
 import useCommonExpose from '@/schema-form/hooks/expose.ts'

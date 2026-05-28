@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import type { SchemaFormExpose } from '../../../../src'
 import { ref } from 'vue'
 import { SchemaForm } from '../../../../src'

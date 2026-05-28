@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { SchemaForm } from '../../../../src'
 import { autoLabelModel, autoLabelSchema } from '../auto-label'
 </script>
@@ -16,5 +16,3 @@ import { autoLabelModel, autoLabelSchema } from '../auto-label'
     :grid-props="{ cols: 1, yGap: 8 }"
   />
 </template>
-
-

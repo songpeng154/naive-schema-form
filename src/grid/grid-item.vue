@@ -2,16 +2,16 @@
 import type { CSSProperties } from 'vue'
 import type { GridItemProps } from '@/grid/types'
 import { computed, onUnmounted, ref, watchEffect } from 'vue'
+import { useNaiveSchemaFormConfig } from '@/config/context'
+import { useResolvedGridItemProps } from '@/config/resolve'
 import { useGridContext } from '@/grid/hooks/context.ts'
 import responsivePropsValue from '@/grid/hooks/responsive-props-value.ts'
 import { resolveItemData } from '@/grid/utils'
 import elementIndex from '@/utils/element-index'
 
-const props = withDefaults(defineProps<GridItemProps>(), {
-  span: 1,
-  offset: 0,
-  suffix: false,
-})
+const rawProps = defineProps<GridItemProps>()
+const props = useResolvedGridItemProps(rawProps)
+const config = useNaiveSchemaFormConfig()
 
 const el = ref<HTMLElement>()
 
@@ -20,18 +20,18 @@ const {
   displayIndexList,
   responsiveCols,
   width,
-  responsiveYGap,
+  responsiveXGap,
   setItemMap,
   removeItemMap,
 } = useGridContext()!
 const index = elementIndex(el)
-const responsiveSpan = responsivePropsValue(width, props, 'span')
-const responsiveOffset = responsivePropsValue(width, props, 'offset')
+const responsiveSpan = responsivePropsValue(width, props, 'span', config.grid.breakpoints)
+const responsiveOffset = responsivePropsValue(width, props, 'offset', config.grid.breakpoints)
 
 const itemData = computed(() => resolveItemData(responsiveCols.value, {
   span: responsiveSpan.value,
   offset: responsiveOffset.value,
-  suffix: props.suffix,
+  suffix: props.suffix ?? false,
 }))
 
 const isDisplay = computed(() => displayIndexList.value.includes(index.value))
@@ -47,9 +47,9 @@ const marginLeftAttribute = computed(() => {
   const { span, offset } = itemData.value
   if (offset < 0)
     return
-  const oneSpan = `(100% - ${responsiveYGap.value * (span - 1)}px) / ${span}`
+  const oneSpan = `(100% - ${responsiveXGap.value * (span - 1)}px) / ${span}`
   return `calc((${oneSpan} * ${offset}) + ${
-    responsiveYGap.value * offset
+    responsiveXGap.value * offset
   }px)`
 })
 
@@ -80,6 +80,6 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped >
+<style scoped>
 
 </style>

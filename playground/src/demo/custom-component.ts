@@ -1,4 +1,4 @@
-﻿import { NInput } from 'naive-ui'
+import { NInput } from 'naive-ui'
 import { defineComponent, h } from 'vue'
 import { registerSchemaComponent } from '../../../src'
 

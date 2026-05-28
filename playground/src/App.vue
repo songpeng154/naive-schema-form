@@ -1,14 +1,14 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue'
+import AutoLabelTab from './demo/tabs/AutoLabelTab.vue'
 import BaseTab from './demo/tabs/BaseTab.vue'
 import ComponentsTab from './demo/tabs/ComponentsTab.vue'
 import DynamicTab from './demo/tabs/DynamicTab.vue'
-import ValidationTab from './demo/tabs/ValidationTab.vue'
-import SearchTab from './demo/tabs/SearchTab.vue'
 import GroupTab from './demo/tabs/GroupTab.vue'
 import PopupTab from './demo/tabs/PopupTab.vue'
-import AutoLabelTab from './demo/tabs/AutoLabelTab.vue'
+import SearchTab from './demo/tabs/SearchTab.vue'
 import SnapshotsTab from './demo/tabs/SnapshotsTab.vue'
+import ValidationTab from './demo/tabs/ValidationTab.vue'
 
 const baseTabRef = ref<InstanceType<typeof BaseTab>>()
 </script>
@@ -71,6 +71,3 @@ const baseTabRef = ref<InstanceType<typeof BaseTab>>()
     </n-card>
   </main>
 </template>
-
-
-

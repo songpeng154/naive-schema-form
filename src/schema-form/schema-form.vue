@@ -1,39 +1,17 @@
 <script setup lang="ts">
 import type { SchemaFormExpose, SchemaFormProps, SchemaFormSlots } from '@/schema-form/types/base.ts'
-import type { Recordable } from '@/types/shared'
 import type { DefineSchema } from '@/schema-form/types/common.ts'
+import type { Recordable } from '@/types/shared'
+import { useResolvedSchemaFormProps } from '@/config/resolve'
+import GridItem from '@/grid/grid-item.vue'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
-import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
 import SchemaFormContent from '@/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/schema-form/components/schema-form-wrap/index.vue'
-import GridItem from '@/grid/grid-item.vue'
+import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
 
-const props = withDefaults(defineProps<SchemaFormProps>(), {
-  autoPlaceholder: true,
-  autoRequiredRule: true,
-  autoLabelWidth: true,
-  scrollToFirstError: true,
-  showActions: true,
-  showLabel: true,
-  showFeedback: true,
-  showRequireMark: undefined,
-  labelOverflowOmitted: false,
-  labelPlacement: 'top',
-  submitText: '提交',
-  resetText: '重置',
-  showReset: true,
-  defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeFormat: 'HH:mm:ss',
-  defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
-  defaultTimeValueFormat: 'HH:mm:ss',
-  gridProps: () => ({
-    cols: 24,
-    yGap: 12,
-  }),
-  gridItemProps: 24,
-})
+const rawProps = defineProps<SchemaFormProps>()
 const slots = defineSlots<SchemaFormSlots>()
-
+const props = useResolvedSchemaFormProps('base', rawProps)
 const model = defineModel<Recordable>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 
@@ -50,16 +28,16 @@ defineExpose<SchemaFormExpose>(exposeSchemaForm<SchemaFormExpose>(commonExpose))
 </script>
 
 <template>
-  <schema-form-wrap
+  <SchemaFormWrap
     :ref="setFormRef"
     v-bind="formProps"
     :model="model"
   >
-    <schema-form-content :schema="schema" :grid-props="gridProps">
+    <SchemaFormContent :schema="schema" :grid-props="props.gridProps || {}">
       <template v-for="(_, key) in formContentSlots" #[key]="scope">
         <slot :name="key" v-bind="scope || {}" />
       </template>
-      <grid-item
+      <GridItem
         v-if="props.showActions"
         suffix
         :span="24"
@@ -79,11 +57,11 @@ defineExpose<SchemaFormExpose>(exposeSchemaForm<SchemaFormExpose>(commonExpose))
             <slot name="actionsAfter" />
           </template>
         </SchemaFormActions>
-      </grid-item>
-    </schema-form-content>
-  </schema-form-wrap>
+      </GridItem>
+    </SchemaFormContent>
+  </SchemaFormWrap>
 </template>
 
-<style scoped >
+<style scoped>
 
 </style>

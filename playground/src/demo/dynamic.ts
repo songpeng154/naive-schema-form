@@ -1,8 +1,19 @@
-﻿import type { DefineSchema } from '../../../src'
+import type { CallbackParams, DefineSchema } from '../../../src'
 import { reactive, ref } from 'vue'
 import { cityOptions, roleOptions } from './options'
 
-export const dynamicModel = reactive({
+export interface DynamicModel {
+  mode: 'personal' | 'company'
+  name: string
+  company: string
+  city: string | null
+  role: string
+  remark: string
+  locked: boolean
+  extra: string
+}
+
+export const dynamicModel = reactive<DynamicModel>({
   mode: 'personal',
   name: '',
   company: '',
@@ -15,7 +26,8 @@ export const dynamicModel = reactive({
 
 export const showExtraField = ref(false)
 
-export const dynamicSchema = ref<DefineSchema<typeof dynamicModel>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const dynamicSchema = reactive<DefineSchema<DynamicModel>[]>([
   {
     field: 'mode',
     label: '模式',
@@ -35,7 +47,7 @@ export const dynamicSchema = ref<DefineSchema<typeof dynamicModel>[]>([
   },
   {
     field: 'name',
-    label: ({ model }) => model.mode === 'company' ? '联系人' : '姓名',
+    label: ({ model }: CallbackParams<DynamicModel>) => model.mode === 'company' ? '联系人' : '姓名',
     component: 'input',
     showRequireMark: true,
     gridItemProps: { span: 8 },
@@ -44,7 +56,7 @@ export const dynamicSchema = ref<DefineSchema<typeof dynamicModel>[]>([
     field: 'company',
     label: '企业名称',
     component: 'input',
-    hide: ({ model }) => model.mode !== 'company',
+    hide: ({ model }: CallbackParams<DynamicModel>) => model.mode !== 'company',
     showRequireMark: true,
     gridItemProps: { span: 8 },
   },
@@ -53,7 +65,7 @@ export const dynamicSchema = ref<DefineSchema<typeof dynamicModel>[]>([
     label: '城市',
     component: 'select',
     options: cityOptions,
-    disabled: ({ model }) => model.locked,
+    disabled: ({ model }: CallbackParams<DynamicModel>) => model.locked,
     gridItemProps: { span: 8 },
   },
   {
@@ -61,7 +73,7 @@ export const dynamicSchema = ref<DefineSchema<typeof dynamicModel>[]>([
     label: '角色',
     component: 'select',
     options: roleOptions,
-    disabled: ({ model }) => model.locked,
+    disabled: ({ model }: CallbackParams<DynamicModel>) => model.locked,
     gridItemProps: { span: 8 },
   },
   {
@@ -69,7 +81,7 @@ export const dynamicSchema = ref<DefineSchema<typeof dynamicModel>[]>([
     label: '备注',
     component: 'input',
     componentProps: { type: 'textarea', rows: 3 },
-    disabled: ({ model }) => model.locked,
+    disabled: ({ model }: CallbackParams<DynamicModel>) => model.locked,
     gridItemProps: { span: 12 },
   },
   {

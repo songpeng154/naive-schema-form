@@ -12,9 +12,10 @@ const emit = defineEmits<{
   overflowChange: [value: boolean]
 }>()
 const id = useId()
-const { schemaFormProps, model } = useSchemaFormContext()!
+const { schemaFormProps, schemaFormComponentProps, model } = useSchemaFormContext()!
 const normalizedSchema = computed(() => normalizeSchema(schema as any, {
   schemaFormProps,
+  schemaFormComponentProps,
   model: model.value,
   fallbackGridItemProps: gridItemProps,
   disabled,
@@ -35,7 +36,7 @@ const GridOverflowObserver = defineComponent({
 </script>
 
 <template>
-  <grid v-bind="gridProps">
+  <Grid v-bind="gridProps">
     <GridOverflowObserver />
     <template
       v-for="config in normalizedSchema"
@@ -55,9 +56,9 @@ const GridOverflowObserver = defineComponent({
       </SchemaFormItem>
     </template>
     <slot />
-  </grid>
+  </Grid>
 </template>
 
-<style scoped >
+<style scoped>
 
 </style>

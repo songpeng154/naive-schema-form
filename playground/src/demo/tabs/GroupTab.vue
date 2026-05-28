@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import type { GroupSchemaFormExpose } from '../../../../src'
 import { ref } from 'vue'
 import { GroupSchemaForm } from '../../../../src'
@@ -44,5 +44,3 @@ function handleFinish() {
     </template>
   </GroupSchemaForm>
 </template>
-
-

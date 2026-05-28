@@ -1,11 +1,13 @@
 import type { ModelRef } from 'vue'
-import type { Recordable } from '@/types/shared'
 import type { SchemaFormCommonProps, SchemaItemData } from '@/schema-form/types/common.ts'
+import type { Recordable } from '@/types/shared'
 import { createInjectionState } from '@vueuse/core'
 import { get, set } from 'es-toolkit/compat'
 import { computed, reactive } from 'vue'
+import { useNaiveSchemaFormConfig } from '@/config/context'
 
 const [useProvideSchemaFormContext, useSchemaFormContext] = createInjectionState((schemaFormProps: SchemaFormCommonProps, model: ModelRef<Recordable>) => {
+  const config = useNaiveSchemaFormConfig()
   const itemsDataMap = reactive<Map<string, SchemaItemData>>(new Map())
 
   const maxLabelWidth = computed(() => {
@@ -21,7 +23,15 @@ const [useProvideSchemaFormContext, useSchemaFormContext] = createInjectionState
   // 设置model值
   const setModelValue = (field: string, value: any) => set(model.value, field, value)
 
-  return { schemaFormProps, model, getModelValue, setModelValue, maxLabelWidth, itemsDataMap }
+  return {
+    schemaFormProps,
+    schemaFormComponentProps: config.schemaForm.componentProps,
+    model,
+    getModelValue,
+    setModelValue,
+    maxLabelWidth,
+    itemsDataMap,
+  }
 })
 
 export { useProvideSchemaFormContext, useSchemaFormContext }

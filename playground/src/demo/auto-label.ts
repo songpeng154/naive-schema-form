@@ -1,5 +1,5 @@
-﻿import type { DefineSchema } from '../../../src'
-import { reactive, ref } from 'vue'
+import type { DefineSchema } from '../../../src'
+import { reactive } from 'vue'
 
 export const autoLabelModel = reactive({
   short: '',
@@ -7,7 +7,8 @@ export const autoLabelModel = reactive({
   veryLongLabel: '',
 })
 
-export const autoLabelSchema = ref<DefineSchema<typeof autoLabelModel>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const autoLabelSchema = reactive<DefineSchema<typeof autoLabelModel>[]>([
   { field: 'short', label: '短', component: 'input' },
   { field: 'mediumLength', label: '中等长度标签', component: 'input' },
   { field: 'veryLongLabel', label: '非常非常长的标签文本', component: 'input' },

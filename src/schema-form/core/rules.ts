@@ -2,8 +2,8 @@ import type { FormItemRule } from 'naive-ui'
 import type { RulePresets, RulePresetsType, Schema } from '@/schema-form/types/common.ts'
 import { isString } from 'es-toolkit'
 import { isArray } from 'es-toolkit/compat'
-import RegUtils from '@/utils/reg'
 import { getSchemaComponentAdapter } from '@/schema-form/core/registry'
+import RegUtils from '@/utils/reg'
 
 // 规则预设
 const rulePresets: RulePresetsType = {

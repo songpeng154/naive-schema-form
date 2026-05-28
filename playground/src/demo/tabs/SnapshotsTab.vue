@@ -1,8 +1,8 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { computed } from 'vue'
+import { baseModel } from '../base'
 import { componentsModel } from '../components'
 import { dynamicModel } from '../dynamic'
-import { baseModel } from '../base'
 import { groupModel } from '../group'
 import { popupModel } from '../popup'
 import { searchModel } from '../search'
@@ -33,4 +33,3 @@ function stringify(value: unknown) {
     </n-grid-item>
   </n-grid>
 </template>
-

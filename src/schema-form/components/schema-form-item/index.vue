@@ -1,12 +1,12 @@
 <script setup lang="tsx">
 import type { GridItemProps } from '@/grid/types'
 import type { SchemaFormItemProps } from '@/schema-form/components/schema-form-item/types/type.ts'
-import type { CallbackParams, OptionType, Schema } from '@/schema-form/types/common.ts'
+import type { CallbackParams, CallbackSchemaSnapshot, OptionType, Schema } from '@/schema-form/types/common.ts'
+import { useCurrentElement } from '@vueuse/core'
 import { isString, omitBy } from 'es-toolkit'
 import { isArray, isNumber } from 'es-toolkit/compat'
-import { isVNode, computed, nextTick, onUnmounted, useSlots, watch } from 'vue'
-import { useCurrentElement } from '@vueuse/core'
 import { NAlert, NCheckbox, NFormItem, NRadio, NTooltip } from 'naive-ui'
+import { computed, isVNode, nextTick, onUnmounted, useSlots, watch } from 'vue'
 import GridItem from '@/grid/grid-item.vue'
 import { useSchemaFormContext } from '@/schema-form/hooks/context.ts'
 
@@ -18,7 +18,7 @@ const uniqueIdentifier = computed(() => props.schema.key)
 
 const isVisible = computed(() => props.schema.visible)
 const gridItemPropsMap = computed(() => {
-  const item = props.schema.gridItemProps || props.gridItemProps || schemaFormProps.gridItemProps
+  const item = props.schema.gridItemProps ?? props.gridItemProps ?? schemaFormProps.gridItemProps
   return (isNumber(item) ? { span: item } : item) as GridItemProps
 })
 
@@ -73,6 +73,20 @@ function renderTooltip(tooltip?: string) {
   )
 }
 
+function renderLabelContent() {
+  const label = props.schema.label
+  if (!label)
+    return undefined
+
+  return isString(label)
+    ? <span title={label}>{ label }</span>
+    : label
+}
+
+function createCallbackSchemaSnapshot() {
+  return props.schema.raw as CallbackSchemaSnapshot
+}
+
 function renderComponentSlots() {
   const raw = props.schema.raw
   const componentSlots = raw.componentSlots
@@ -91,7 +105,7 @@ function renderComponentSlots() {
 
   const content = typeof componentSlots === 'function'
     ? (componentSlots as (params: CallbackParams) => any)({
-        schema: raw,
+        schema: createCallbackSchemaSnapshot(),
         model: props.schema.model,
         value: props.schema.field ? getModelValue(props.schema.field) : undefined,
         field: props.schema.field as any,
@@ -141,7 +155,7 @@ function renderFormItemSlots() {
       return
     return () => (
       <>
-        { item.label }
+        { renderLabelContent() }
         { item.raw.tooltip ? renderTooltip(item.raw.tooltip) : undefined }
       </>
     )
@@ -250,13 +264,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <grid-item v-if="isVisible" v-bind="gridItemPropsMap">
+  <GridItem v-if="isVisible" v-bind="gridItemPropsMap">
     <FormItem v-if="!schema.itemSlot" />
     <slot v-else :name="schema.itemSlot" />
-  </grid-item>
+  </GridItem>
 </template>
 
-<style scoped >
+<style scoped>
 :deep(.n-input-number), :deep(.n-time-picker), :deep(.n-date-picker) {
   width: 100%;
 }

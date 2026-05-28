@@ -1,5 +1,5 @@
-import type { SchemaFormCommonExpose } from '@/schema-form/types/common.ts'
 import type { SchemaFormExposeControllerOptions } from '@/schema-form/core/types'
+import type { SchemaFormCommonExpose } from '@/schema-form/types/common.ts'
 import type { Recordable } from '@/types/shared'
 import { cloneDeep } from 'es-toolkit'
 import { nextTick } from 'vue'

@@ -1,11 +1,10 @@
-﻿import type { FormItemRule } from 'naive-ui'
-import type { DefineSchema, SchemaComponentName } from '../../../src'
-import { reactive, ref } from 'vue'
+import type { FormItemRule } from 'naive-ui'
+import type { CallbackParams, DefineSchema } from '../../../src'
+import { reactive } from 'vue'
 import { cityOptions, departmentTree, roleOptions, tagOptions } from './options'
 import './custom-component'
 
 export type BaseModel = typeof baseModel
-export type PlaygroundComponentName = SchemaComponentName | 'notExists'
 
 export const baseModel = reactive({
   name: '',
@@ -26,25 +25,29 @@ export const baseModel = reactive({
   runtimeOnly: 'reset 后会清理',
 })
 
-const customComponentSchema: DefineSchema<BaseModel, 'badgeInput'> = {
+const customComponentSchema = {
   field: 'customCode',
   label: '注册组件',
   component: 'badgeInput',
   componentProps: { prefix: 'NSF' },
   gridItemProps: { span: 12 },
-}
+} as const
 
-const unknownComponentSchema: DefineSchema<BaseModel, 'notExists'> = {
+const unknownComponentSchema = {
   label: '错误组件',
   component: 'notExists',
   gridItemProps: { span: 12 },
-}
+} as const
 
-export const baseSchema = ref<DefineSchema<BaseModel, PlaygroundComponentName>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const baseSchema = reactive<DefineSchema<BaseModel>[]>([
   {
     field: 'name',
     label: '姓名',
     component: 'input',
+    componentProps: {
+      placeholder: '1',
+    },
     showRequireMark: true,
     tooltip: '必填；提交失败会滚动到这里',
     gridItemProps: { span: 8 },
@@ -140,7 +143,7 @@ export const baseSchema = ref<DefineSchema<BaseModel, PlaygroundComponentName>[]
     componentProps: { keyField: 'key', clearable: true },
     gridItemProps: { span: 12 },
   },
-  customComponentSchema,
+  customComponentSchema as DefineSchema<BaseModel>,
   {
     label: '整项插槽',
     itemSlot: 'wholeItem',
@@ -154,13 +157,13 @@ export const baseSchema = ref<DefineSchema<BaseModel, PlaygroundComponentName>[]
   },
   {
     field: 'city',
-    label: ({ model }) => `动态 Label：${model.city || '未选城市'}`,
+    label: ({ model }: CallbackParams<BaseModel>) => `动态 Label：${model.city || '未选城市'}`,
     component: 'select',
     options: cityOptions,
-    hide: ({ model }) => model.role === 'guest',
+    hide: ({ model }: CallbackParams<BaseModel>) => model.role === 'guest',
     gridItemProps: { span: 12 },
   },
-  unknownComponentSchema,
+  unknownComponentSchema as unknown as DefineSchema<BaseModel>,
   {
     label: '错误日期类型',
     component: 'datePicker',
@@ -181,4 +184,3 @@ export const validationRules = {
     trigger: 'change',
   } satisfies FormItemRule,
 }
-

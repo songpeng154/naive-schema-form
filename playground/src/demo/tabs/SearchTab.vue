@@ -1,9 +1,9 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import type { SearchSchemaFormExpose } from '../../../../src'
 import { ref } from 'vue'
 import { SearchSchemaForm } from '../../../../src'
-import { searchModel, searchSchema } from '../search'
 import { message } from '../message'
+import { searchModel, searchSchema } from '../search'
 
 const formRef = ref<SearchSchemaFormExpose>()
 
@@ -35,5 +35,3 @@ function handleFinish() {
     </template>
   </SearchSchemaForm>
 </template>
-
-

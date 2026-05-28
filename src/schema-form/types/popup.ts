@@ -2,10 +2,10 @@
 
 import type { CardProps, DrawerContentProps, DrawerProps, ModalProps } from 'naive-ui'
 import type {
+  DefineSchema,
   SchemaFormCommonExpose,
   SchemaFormCommonProps,
   SchemaFormCommonSlots,
-  DefineSchema,
 } from '@/schema-form/types/common.ts'
 
 export type PopupType = 'drawer' | 'modal'

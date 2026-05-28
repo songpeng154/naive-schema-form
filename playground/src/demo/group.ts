@@ -1,5 +1,5 @@
-﻿import type { DefineGroupSchema } from '../../../src'
-import { reactive, ref } from 'vue'
+import type { DefineGroupSchema } from '../../../src'
+import { reactive } from 'vue'
 import { cityOptions } from './options'
 
 export const groupModel = reactive({
@@ -15,7 +15,8 @@ export const groupModel = reactive({
   score: 2,
 })
 
-export const groupSchema = ref<DefineGroupSchema<typeof groupModel>[]>([
+// Prefer reactive schema arrays so exported demo types stay portable in declaration emit.
+export const groupSchema = reactive<DefineGroupSchema<typeof groupModel>[]>([
   {
     title: '基础配置',
     helpMessage: 'collapsedRows=1，只有超出折叠行数才显示按钮',
@@ -41,4 +42,3 @@ export const groupSchema = ref<DefineGroupSchema<typeof groupModel>[]>([
     ],
   },
 ])
-

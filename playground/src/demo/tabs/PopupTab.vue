@@ -1,7 +1,7 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { PopupSchemaForm } from '../../../../src'
-import { modalVisible, popupModel, popupSchema, popupVisible } from '../popup'
 import { message } from '../message'
+import { modalVisible, popupModel, popupSchema, popupVisible } from '../popup'
 
 function handleFinish(label: string) {
   message.success(`${label} 校验通过`)
@@ -24,8 +24,8 @@ function handleFinish(label: string) {
 
   <PopupSchemaForm
     v-model:model="popupModel"
-    :schema="popupSchema"
     v-model:visible="popupVisible"
+    :schema="popupSchema"
     title="Drawer 编辑"
     type="drawer"
     width="560px"
@@ -44,8 +44,8 @@ function handleFinish(label: string) {
 
   <PopupSchemaForm
     v-model:model="popupModel"
-    :schema="popupSchema"
     v-model:visible="modalVisible"
+    :schema="popupSchema"
     title="Modal 编辑"
     type="modal"
     width="760px"
@@ -65,5 +65,3 @@ function handleFinish(label: string) {
     </template>
   </PopupSchemaForm>
 </template>
-
-

@@ -7,4 +7,3 @@ export type WrapWithMaybeRef<T> = {
 }
 
 export type BreakpointType = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-

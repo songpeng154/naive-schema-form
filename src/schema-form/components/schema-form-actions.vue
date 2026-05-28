@@ -35,7 +35,7 @@ function handleReset() {
 </script>
 
 <template>
-  <n-flex
+  <NFlex
     v-if="formProps.showActions"
     :class="actionClass"
     :justify="justify || 'end'"
@@ -47,22 +47,22 @@ function handleReset() {
       <slot name="actions" />
     </template>
     <template v-else>
-      <n-button
+      <NButton
         v-if="formProps.showReset"
         :loading="formProps.resetLoading"
         @click="handleReset"
       >
         {{ formProps.resetText }}
-      </n-button>
-      <n-button
+      </NButton>
+      <NButton
         type="primary"
         :loading="formProps.submitLoading"
         @click="handleSubmit"
       >
         {{ formProps.submitText }}
-      </n-button>
+      </NButton>
       <slot name="extra" />
     </template>
     <slot name="actionsAfter" />
-  </n-flex>
+  </NFlex>
 </template>

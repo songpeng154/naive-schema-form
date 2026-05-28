@@ -1,9 +1,9 @@
 /* --------------基础表单-------------- */
 import type {
+  DefineSchema,
   SchemaFormCommonExpose,
   SchemaFormCommonProps,
   SchemaFormCommonSlots,
-  DefineSchema,
 } from '@/schema-form/types/common.ts'
 
 export interface SchemaFormProps extends SchemaFormCommonProps {

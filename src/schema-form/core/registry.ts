@@ -1,6 +1,6 @@
 import type { Component } from 'vue'
 import type { SchemaComponentAdapter, SchemaComponentRegistry } from '@/schema-form/core/types'
-import { defineAsyncComponent } from 'vue'
+import type { SchemaComponentName } from '@/schema-form/types/component'
 import {
   NAutoComplete,
   NCheckbox,
@@ -14,13 +14,15 @@ import {
   NSwitch,
   NTimePicker,
 } from 'naive-ui'
-import type { SchemaComponentName } from '@/schema-form/types/component'
+import { defineAsyncComponent } from 'vue'
 
-const lazy = (loader: () => Promise<Component>) => defineAsyncComponent({
-  loader,
-  delay: 200,
-  timeout: 3000,
-})
+function lazy(loader: () => Promise<Component>) {
+  return defineAsyncComponent({
+    loader,
+    delay: 200,
+    timeout: 3000,
+  })
+}
 
 export const schemaComponentRegistry: SchemaComponentRegistry = {
   input: {

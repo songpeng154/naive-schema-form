@@ -1,9 +1,7 @@
 /* --------------鍒嗙粍琛ㄥ崟-------------- */
 
-import type { GridItemProps, GridProps } from '@/grid/types'
-import type { Recordable } from '@/types/shared'
 import type { MaybeRef } from 'vue'
-import type { SchemaComponentName } from '@/schema-form/types/component.ts'
+import type { GridItemProps, GridProps } from '@/grid/types'
 import type {
   DefineSchema,
   SchemaFormCommonExpose,
@@ -11,6 +9,8 @@ import type {
   SchemaFormCommonSlots,
   UnwrapSchema,
 } from '@/schema-form/types/common.ts'
+import type { SchemaComponentName } from '@/schema-form/types/component.ts'
+import type { Recordable } from '@/types/shared'
 // 鍥炶皟鍙傛暟
 export interface GroupCallbackParams<
   TForm extends Recordable = Recordable,
@@ -65,10 +65,10 @@ export interface DefineGroupSchema<
   gridProps?: MaybeRef<GridProps>
 }
 
-export type UnwrapGroupSchema<
+export interface UnwrapGroupSchema<
   TForm extends Recordable = any,
   DComponentsName extends string = SchemaComponentName,
-> = {
+> {
   title: string
   helpMessage?: string
   hide?: boolean | GroupCallbackParamsFunction<TForm, DComponentsName, boolean>

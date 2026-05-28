@@ -1,14 +1,14 @@
-﻿import type { FormInst, FormItemRule } from 'naive-ui'
+import type { FormInst, FormItemRule } from 'naive-ui'
 import type { Component, ComputedRef, ModelRef, Ref } from 'vue'
 import type { GridItemProps } from '@/grid/types'
-import type { Recordable } from '@/types/shared'
 import type {
   SchemaFormCommonExpose,
   SchemaFormCommonProps,
   SlotsContent,
   UnwrapSchema,
 } from '@/schema-form/types/common.ts'
-import type { SchemaComponentName } from '@/schema-form/types/component'
+import type { SchemaComponentName, SchemaComponentPropsMap } from '@/schema-form/types/component'
+import type { Recordable } from '@/types/shared'
 
 export type SchemaComponentValueType = 'input' | 'select' | 'date' | 'time' | 'checked' | 'default'
 
@@ -25,6 +25,7 @@ export type SchemaComponentRegistry = Record<string, SchemaComponentAdapter>
 
 export interface NormalizeSchemaContext<TForm extends Recordable = Recordable> {
   schemaFormProps: SchemaFormCommonProps
+  schemaFormComponentProps?: Partial<SchemaComponentPropsMap>
   model: TForm
   fallbackGridItemProps?: number | GridItemProps
   disabled?: boolean
@@ -69,7 +70,7 @@ export type SchemaFormController = <TProps extends SchemaFormCommonProps>(
   props: TProps,
   model: ModelRef<Recordable>,
   slots: Record<string, any>,
-  options?: SchemaFormCoreOptions<TProps>
+  options?: SchemaFormCoreOptions<TProps>,
 ) => SchemaFormControllerResult
 
 export interface SchemaFormExposeControllerOptions {

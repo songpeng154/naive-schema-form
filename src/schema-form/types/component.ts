@@ -1,5 +1,5 @@
-import type { MaybeRef } from 'vue'
 import type { AutoCompleteProps, CascaderProps, CheckboxGroupProps, CheckboxProps, ColorPickerProps, DatePickerProps, DynamicInputProps, DynamicTagsProps, InputNumberProps, InputProps, MentionProps, RadioGroupProps, RadioProps, RateProps, SelectProps, SliderProps, SwitchProps, TimePickerProps, TransferProps, TreeSelectProps, UploadProps } from 'naive-ui'
+import type { MaybeRef } from 'vue'
 import type { Recordable } from '@/types/shared'
 
 export interface SchemaBuiltinComponentPropsMap {
@@ -40,8 +40,8 @@ export type SchemaComponentNameRef = MaybeRef<SchemaComponentName>
 
 export type ComponentsNameRef = SchemaComponentNameRef
 
-export type SchemaComponentProps<TName extends MaybeRef<string>> =
-  TName extends MaybeRef<infer Name>
+export type SchemaComponentProps<TName extends MaybeRef<string>>
+  = [TName] extends [MaybeRef<infer Name>]
     ? Name extends keyof SchemaComponentPropsMap
       ? NonNullable<SchemaComponentPropsMap[Name]>
       : Recordable

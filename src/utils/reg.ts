@@ -11,4 +11,3 @@ class RegUtils {
 }
 
 export default RegUtils
-
