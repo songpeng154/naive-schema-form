@@ -1,43 +1,89 @@
-# vue-components-starter [![npm](https://img.shields.io/npm/v/vue-components-starter.svg)](https://npmjs.com/package/vue-components-starter)
+# naive-schema-form
 
-[![Unit Test](https://github.com/sxzz/vue-components-starter/actions/workflows/unit-test.yml/badge.svg)](https://github.com/sxzz/vue-components-starter/actions/workflows/unit-test.yml)
+Schema-driven form components for Vue 3 + Naive UI.
 
-A starter for creating a Vue component library.
-
-## Development
-
-- Install dependencies:
+## Install
 
 ```bash
-pnpm install
+pnpm add naive-schema-form naive-ui vue
 ```
 
-- Run the playground:
+## Usage
 
-```bash
-pnpm play
+```vue
+<script setup lang="ts">
+import { reactive, ref } from 'vue'
+import { SchemaForm, type DefineSchema } from 'naive-schema-form'
+import 'naive-schema-form/style.css'
+
+const model = reactive({
+  name: '',
+  city: null,
+})
+
+const schema = ref<DefineSchema[]>([
+  { field: 'name', label: '姓名', component: 'input', showRequireMark: true },
+  {
+    field: 'city',
+    label: '城市',
+    component: 'select',
+    options: [{ label: '深圳', value: 'shenzhen' }],
+  },
+])
+</script>
+
+<template>
+  <SchemaForm v-model:model="model" v-model:schema="schema" />
+</template>
 ```
 
-- Run the unit tests:
+## Exports
+
+- `SchemaForm`
+- `SearchSchemaForm`
+- `GroupSchemaForm`
+- `PopupSchemaForm`
+- `Grid`
+- `GridItem`
+- `schemaComponentRegistry`
+- `registerSchemaComponent`
+- `extendSchemaComponents`
+
+## Scripts
 
 ```bash
-pnpm test
-```
-
-- Build the library:
-
-```bash
+pnpm playground
+pnpm typecheck
+pnpm test --run
 pnpm build
 ```
 
-## Sponsors
+## Current Notes
 
-<p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/sxzz/sponsors/sponsors.svg">
-    <img src='https://cdn.jsdelivr.net/gh/sxzz/sponsors/sponsors.svg'/>
-  </a>
-</p>
+- This package is Naive UI specific.
+- `vue` and `naive-ui` are peer dependencies.
+- Project-specific icon components were removed; custom components can be added through the registry helpers.
 
-## License
+## Custom Components
 
-[MIT](./LICENSE) License © 2025 [三咲智子 Kevin Deng](https://github.com/sxzz)
+自定义组件建议同时注册运行时组件和增强类型：
+
+```ts
+import { registerSchemaComponent } from 'naive-schema-form'
+
+declare module 'naive-schema-form' {
+  interface SchemaCustomComponentPropsMap {
+    badgeInput: {
+      prefix?: string
+    }
+  }
+}
+
+registerSchemaComponent('badgeInput', {
+  component: BadgeInput,
+  valueType: 'input',
+  mapPlaceholder: true,
+})
+```
+
+之后 `DefineSchema<Model, 'badgeInput'>` 的 `componentProps` 会按增强后的 props 推导。
