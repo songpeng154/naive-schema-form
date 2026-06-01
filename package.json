@@ -1,13 +1,12 @@
 {
   "name": "naive-schema-form",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "packageManager": "pnpm@10.11.0",
   "description": "Schema-driven form components for Naive UI.",
   "author": "songpeng <419626398@qq.com>",
   "license": "MIT",
-  "funding": "https://github.com/sponsors/sxzz",
-  "homepage": "",
+  "homepage": "https://github.com/songpeng154/naive-schema-form",
   "repository": {},
   "bugs": {},
   "sideEffects": [
