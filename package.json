@@ -1,7 +1,7 @@
 {
   "name": "naive-schema-form",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "packageManager": "pnpm@10.11.0",
   "description": "Schema-driven form components for Naive UI.",
   "author": "songpeng <419626398@qq.com>",
@@ -38,6 +38,9 @@
     "playground": "vite",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
   },
@@ -65,6 +68,8 @@
     "tsdown": "^0.22.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.11",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-demo": "^0.8.1",
     "vitest": "^4.1.5",
     "vitest-browser-vue": "^2.1.0",
     "vue": "^3.5.34",
