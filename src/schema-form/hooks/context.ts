@@ -17,10 +17,14 @@ const [useProvideSchemaFormContext, useSchemaFormContext] = createInjectionState
     return widths.length ? Math.max(...widths) : 0
   })
 
-  // 获取model值
+  /**
+   * 获取 model 值
+   */
   const getModelValue = (field: string) => get(model.value, field)
 
-  // 设置model值
+  /**
+   * 设置 model 值
+   */
   const setModelValue = (field: string, value: any) => set(model.value, field, value)
 
   return {

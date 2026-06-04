@@ -22,8 +22,15 @@ export const groupSchema = reactive<DefineGroupSchema<typeof groupModel>[]>([
     helpMessage: 'collapsedRows=1，只有超出折叠行数才显示按钮',
     collapsedRows: 1,
     form: [
-      { field: 'project', label: '项目名', component: 'input', showRequireMark: true, gridItemProps: { span: 8 } },
-      { field: 'owner', label: '负责人', component: 'input', gridItemProps: { span: 8 } },
+      {
+        field: 'project',
+        label: '项目名',
+        component: 'input',
+        showRequireMark: true,
+        gridItemProps: { span: 8 },
+        tooltip: 'xxx',
+      },
+      { field: 'owner', label: '负责人', component: 'input', gridItemProps: { span: 8 }, tooltip: 'xxx' },
       { field: 'city', label: '城市', component: 'select', options: cityOptions, gridItemProps: { span: 8 } },
       { field: 'startAt', label: '启动日期', component: 'datePicker', componentProps: { type: 'date' }, gridItemProps: { span: 8 } },
     ],

@@ -8,22 +8,34 @@ import type {
 } from '@/schema-form/types/common.ts'
 
 export interface SearchSchemaFormProps extends SchemaFormCommonProps {
-  // schema 配置
+  /**
+   * schema 配置
+   */
   schema: DefineSchema[]
 
-  // 是否开启折叠(关闭后折叠按钮不在显示)
+  /**
+   * 是否开启折叠（关闭后折叠按钮不再显示）
+   */
   enableCollapsed?: boolean
 
-  // 查询表单默认展示个数
+  /**
+   * 查询表单默认展示个数
+   */
   searchShowNumber?: number
 
-  // 是否折叠
+  /**
+   * 是否折叠
+   */
   collapsed?: boolean
 
-  // 折叠文字 (默认:展开)
+  /**
+   * 折叠文字（默认: 展开）
+   */
   collapsedText?: string
 
-  // 未折叠文字 (默认:收起)
+  /**
+   * 未折叠文字（默认: 收起）
+   */
   expandedText?: string
 }
 

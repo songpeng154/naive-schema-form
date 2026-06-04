@@ -7,7 +7,9 @@ import type {
 } from '@/schema-form/types/common.ts'
 
 export interface SchemaFormProps extends SchemaFormCommonProps {
-  // schema 配置
+  /**
+   * schema 配置
+   */
   schema: DefineSchema[]
 }
 

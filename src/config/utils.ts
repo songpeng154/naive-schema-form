@@ -21,7 +21,9 @@ export function mergeConfig<T>(...sources: Array<Partial<T> | undefined>): T {
         continue
 
       const currentValue = result[key]
-      // Merge nested config objects so callers can override only the pieces they need.
+      /**
+       * 递归合并嵌套对象，使调用方可以只覆盖部分字段。
+       */
       if (isPlainObject(currentValue) && isPlainObject(value)) {
         result[key] = mergeConfig(currentValue, value)
         continue
@@ -35,7 +37,9 @@ export function mergeConfig<T>(...sources: Array<Partial<T> | undefined>): T {
 }
 
 export function resolveNaiveSchemaFormConfig(config: NaiveSchemaFormConfig = {}): Readonly<ResolvedNaiveSchemaFormConfig> {
-  // Library defaults stay as the base layer; app-level config only overrides selected keys.
+  /**
+   * 库默认值作为基础层，应用级配置仅覆盖选中的字段。
+   */
   return mergeConfig<ResolvedNaiveSchemaFormConfig>(
     DEFAULT_NAIVE_SCHEMA_FORM_CONFIG,
     config as Partial<ResolvedNaiveSchemaFormConfig>,

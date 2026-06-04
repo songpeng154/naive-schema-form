@@ -32,7 +32,7 @@ watchEffect(() => {
 
 <template>
   <div
-    ref="gridContext.rowEl"
+    :ref="(el) => gridContext.rowEl = el as any"
     class="grid"
     :style="gridStyle"
   >
@@ -41,8 +41,5 @@ watchEffect(() => {
 </template>
 
 <style scoped>
-.grid {
-  width: 100%;
-  display: grid;
-}
+
 </style>

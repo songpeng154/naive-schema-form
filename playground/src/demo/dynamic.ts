@@ -94,7 +94,7 @@ export const dynamicSchema = reactive<DefineSchema<DynamicModel>[]>([
   },
   {
     label: '自定义整项插槽',
-    itemSlot: 'customBlock',
+    slot: 'customBlock',
     gridItemProps: { span: 12 },
   },
   {

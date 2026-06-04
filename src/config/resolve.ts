@@ -37,7 +37,10 @@ function syncReactiveObject<T extends Recordable>(target: T, source: T) {
 
 function useResolvedObject<T extends Recordable>(resolver: () => T): T {
   const state = reactive({} as T) as T
-  // Keep a stable reactive object so destructuring in components still updates with config changes.
+  /**
+   * 保持响应式对象引用稳定，
+   * 使得组件中解构后的变量仍能响应配置变化。
+   */
   syncReactiveObject(state, resolver())
 
   watchEffect(() => {
@@ -62,7 +65,9 @@ export function useResolvedGridItemProps(rawProps: GridItemProps) {
 export function useResolvedSchemaFormProps<TProps extends SchemaFormCommonProps>(variant: SchemaFormVariant, rawProps: TProps) {
   const config = useNaiveSchemaFormConfig()
 
-  // Precedence: common defaults < variant defaults < instance props.
+  /**
+   * 优先级：通用默认 < 变体默认 < 实例传入的属性
+   */
   return useResolvedObject(() => mergeConfig<TProps>(
     {},
     config.schemaForm.common as Partial<TProps>,
@@ -76,7 +81,9 @@ export function resolveSchemaComponentProps(
   componentProps: Recordable | undefined,
   globalComponentProps: Partial<SchemaComponentPropsMap> = {},
 ) {
-  // Schema-local componentProps should always win over library-wide component defaults.
+  /**
+   * Schema 局部的 componentProps 始终优先于库级别的组件默认值。
+   */
   const defaults = componentName
     ? globalComponentProps[componentName as SchemaComponentName] as Recordable | undefined
     : undefined

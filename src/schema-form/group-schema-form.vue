@@ -10,9 +10,10 @@ import type {
   UnwrapGroupSchema,
 } from '@/schema-form/types/group.ts'
 import type { Recordable } from '@/types/shared'
+import { Icon } from '@iconify/vue'
 import { isBoolean, isFunction } from 'es-toolkit'
 import { NButton, NTooltip } from 'naive-ui'
-import { computed, reactive } from 'vue'
+import { reactive, ref, watchEffect } from 'vue'
 import { useResolvedSchemaFormProps } from '@/config/resolve'
 import { mergeConfig } from '@/config/utils'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
@@ -30,7 +31,7 @@ const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormCont
   omitFormProps: ['schema'],
   omitContentSlots: ['actions', 'actionsAfter', 'actionsBefore', 'groupTitle', 'collapsedButton'],
 })
-
+const groupSchema = ref<RuntimeGroupSchema[]>([])
 const groupState = reactive(new Map<string, { collapsed: boolean }>())
 const groupOverflowMap = reactive(new Map<string, boolean>())
 
@@ -71,14 +72,6 @@ function createGroupCallbackSchema(config: RuntimeGroupSchema): GroupCallbackSch
     gridProps: config.gridProps,
   }
 }
-
-const groupSchema = computed<RuntimeGroupSchema[]>(() => {
-  const source = schema.value as UnwrapGroupSchema[]
-  const result: RuntimeGroupSchema[] = []
-  for (let index = 0; index < source.length; index += 1)
-    result.push(createRuntimeGroupSchema(source[index], index))
-  return result
-})
 
 function handleGroupHide(config: RuntimeGroupSchema) {
   let isVisible = true
@@ -128,6 +121,10 @@ function setFormRef(instance: any) {
   formRef.value = instance ?? undefined
 }
 
+watchEffect(() => {
+  groupSchema.value = schema.value.map((group, index) => createRuntimeGroupSchema(group, index))
+})
+
 defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(commonExpose, {
   toggleCollapsed: toggleCollapseByIndex,
 }))
@@ -149,7 +146,7 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
             </slot>
             <NTooltip v-if="config.helpMessage" trigger="hover">
               <template #trigger>
-                <span class="schemaForm-groupHeader-help">?</span>
+                <Icon icon="mdi:help-circle-outline" class="schemaForm-groupHeader-help" />
               </template>
               {{ config.helpMessage }}
             </NTooltip>
@@ -204,51 +201,5 @@ defineExpose<GroupSchemaFormExpose>(exposeSchemaForm<GroupSchemaFormExpose>(comm
 </template>
 
 <style scoped>
-.schemaForm-groupHeader {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 5px 10px;
-  background: var(--primary-shallow);
-  border-radius: var(--border-radius-md);
-}
 
-.schemaForm-groupHeader-title {
-  display: inline-flex;
-  align-items: center;
-  line-height: 20px;
-  gap: 7px;
-}
-
-.schemaForm-groupHeader-title-placeholder {
-  display: inline-block;
-  height: 25px;
-  width: 4px;
-  background: var(--primary-main);
-  border-radius: var(--border-radius-md);
-  flex-shrink: 0;
-}
-
-.schemaForm-groupHeader-title-name {
-  font-size: 15px;
-  font-weight: 500;
-  position: relative;
-  letter-spacing: 1px;
-}
-
-.schemaForm-groupHeader-help {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  font-size: 12px;
-  line-height: 1;
-  color: var(--n-text-color-3);
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  cursor: help;
-}
 </style>

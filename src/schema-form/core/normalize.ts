@@ -9,7 +9,6 @@ import type {
 import type {
   CallbackParams,
   CallbackParamsFunction,
-  CallbackSchemaSnapshot,
   OptionType,
   Schema,
   SchemaFormCommonProps,
@@ -41,17 +40,13 @@ const FORM_ITEM_OMIT_KEYS: (keyof Schema)[] = [
   'gridItemProps',
   'formItemProps',
   'formItemSlot',
-  'itemSlot',
+  'slot',
 ]
 
 function callbackParamsFunction<TForm extends Recordable, R>(value: R | CallbackParamsFunction<TForm, R>, params: CallbackParams<TForm>): R {
   return isFunction(value)
     ? value(params)
     : value
-}
-
-function createCallbackSchemaSnapshot(schema: UnwrapSchema): CallbackSchemaSnapshot {
-  return schema as CallbackSchemaSnapshot
 }
 
 function normalizeGridItemProps(item?: number | GridItemProps): GridItemProps {
@@ -80,7 +75,9 @@ function resolveComponentProps(
 ) {
   const { component, componentProps, placeholder, startPlaceholder, endPlaceholder, options, disabled } = schema
   const mapProps: Recordable = {}
-  // Merge global component defaults first so schema-level props can override them.
+  /**
+   * 先合并全局组件默认值，使得 Schema 级别的属性可以覆盖它们。
+   */
   const props = resolveSchemaComponentProps(
     component as SchemaComponentName | string | undefined,
     componentProps as Recordable | undefined,
@@ -147,7 +144,6 @@ function resolveSchemaError(schema: UnwrapSchema, adapter: SchemaComponentAdapte
 function normalizeSchemaItemInternal(schema: UnwrapSchema, ctx: NormalizeSchemaContext): NormalizedSchema {
   const field = schema.field as string | undefined
   const params = {
-    schema: createCallbackSchemaSnapshot(schema),
     model: ctx.model,
     value: field ? get(ctx.model, field) : undefined,
     field,
@@ -169,7 +165,7 @@ function normalizeSchemaItemInternal(schema: UnwrapSchema, ctx: NormalizeSchemaC
   return {
     raw: schema,
     model: ctx.model,
-    key: field || schema.itemSlot || schema.formItemSlot || `${ctx.formId}-${ctx.index}`,
+    key: field || schema.slot || schema.formItemSlot || `${ctx.formId}-${ctx.index}`,
     field,
     label,
     visible: !(callbackParamsFunction(schema.hide, params) ?? false),
@@ -183,7 +179,7 @@ function normalizeSchemaItemInternal(schema: UnwrapSchema, ctx: NormalizeSchemaC
     },
     gridItemProps: normalizeGridItemProps(schema.gridItemProps ?? ctx.fallbackGridItemProps ?? ctx.schemaFormProps.gridItemProps),
     rules: resolveRules(schema, ctx.schemaFormProps),
-    itemSlot: schema.itemSlot as string | undefined,
+    itemSlot: schema.slot as string | undefined,
     formItemSlot: schema.formItemSlot as string | undefined,
     error,
   }

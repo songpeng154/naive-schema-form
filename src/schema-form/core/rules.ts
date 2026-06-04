@@ -5,7 +5,9 @@ import { isArray } from 'es-toolkit/compat'
 import { getSchemaComponentAdapter } from '@/schema-form/core/registry'
 import RegUtils from '@/utils/reg'
 
-// 规则预设
+/**
+ * 规则预设
+ */
 const rulePresets: RulePresetsType = {
   mail: {
     requiredMessage: '请输入邮箱',

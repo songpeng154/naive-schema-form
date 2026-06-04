@@ -25,22 +25,22 @@ function handleFinish() {
     :grid-props="{ cols: 24, xGap: 16, yGap: 12 }"
     @finish="handleFinish"
   >
-    <template #groupTitle="{ config }">
-      <div class="group-title-slot">
-        <span />
-        <strong>{{ config.title }}</strong>
-        <small>{{ config.form.length }} items</small>
-      </div>
-    </template>
-    <template #collapsedButton="{ config, toggleCollapsed, overflow }">
-      <n-button quaternary type="primary" :disabled="!overflow" @click="toggleCollapsed(config)">
-        {{ config.collapsed ? '展开本组' : '收起本组' }}
-      </n-button>
-    </template>
-    <template #actionsAfter>
-      <n-button tertiary @click="formRef?.toggleCollapsed(0, false)">
-        展开第一组
-      </n-button>
-    </template>
+<!--    <template #groupTitle="{ config }">-->
+<!--      <div class="group-title-slot">-->
+<!--        <span />-->
+<!--        <strong>{{ config.title }}</strong>-->
+<!--        <small>{{ config.form.length }} items</small>-->
+<!--      </div>-->
+<!--    </template>-->
+<!--    <template #collapsedButton="{ config, toggleCollapsed, overflow }">-->
+<!--      <n-button quaternary type="primary" :disabled="!overflow" @click="toggleCollapsed(config)">-->
+<!--        {{ config.collapsed ? '展开本组' : '收起本组' }}-->
+<!--      </n-button>-->
+<!--    </template>-->
+<!--    <template #actionsAfter>-->
+<!--      <n-button tertiary @click="formRef?.toggleCollapsed(0, false)">-->
+<!--        展开第一组-->
+<!--      </n-button>-->
+<!--    </template>-->
   </GroupSchemaForm>
 </template>

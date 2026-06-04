@@ -14,7 +14,9 @@ function responsivePropsValue<K extends Recordable>(
   const getResponsiveValue = (record: ResponsiveValue) => {
     const { xs, sm, md, lg, xl } = record
     const w = width.value
-    // Start from the first declared breakpoint so sparse configs still resolve deterministically.
+    /**
+     * 从第一个声明的断点开始，确保稀疏配置也能确定性地解析。
+     */
     let value = xs ?? sm ?? md ?? lg ?? xl
 
     if (w > breakpoints.xs && sm !== undefined)
@@ -31,7 +33,9 @@ function responsivePropsValue<K extends Recordable>(
 
   return computed(() => {
     const value = isObject(data[key]) ? getResponsiveValue(data[key]) : data[key]
-    // Preserve explicit zero values and fall back to 0 only when the prop is actually missing.
+    /**
+     * 保留显式的零值，仅在属性缺失时回退到 0。
+     */
     return typeof value === 'number' ? value : 0
   })
 }

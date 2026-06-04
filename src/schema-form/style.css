@@ -1,0 +1,60 @@
+.n-input-number,.n-time-picker,.n-date-picker {
+    width: 100%;
+}
+
+.feedback{
+    min-height: 20px;
+    height: 20px;
+    font-size: 12px;
+    padding-top: 2px !important;
+}
+
+.n-form-item-label__text{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.schema-form-item-help {
+    margin-left: 5px;
+    font-size: 12px;
+    cursor: help;
+}
+
+.schemaForm-groupHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+}
+
+.schemaForm-groupHeader-title {
+    display: inline-flex;
+    align-items: center;
+    line-height: 20px;
+    gap: 7px;
+}
+
+.schemaForm-groupHeader-title-placeholder {
+    display: inline-block;
+    height: 25px;
+    width: 4px;
+    background: var(--n-color-target);
+    border-radius: var(--n-border-radius);
+    flex-shrink: 0;
+}
+
+.schemaForm-groupHeader-title-name {
+    font-size: 15px;
+    font-weight: 500;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+.schemaForm-groupHeader-help {
+    font-size: 12px;
+    cursor: help;
+    vertical-align: middle;
+}

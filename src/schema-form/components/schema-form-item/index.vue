@@ -1,9 +1,10 @@
 <script setup lang="tsx">
 import type { GridItemProps } from '@/grid/types'
 import type { SchemaFormItemProps } from '@/schema-form/components/schema-form-item/types/type.ts'
-import type { CallbackParams, CallbackSchemaSnapshot, OptionType, Schema } from '@/schema-form/types/common.ts'
+import type { OptionType, Schema } from '@/schema-form/types/common.ts'
+import { Icon } from '@iconify/vue'
 import { useCurrentElement } from '@vueuse/core'
-import { isString, omitBy } from 'es-toolkit'
+import { isFunction, isString, omitBy } from 'es-toolkit'
 import { isArray, isNumber } from 'es-toolkit/compat'
 import { NAlert, NCheckbox, NFormItem, NRadio, NTooltip } from 'naive-ui'
 import { computed, isVNode, nextTick, onUnmounted, useSlots, watch } from 'vue'
@@ -67,7 +68,7 @@ function renderTooltip(tooltip?: string) {
     <NTooltip>
       { {
         default: () => tooltip,
-        trigger: () => <span class="schema-form-item-help">?</span>,
+        trigger: () => <Icon icon="mdi:help-circle-outline" class="schema-form-item-help" />,
       } }
     </NTooltip>
   )
@@ -81,10 +82,6 @@ function renderLabelContent() {
   return isString(label)
     ? <span title={label}>{ label }</span>
     : label
-}
-
-function createCallbackSchemaSnapshot() {
-  return props.schema.raw as CallbackSchemaSnapshot
 }
 
 function renderComponentSlots() {
@@ -103,13 +100,12 @@ function renderComponentSlots() {
   if (isOptionsTransformRadio)
     return defaultSlot(optionsMapRadioComponent(raw.options!))
 
-  const content = typeof componentSlots === 'function'
-    ? (componentSlots as (params: CallbackParams) => any)({
-        schema: createCallbackSchemaSnapshot(),
+  const content = isFunction(componentSlots)
+    ? componentSlots({
         model: props.schema.model,
         value: props.schema.field ? getModelValue(props.schema.field) : undefined,
         field: props.schema.field as any,
-      } as CallbackParams)
+      })
     : componentSlots
 
   if (isArray(content) || isString(content) || isVNode(content))
@@ -269,38 +265,3 @@ onUnmounted(() => {
     <slot v-else :name="schema.itemSlot" />
   </GridItem>
 </template>
-
-<style scoped>
-:deep(.n-input-number), :deep(.n-time-picker), :deep(.n-date-picker) {
-  width: 100%;
-}
-
-:deep(.feedback) {
-  min-height: 20px;
-  height: 20px;
-  font-size: 12px;
-  padding-top: 2px !important;
-}
-
-:deep(.n-form-item-label__text) {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.schema-form-item-help {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  margin-left: 5px;
-  margin-bottom: 4px;
-  font-size: 12px;
-  line-height: 1;
-  color: var(--n-text-color-3);
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  cursor: help;
-}
-</style>

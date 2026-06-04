@@ -146,7 +146,7 @@ export const baseSchema = reactive<DefineSchema<BaseModel>[]>([
   customComponentSchema as DefineSchema<BaseModel>,
   {
     label: '整项插槽',
-    itemSlot: 'wholeItem',
+    slot: 'wholeItem',
     gridItemProps: { span: 12 },
   },
   {

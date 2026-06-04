@@ -7,10 +7,19 @@ import type {
   SlotsContent,
   UnwrapSchema,
 } from '@/schema-form/types/common.ts'
-import type { SchemaComponentName, SchemaComponentPropsMap } from '@/schema-form/types/component'
+import type {
+  SchemaComponentName,
+  SchemaComponentPropsMap,
+} from '@/schema-form/types/component'
 import type { Recordable } from '@/types/shared'
 
-export type SchemaComponentValueType = 'input' | 'select' | 'date' | 'time' | 'checked' | 'default'
+export type SchemaComponentValueType
+  = | 'input'
+    | 'select'
+    | 'date'
+    | 'time'
+    | 'checked'
+    | 'default'
 
 export interface SchemaComponentAdapter {
   component: Component
@@ -20,7 +29,6 @@ export interface SchemaComponentAdapter {
   mapOptions?: boolean
   dateTypes?: string[]
 }
-
 export type SchemaComponentRegistry = Record<string, SchemaComponentAdapter>
 
 export interface NormalizeSchemaContext<TForm extends Recordable = Recordable> {
@@ -33,7 +41,8 @@ export interface NormalizeSchemaContext<TForm extends Recordable = Recordable> {
   index: number
 }
 
-export type NormalizeSchemaListContext<TForm extends Recordable = Recordable> = Omit<NormalizeSchemaContext<TForm>, 'index'>
+export type NormalizeSchemaListContext<TForm extends Recordable = Recordable>
+  = Omit<NormalizeSchemaContext<TForm>, 'index'>
 
 export interface NormalizedSchema<TForm extends Recordable = Recordable> {
   raw: UnwrapSchema<TForm>

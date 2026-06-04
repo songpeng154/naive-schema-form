@@ -7,7 +7,7 @@ export default defineConfig([
     platform: 'neutral',
     fromVite: true,
     deps: {
-      neverBundle: ['vue', 'naive-ui'],
+      neverBundle: ['vue', 'naive-ui', '@iconify/vue'],
     },
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

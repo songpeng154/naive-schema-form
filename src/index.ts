@@ -1,4 +1,10 @@
-export { provideNaiveSchemaFormConfig, useNaiveSchemaFormConfig } from './config/context'
+import './grid/style.css'
+import './schema-form/style.css'
+
+export {
+  provideNaiveSchemaFormConfig,
+  useNaiveSchemaFormConfig,
+} from './config/context'
 export * from './config/types'
 export { default as GridItem } from './grid/grid-item.vue'
 export { default as Grid } from './grid/grid.vue'
