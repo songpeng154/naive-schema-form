@@ -75,17 +75,13 @@ export function generateRule(label: string, component: string): FormItemRule {
     message = placeholder.pick
 
   return {
-    required: true,
-    message,
-    validator(rule: FormItemRule, value: any) {
-      if (value === null
+    required: true, // 仅用于显示必填星号，校验逻辑由 validator 统一处理
+    validator(_rule: FormItemRule, value: any) {
+      const isEmpty = value === null
         || value === undefined
         || value === ''
-        || (isArray(value) && value.length === 0)) {
-        return new Error(message)
-      }
-
-      return true
+        || (isArray(value) && value.length === 0)
+      return isEmpty ? Promise.reject(message) : Promise.resolve()
     },
     trigger: adapter?.valueType === 'input' ? 'blur' : 'change',
   }

@@ -15,8 +15,13 @@ export function useSchemaFormController<TProps extends SchemaFormCommonProps>(
   useProvideSchemaFormContext(props, model)
 
   const { formRef, commonExpose } = useCommonExpose()
-  const formProps = useOmitProps(props, options.omitFormProps || [])
-  const formContentSlots = useOmitProps(slots, options.omitContentSlots || [])
+
+  // 调用 register 回调，将 expose 注入给 schemaForm hook
+  props.register?.(commonExpose as SchemaFormCommonExpose)
+
+  // 始终从 formProps 中排除 register，避免传递给底层 NForm
+  const formProps = useOmitProps(props, [...(options.omitFormProps || []), 'register'])
+  const formContentSlots = useOmitProps(slots, [...(options.omitContentSlots || []), 'default'])
 
   return {
     formRef,

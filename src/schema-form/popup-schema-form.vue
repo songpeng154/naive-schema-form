@@ -8,16 +8,50 @@ import type {
 import type { Recordable } from '@/types/shared'
 import { createReusableTemplate } from '@vueuse/core'
 import { NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
-import { useResolvedSchemaFormProps } from '@/config/resolve'
+import { useMergeGlobalConfig } from '@/global.ts'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/schema-form/components/schema-form-wrap/index.vue'
 import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
 
-const rawProps = defineProps<PopupSchemaFormProps>()
-const slots = defineSlots<PopupSchemaFormSlots>()
+const rawProps = withDefaults(defineProps<PopupSchemaFormProps>(), {
+  // ---- 通用默认值（common）----
+  autoPlaceholder: true,
+  autoRequiredRule: true,
+  autoLabelWidth: true,
+  showActions: true,
+  showLabel: true,
+  showFeedback: true,
+  showReset: true,
+  showRequireMark: undefined,
+  submitText: '提交',
+  resetText: '重置',
+  defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
+  defaultTimeFormat: 'HH:mm:ss',
+  defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
+  defaultTimeValueFormat: 'HH:mm:ss',
+  // ---- popup 变体默认值 ----
+  scrollToFirstError: true,
+  labelOverflowOmitted: false,
+  labelPlacement: 'top',
+  gridProps: () => ({
+    cols: 24,
+    yGap: 12,
+    xGap: 12,
+  }),
+  gridItemProps: 24,
+  type: 'drawer',
+  maskClosable: true,
+  resetOnClose: true,
+  confirmOnClose: true,
+  confirmTitle: '关闭提示',
+  confirmContent: '您确定要关闭它吗？',
+  drawerContentProps: () => ({
+    closable: true,
+  }),
+})
 
-const props = useResolvedSchemaFormProps('popup', rawProps)
+const slots = defineSlots<PopupSchemaFormSlots>()
 
 const drawerDefaultWidth = '500px'
 const modalDefaultWidth = '800px'
@@ -29,6 +63,8 @@ const visible = defineModel<boolean>('visible', { required: true })
 
 const [DefineActionButton, ActionButton] = createReusableTemplate()
 const [DefineForm, Form] = createReusableTemplate()
+
+const props = useMergeGlobalConfig('popup', rawProps)
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: [
@@ -113,7 +149,7 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
     >
       <SchemaFormContent :schema="schema" :grid-props="props.gridProps || {}">
         <template v-for="(_, key) in formContentSlots" #[key]="scope">
-          <slot :name="key" v-bind="scope || {}" />
+          <slot :name="key as PopupSchemaFormSlots" v-bind="scope || {}" />
         </template>
       </SchemaFormContent>
     </SchemaFormWrap>

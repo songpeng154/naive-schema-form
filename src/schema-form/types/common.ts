@@ -1,4 +1,4 @@
-import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
+import type { FormInst, FormItemProps, FormItemRule, FormRules } from 'naive-ui'
 import type { Theme } from 'naive-ui/es/_mixins'
 import type { ExtractThemeOverrides } from 'naive-ui/es/_mixins/use-theme'
 import type { FormValidateMessages } from 'naive-ui/es/form/src/interface'
@@ -20,7 +20,7 @@ export interface SchemaItemData {
   /**
    * 字段
    */
-  field: string
+  field?: string
 
   /**
    * item 标签宽度
@@ -74,6 +74,8 @@ export type ComponentSlots = {
  */
 export type RulePresets = 'mail' | 'phone' | 'landline' | 'idCard' | 'url'
 
+export type FieldPaths<TModel> = Paths<TModel> | (string & {})
+
 export type RulePresetsType = Record<RulePresets, {
   /**
    * 必填信息
@@ -97,34 +99,6 @@ export type SafeComponentProps<T> = T extends Recordable ? T : never
  * 通用的选项类型
  */
 export type OptionType = Recordable
-
-/**
- * 公共的 Schema 级别 form-item 属性。
- * 保持导出列表精简，使 Schema 类型保持可移植性。
- * 不常用的底层属性请使用 formItemProps。
- */
-export interface SchemaFormItemPublicProps {
-  first?: MaybeRef<boolean>
-  rulePath?: MaybeRef<string>
-  showRequireMark?: MaybeRef<boolean>
-  requireMarkPlacement?: MaybeRef<FormRequireMarkPlacement>
-  showFeedback?: MaybeRef<boolean>
-  size?: MaybeRef<FormSize>
-  ignorePathChange?: MaybeRef<boolean>
-  validationStatus?: MaybeRef<'error' | 'warning' | 'success'>
-  feedback?: MaybeRef<string>
-  feedbackClass?: MaybeRef<string>
-  showLabel?: MaybeRef<boolean>
-  labelWidth?: MaybeRef<string | number>
-  labelAlign?: MaybeRef<FormLabelAlign>
-  labelPlacement?: MaybeRef<FormLabelPlacement>
-  contentClass?: MaybeRef<string>
-  /**
-   * 不常用底层 form-item 属性的扩展入口。
-   * 保持运行时兼容性，无需将完整的 NFormItem 类型图谱引入 Schema。
-   */
-  formItemProps?: WrapWithMaybeRef<Recordable>
-}
 
 export type CallbackSchemaBase<
   TForm extends Recordable = any,
@@ -171,11 +145,11 @@ export interface CommonComponentPropsMap<
 /**
  * Schema 基础配置
  */
-export interface SchemaBaseConfig<TForm extends Recordable = any> extends SchemaFormItemPublicProps, CommonComponentPropsMap<TForm> {
+export interface SchemaBaseConfig<TForm extends Recordable = any> extends CommonComponentPropsMap<TForm> {
   /**
    * 字段
    */
-  field?: MaybeRef<Paths<TForm> | (string & {})>
+  field?: MaybeRef<FieldPaths<TForm>>
 
   /**
    * label 标签的文本
@@ -210,9 +184,20 @@ export interface SchemaBaseConfig<TForm extends Recordable = any> extends Schema
   gridItemProps?: MaybeRef<number | GridItemProps>
 
   /**
+   * form item 组件属性
+   */
+  formItemProps?: FormItemProps
+
+  /**
    * 规则
    */
   rules?: MaybeRef<RulePresets | FormItemRule | FormItemRule[]>
+
+  /**
+   * 是否必填（业务逻辑层面）。
+   * 开启后将自动附加必填验证规则。
+   */
+  required?: MaybeRef<boolean> | CallbackParamsFunction<TForm, boolean>
 
   /**
    * 该 formItem 是否隐藏
@@ -281,7 +266,7 @@ export type FormRequireMarkPlacement = 'left' | 'right' | 'right-hanging'
 /**
  * 通用 props
  */
-export interface SchemaFormCommonProps {
+export interface SchemaFormCommonProps<TModel extends Recordable = Recordable> {
   /**
    * 表单类名
    */
@@ -295,7 +280,7 @@ export interface SchemaFormCommonProps {
   /**
    * 模型
    */
-  model: Recordable
+  model: TModel
 
   /**
    * grid item 组件属性
@@ -423,8 +408,7 @@ export interface SchemaFormCommonProps {
   autoPlaceholder?: boolean
 
   /**
-   * 自动规则校验（当 showRequireMark 为真时，会根据 label 自动生成校验提示信息，label 类型为 string 才会生效，优先级最低）
-   * TODO: 优化，支持生成其他类型
+   * 自动规则校验（当 required 为真时，会根据 label 自动生成校验提示信息，label 类型为 string 才会生效，优先级最低）
    */
   autoRequiredRule?: boolean
 
@@ -463,13 +447,13 @@ export interface SchemaFormCommonProps {
    * @param validate 验证方法
    * @param model 模型
    */
-  onSubmit?: (validate: SchemaFormCommonExpose['validate'], model: Recordable) => void
+  onSubmit?: (validate: SchemaFormCommonExpose['validate'], model: TModel) => void
 
   /**
    * 提交表单且数据验证成功后回调事件
    * @param model 模型
    */
-  onFinish?: (model: Recordable) => void
+  onFinish?: (model: TModel) => void
 
   /**
    * 提交表单且数据验证失败后回调事件
@@ -482,13 +466,20 @@ export interface SchemaFormCommonProps {
    * @param validate 验证方法
    * @param model 模型
    */
-  onReset?: (validate: SchemaFormCommonExpose['resetFields'], model: Recordable) => void
+  onReset?: (validate: SchemaFormCommonExpose['resetFields'], model: TModel) => void
 
   /**
    * 重置表单后执行
    * @param model 模型
    */
-  onResetAfter?: (model: Recordable) => void
+  onResetAfter?: (model: TModel) => void
+
+  /**
+   * 通过 schemaForm hook 注册表单实例的回调，
+   * 组件挂载后会自动调用此方法将 expose 注入给 hook。
+   * 请勿手动传入此属性，应通过 schemaForm 使用。
+   */
+  register?: (instance: SchemaFormCommonExpose) => void
 }
 
 export interface SchemaFormCommonEmits {
@@ -548,7 +539,7 @@ export interface SchemaFormCommonSlots {
 /**
  * 通用方法
  */
-export interface SchemaFormCommonExpose extends FormInst {
+export interface SchemaFormCommonExpose<TForm extends Recordable = Recordable> extends FormInst {
   /**
    * 重置
    */
@@ -557,5 +548,5 @@ export interface SchemaFormCommonExpose extends FormInst {
   /**
    * 滚动到字段
    */
-  scrollToField: (field: string) => void
+  scrollToField: (field: FieldPaths<TForm>) => void
 }

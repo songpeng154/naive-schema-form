@@ -9,6 +9,32 @@ export type RowResponsive = 'self' | 'screen'
 
 export type ResponsiveValue<K extends number = number> = Partial<Record<BreakpointType, K>>
 
+/**
+ * 栅格系统使用的响应式断点阈值。
+ */
+export interface GridBreakpoints {
+  /**
+   * 超小布局的最大宽度。
+   */
+  xs: number
+  /**
+   * 单独小布局阈值。
+   */
+  sm: number
+  /**
+   * 中等布局阈值。
+   */
+  md: number
+  /**
+   * 大布局阈值。
+   */
+  lg: number
+  /**
+   * 超大布局阈值。
+   */
+  xl: number
+}
+
 export interface GridProps {
   /**
    * 列数量，默认 24
@@ -41,6 +67,11 @@ export interface GridProps {
    * Y 间距
    */
   yGap?: number | ResponsiveValue
+
+  /**
+   * 栅格系统使用的响应式断点阈值
+   */
+  breakpoints?: Partial<GridBreakpoints>
 }
 
 export interface GridItemProps {

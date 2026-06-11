@@ -92,7 +92,7 @@ export interface UnwrapGroupSchema<
   title: string
   helpMessage?: string
   hide?: boolean | GroupCallbackParamsFunction<TForm, boolean>
-  form: UnwrapSchema<TForm>[]
+  form: DefineSchema<TForm>[] | UnwrapSchema<TForm>[]
   collapsed?: boolean
   collapsedRows?: number
   hideCollapseButton?: boolean
@@ -107,7 +107,7 @@ export interface RuntimeGroupBaseSchema<
   key: string
   title: string
   helpMessage?: string
-  form: UnwrapSchema<TForm>[]
+  form: DefineSchema<TForm>[] | UnwrapSchema<TForm>[]
   collapsed: boolean
   collapsedRows: number
   hideCollapseButton?: boolean
@@ -122,7 +122,7 @@ export interface GroupCallbackSchema<
   key?: string
   title: string
   helpMessage?: string
-  form: UnwrapSchema<TForm>[]
+  form: DefineSchema<TForm>[] | UnwrapSchema<TForm>[]
   collapsed?: boolean
   collapsedRows?: number
   hideCollapseButton?: boolean
@@ -137,11 +137,11 @@ export interface RuntimeGroupSchema<
   hide?: boolean | GroupCallbackParamsFunction<TForm, boolean>
 }
 
-export interface GroupSchemaFormProps extends SchemaFormCommonProps {
+export interface GroupSchemaFormProps<TModel extends Recordable = Recordable> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
    */
-  schema: DefineGroupSchema[]
+  schema: DefineGroupSchema<TModel>[]
 
   /**
    * 默认是否折叠

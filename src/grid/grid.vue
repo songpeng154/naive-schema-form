@@ -2,12 +2,18 @@
 import type { CSSProperties } from 'vue'
 import type { GridProps } from '@/grid/types'
 import { computed, watchEffect } from 'vue'
-import { useResolvedGridProps } from '@/config/resolve'
 import { useProvideGridContext } from '@/grid/hooks/context.ts'
 import { setItemVisible } from '@/grid/utils'
 
-const rawProps = defineProps<GridProps>()
-const props = useResolvedGridProps(rawProps)
+const props = withDefaults(defineProps<GridProps>(), {
+  breakpoints: () => ({
+    xs: 530,
+    sm: 768,
+    md: 992,
+    lg: 1200,
+    xl: 1920,
+  }),
+})
 
 const gridContext = useProvideGridContext(props)
 const { isOverflow, displayIndexList, itemDataList, responsiveCols, responsiveXGap, responsiveYGap } = gridContext
@@ -17,6 +23,10 @@ const gridStyle = computed<CSSProperties>(() => ({
   'row-gap': `${responsiveYGap.value || 0}px`,
   'column-gap': `${responsiveXGap.value || 0}px`,
 }))
+
+function setRowel(el: any) {
+  gridContext.rowEl.value = el
+}
 
 watchEffect(() => {
   const itemVisible = setItemVisible(
@@ -32,7 +42,7 @@ watchEffect(() => {
 
 <template>
   <div
-    :ref="(el) => gridContext.rowEl = el as any"
+    :ref="setRowel"
     class="grid"
     :style="gridStyle"
   >

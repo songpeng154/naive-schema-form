@@ -2,21 +2,14 @@ import type { ModelRef } from 'vue'
 import type { SchemaFormCommonProps, SchemaItemData } from '@/schema-form/types/common.ts'
 import type { Recordable } from '@/types/shared'
 import { createInjectionState } from '@vueuse/core'
+import { merge } from 'es-toolkit'
 import { get, set } from 'es-toolkit/compat'
-import { computed, reactive } from 'vue'
-import { useNaiveSchemaFormConfig } from '@/config/context'
+import { reactive } from 'vue'
+import { useNaiveSchemaFormConfig } from '@/global.ts'
 
 const [useProvideSchemaFormContext, useSchemaFormContext] = createInjectionState((schemaFormProps: SchemaFormCommonProps, model: ModelRef<Recordable>) => {
   const config = useNaiveSchemaFormConfig()
-  const itemsDataMap = reactive<Map<string, SchemaItemData>>(new Map())
-
-  const maxLabelWidth = computed(() => {
-    const widths = Array.from(itemsDataMap.values())
-      .map(value => value.labelWidth)
-      .filter((value): value is number => typeof value === 'number' && value > 0)
-    return widths.length ? Math.max(...widths) : 0
-  })
-
+  const formItemData = reactive<Record<string, SchemaItemData>>({})
   /**
    * 获取 model 值
    */
@@ -27,14 +20,21 @@ const [useProvideSchemaFormContext, useSchemaFormContext] = createInjectionState
    */
   const setModelValue = (field: string, value: any) => set(model.value, field, value)
 
+  const setFormItemData = (key: string, data: Partial<SchemaItemData>) => {
+    formItemData[key] = merge(formItemData[key] || {}, data)
+  }
+
   return {
     schemaFormProps,
-    schemaFormComponentProps: config.schemaForm.componentProps,
+    /**
+     * 全局组件默认属性配置，用于跟局部 componentProps 合并
+     */
+    globalComponentProps: config?.schemaForm?.componentProps ?? {},
     model,
     getModelValue,
     setModelValue,
-    maxLabelWidth,
-    itemsDataMap,
+    formItemData,
+    setFormItemData,
   }
 })
 

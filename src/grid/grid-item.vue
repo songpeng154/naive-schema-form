@@ -2,16 +2,12 @@
 import type { CSSProperties } from 'vue'
 import type { GridItemProps } from '@/grid/types'
 import { computed, onUnmounted, ref, watchEffect } from 'vue'
-import { useNaiveSchemaFormConfig } from '@/config/context'
-import { useResolvedGridItemProps } from '@/config/resolve'
 import { useGridContext } from '@/grid/hooks/context.ts'
 import responsivePropsValue from '@/grid/hooks/responsive-props-value.ts'
 import { resolveItemData } from '@/grid/utils'
 import elementIndex from '@/utils/element-index'
 
-const rawProps = defineProps<GridItemProps>()
-const props = useResolvedGridItemProps(rawProps)
-const config = useNaiveSchemaFormConfig()
+const props = defineProps<GridItemProps>()
 
 const el = ref<HTMLElement>()
 
@@ -21,12 +17,13 @@ const {
   responsiveCols,
   width,
   responsiveXGap,
+  breakpoints,
   setItemMap,
   removeItemMap,
 } = useGridContext()!
 const index = elementIndex(el)
-const responsiveSpan = responsivePropsValue(width, props, 'span', config.grid.breakpoints)
-const responsiveOffset = responsivePropsValue(width, props, 'offset', config.grid.breakpoints)
+const responsiveSpan = responsivePropsValue(width, props, 'span', breakpoints.value)
+const responsiveOffset = responsivePropsValue(width, props, 'offset', breakpoints.value)
 
 const itemData = computed(() => resolveItemData(responsiveCols.value, {
   span: responsiveSpan.value,

@@ -9,19 +9,59 @@ import type { Recordable } from '@/types/shared'
 import { take } from 'es-toolkit'
 import { NButton } from 'naive-ui'
 import { computed } from 'vue'
-import { useResolvedSchemaFormProps } from '@/config/resolve'
+import { useMergeGlobalConfig } from '@/global.ts'
 import GridItem from '@/grid/grid-item.vue'
 import SchemaFormActions from '@/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/schema-form/components/schema-form-wrap/index.vue'
 import { exposeSchemaForm, useSchemaFormController } from '@/schema-form/core/controller'
 
-const rawProps = defineProps<SearchSchemaFormProps>()
+const rawProps = withDefaults(defineProps<SearchSchemaFormProps>(), {
+  // ---- 通用默认值（common）----
+  autoPlaceholder: true,
+  autoRequiredRule: true,
+  autoLabelWidth: true,
+  showActions: true,
+  showLabel: true,
+  showFeedback: true,
+  showReset: true,
+  showRequireMark: undefined,
+  submitText: '搜索', // 搜索变体默认值为 '搜索'
+  resetText: '重置',
+  defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
+  defaultTimeFormat: 'HH:mm:ss',
+  defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
+  defaultTimeValueFormat: 'HH:mm:ss',
+  // ---- search 变体默认值 ----
+  labelAlign: 'right',
+  labelPlacement: 'left',
+  inline: true,
+  gridItemProps: () => ({
+    span: {
+      xs: 24,
+      sm: 12,
+      md: 8,
+      lg: 6,
+      xl: 4,
+    },
+  }),
+  gridProps: () => ({
+    cols: 24,
+    xGap: 12,
+    responsive: 'self',
+  }),
+  searchShowNumber: 3,
+  enableCollapsed: true,
+  collapsedText: '展开',
+  expandedText: '收起',
+})
+
 const slots = defineSlots<SearchSchemaFormSlots>()
-const props = useResolvedSchemaFormProps('search', rawProps)
 const model = defineModel<Recordable>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 const collapsed = defineModel<boolean>('collapsed', { default: true })
+
+const props = useMergeGlobalConfig('search', rawProps)
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: ['searchShowNumber', 'schema', 'collapsed', 'enableCollapsed', 'collapsedText', 'expandedText'],
@@ -57,11 +97,11 @@ defineExpose<SearchSchemaFormExpose>(exposeSchemaForm<SearchSchemaFormExpose>(co
   >
     <SchemaFormContent :schema="searchSchemas" :grid-props="props.gridProps || {}">
       <template v-for="(_, key) in formContentSlots" #[key]="scope">
-        <slot :name="key" v-bind="scope || {}" />
+        <slot :name="key as SearchSchemaFormSlots" v-bind="scope || {}" />
       </template>
       <GridItem
         v-if="props.showActions"
-        :span="4"
+        :span="6"
         suffix
       >
         <SchemaFormActions

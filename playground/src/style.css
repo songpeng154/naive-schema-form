@@ -19,7 +19,6 @@
 }
 
 body {
-  min-width: 320px;
   margin: 0;
   background:
     radial-gradient(circle at 12% 8%, rgba(31, 122, 77, 0.18), transparent 28rem),
@@ -102,7 +101,6 @@ textarea {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
-  min-width: 280px;
 }
 
 .n-card {

@@ -7,11 +7,13 @@ import type {
   SchemaFormCommonSlots,
 } from '@/schema-form/types/common.ts'
 
-export interface SearchSchemaFormProps extends SchemaFormCommonProps {
+import type { Recordable } from '@/types/shared'
+
+export interface SearchSchemaFormProps<TModel extends Recordable = Recordable> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
    */
-  schema: DefineSchema[]
+  schema: DefineSchema<TModel>[]
 
   /**
    * 是否开启折叠（关闭后折叠按钮不再显示）

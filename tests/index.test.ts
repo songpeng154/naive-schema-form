@@ -98,7 +98,7 @@ it('string labels expose the full text through native title attribute', () => {
     },
   })
 
-  expect(wrapper.find('.n-form-item-label__text span').attributes('title')).toBe('A very long field label')
+  expect(wrapper.find('span[title]').attributes('title')).toBe('A very long field label')
 })
 
 it('schema-only component props are not forwarded to form item', () => {

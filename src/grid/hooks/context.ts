@@ -1,7 +1,9 @@
-import type { GridItemData, GridProps } from '@/grid/types'
+import type { ComputedRef } from 'vue'
+import type { GridBreakpoints, GridItemData, GridProps } from '@/grid/types'
 import { createInjectionState, useElementSize, useWindowSize } from '@vueuse/core'
+import { merge } from 'es-toolkit'
 import { computed, reactive, ref } from 'vue'
-import { useNaiveSchemaFormConfig } from '@/config/context'
+import { useNaiveSchemaFormConfig } from '@/global.ts'
 import responsivePropsValue from '@/grid/hooks/responsive-props-value.ts'
 
 const [useProvideGridContext, useGridContext] = createInjectionState((props: GridProps) => {
@@ -10,16 +12,16 @@ const [useProvideGridContext, useGridContext] = createInjectionState((props: Gri
   const isOverflow = ref(false)
   const displayIndexList = ref<number[]>([])
   const itemDataMap = reactive<Map<number, GridItemData>>(new Map())
-
+  const breakpoints = computed(() => merge(config?.breakpoints ?? {}, props.breakpoints || {})) as ComputedRef<GridBreakpoints>
   const { width: elWidth } = useElementSize(rowEl)
   const { width: windowsWidth } = useWindowSize()
 
   const width = computed(() => props.responsive === 'screen' ? windowsWidth.value : elWidth.value)
   const itemDataList = computed<GridItemData[]>(() => Array.from(itemDataMap.entries()).map(([, itemData]) => itemData))
 
-  const responsiveCols = responsivePropsValue(width, props, 'cols', config.grid.breakpoints)
-  const responsiveXGap = responsivePropsValue(width, props, 'xGap', config.grid.breakpoints)
-  const responsiveYGap = responsivePropsValue(width, props, 'yGap', config.grid.breakpoints)
+  const responsiveCols = responsivePropsValue(width, props, 'cols', breakpoints.value)
+  const responsiveXGap = responsivePropsValue(width, props, 'xGap', breakpoints.value)
+  const responsiveYGap = responsivePropsValue(width, props, 'yGap', breakpoints.value)
 
   const setItemMap = (index: number, itemProps: GridItemData) => {
     itemDataMap.set(index, itemProps)
@@ -39,6 +41,7 @@ const [useProvideGridContext, useGridContext] = createInjectionState((props: Gri
     responsiveCols,
     responsiveXGap,
     responsiveYGap,
+    breakpoints,
     setItemMap,
     removeItemMap,
   }
