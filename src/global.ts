@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
-import type { NaiveSchemaFormConfig, SchemaFormGlobalConfig } from '@/config/types.ts'
-import type { SchemaFormCommonProps } from '@/schema-form/types/common.ts'
+import type { SchemaFormCommonProps } from '@/components/schema-form/types/common.ts'
+import type { NaiveSchemaFormConfig, SchemaFormGlobalConfig } from '@/types/global.ts'
 import { reactiveComputed } from '@vueuse/core'
 import { merge } from 'es-toolkit'
 import { inject, provide } from 'vue'

@@ -1,76 +1,188 @@
 # naive-schema-form
 
+[中文](./README.zh-CN.md) | English
+
 Schema-driven form components for Vue 3 + Naive UI.
 
-## Install
+### Motivation
+
+Building complex forms in enterprise applications (B2B/Admin dashboards) is traditionally a massive time sink. Handling intricate validations, responsive layouts, nested fields, and dynamic visibilities using raw template syntax often results in monolithic, unmaintainable Vue files.
+
+`naive-schema-form` was born to solve this. By shifting form definitions from HTML templates to **JSON schemas**, it frees you from DOM manipulation and lets you focus on what really matters: your business data flow.
+
+### Core Features
+
+- **Schema-Driven**: Describe dynamic forms using pure JS objects to keep your Vue templates clean and maintainable.
+- **Hooks Architecture**: Fully embraces the Composition API (`useSchemaForm`, etc.) to decouple form state and actions from the UI layer.
+- **Business-Ready Variants**: Out-of-the-box solutions for high-frequency scenarios:
+  - **Search Form**: Perfect for table headers with built-in auto-collapse and expand logic.
+  - **Group Form**: Designed for massive configuration pages, split into independent card sections.
+  - **Popup Form**: Seamlessly embed forms into Modals or Drawers with unsaved-changes protection.
+- **Flawless TypeScript Inference**: Enjoy perfect type inference—defining `component: 'select'` instantly grants you `naive-ui`'s native `SelectProps` autocomplete.
+- **Responsive Grid Engine**: Manage complex responsive layouts effortlessly with the built-in highly flexible Grid system.
+- **Extensible Ecosystem**: Register your own business components globally with a single line of code, while retaining full TypeScript support.
+
+---
+
+### 📦 Install
 
 ```bash
+# naive-ui and vue are required peer dependencies
 pnpm add naive-schema-form naive-ui vue
 ```
 
-## Usage
+### 🚀 Quick Start (Basic Form)
 
 ```vue
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { SchemaForm, type DefineSchema } from 'naive-schema-form'
-import 'naive-schema-form/style.css'
+import { ref } from 'vue'
+import { SchemaForm, useSchemaForm } from 'naive-schema-form'
+import 'naive-schema-form/style.css' // Required CSS
 
-const model = reactive({
-  name: '',
-  city: null,
+const model = ref({ name: '', city: null, isActive: false })
+
+const { register, validate } = useSchemaForm(model, {
+  // Built-in form configuration
+  labelPlacement: 'top',
+  gridProps: { cols: 24, xGap: 24 },
+  
+  schema: [
+    { 
+      field: 'name', 
+      label: 'Name', 
+      component: 'input', 
+      required: true, 
+      gridItemProps: 24 
+    },
+    {
+      field: 'isActive',
+      label: 'Is Active',
+      component: 'switch',
+      gridItemProps: 12
+    },
+    {
+      field: 'city',
+      label: 'City',
+      component: 'select',
+      gridItemProps: 12,
+      // Dynamic visibility based on another field
+      hide: ({ model }) => !model.isActive, 
+      componentProps: {
+        options: [{ label: 'Shenzhen', value: 'shenzhen' }],
+      }
+    },
+  ]
 })
 
-const schema = ref<DefineSchema[]>([
-  { field: 'name', label: '姓名', component: 'input', showRequireMark: true },
-  {
-    field: 'city',
-    label: '城市',
-    component: 'select',
-    options: [{ label: '深圳', value: 'shenzhen' }],
-  },
-])
+const onSubmit = async () => {
+  await validate()
+  console.log('Valid!', model.value)
+}
 </script>
 
 <template>
-  <SchemaForm v-model:model="model" v-model:schema="schema" />
+  <SchemaForm v-bind="register" />
+  <button @click="onSubmit">Submit</button>
 </template>
 ```
 
-## Exports
+---
 
-- `SchemaForm`
-- `SearchSchemaForm`
-- `GroupSchemaForm`
-- `PopupSchemaForm`
-- `Grid`
-- `GridItem`
-- `schemaComponentRegistry`
-- `registerSchemaComponent`
-- `extendSchemaComponents`
+### 🎯 Form Variants Examples
 
-## Scripts
+#### 1. SearchSchemaForm (Table Query Headers)
+Automatically collapses excess query fields and provides built-in Search/Reset buttons.
 
-```bash
-pnpm playground
-pnpm typecheck
-pnpm test --run
-pnpm build
+```vue
+<script setup lang="ts">
+import { SearchSchemaForm, useSearchSchemaForm } from 'naive-schema-form'
+
+const { register } = useSearchSchemaForm(model, {
+  searchShowNumber: 3, // Auto collapse fields after the 3rd one
+  enableCollapsed: true, // Toggle collapse functionality
+  onSubmit: async (validateFunc, currentModel) => {
+    await validateFunc()
+    // Trigger table fetch with currentModel
+  },
+  schema: [
+    /* ... lots of fields ... */
+  ]
+})
+</script>
+
+<template>
+  <SearchSchemaForm v-bind="register" />
+</template>
 ```
 
-## Current Notes
+#### 2. PopupSchemaForm (Modal/Drawer Forms)
+Manage modal visibility and loading states automatically without cluttering your template.
 
-- This package is Naive UI specific.
-- `vue` and `naive-ui` are peer dependencies.
-- Project-specific icon components were removed; custom components can be added through the registry helpers.
+```vue
+<script setup lang="ts">
+import { PopupSchemaForm, usePopupSchemaForm } from 'naive-schema-form'
 
-## Custom Components
+const { register, openPopup } = usePopupSchemaForm(model, {
+  type: 'modal', // Or 'drawer'
+  title: 'Edit User',
+  width: '600px',
+  resetOnClose: true, // Auto reset fields on close
+  confirmOnClose: true, // Warn users if they have unsaved changes
+  onSubmit: async (validateFunc, currentModel) => {
+    await validateFunc()
+    // Submit data... the modal will auto close on success
+  },
+  schema: [ /* ... fields ... */ ]
+})
+</script>
 
-自定义组件建议同时注册运行时组件和增强类型：
+<template>
+  <button @click="openPopup">Edit</button>
+  <!-- Rendered via Teleport inside -->
+  <PopupSchemaForm v-bind="register" />
+</template>
+```
+
+#### 3. GroupSchemaForm (Complex Grouped Forms)
+Ideal for massive configuration pages split into sections.
+
+```vue
+<script setup lang="ts">
+import { GroupSchemaForm, useGroupSchemaForm } from 'naive-schema-form'
+
+const { register } = useGroupSchemaForm(model, {
+  defaultCollapsed: false,
+  schema: [
+    {
+      title: 'Basic Information',
+      helpMessage: 'General settings for this entity',
+      form: [ /* ... inputs ... */ ]
+    },
+    {
+      title: 'Advanced Settings',
+      collapsed: true, // Start collapsed
+      form: [ /* ... inputs ... */ ]
+    }
+  ]
+})
+</script>
+
+<template>
+  <GroupSchemaForm v-bind="register" />
+</template>
+```
+
+---
+
+### 🧩 Custom Components
+
+You can easily register custom components and extend their types:
 
 ```ts
 import { registerSchemaComponent } from 'naive-schema-form'
+import BadgeInput from './BadgeInput.vue'
 
+// 1. Extend Types
 declare module 'naive-schema-form' {
   interface SchemaCustomComponentPropsMap {
     badgeInput: {
@@ -79,11 +191,10 @@ declare module 'naive-schema-form' {
   }
 }
 
+// 2. Register Runtime Component
 registerSchemaComponent('badgeInput', {
   component: BadgeInput,
   valueType: 'input',
   mapPlaceholder: true,
 })
 ```
-
-之后 `DefineSchema<Model, 'badgeInput'>` 的 `componentProps` 会按增强后的 props 推导。

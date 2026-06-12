@@ -1,9 +1,9 @@
 import type { Ref } from 'vue'
 import type { UsePopupSchemaFormArgs, UsePopupSchemaFormOptions, UsePopupSchemaFormReturn } from './types'
-import type { DefineSchema, FieldPaths } from '@/schema-form/types/common'
-import type { PopupSchemaFormExpose } from '@/schema-form/types/popup'
+import type { DefineSchema, FieldPaths } from '@/components/schema-form/types/common'
+import type { PopupSchemaFormExpose } from '@/components/schema-form/types/popup'
 import type { Recordable } from '@/types/shared'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 /**
  * 弹窗表单 Hook，通过直接传入 schema 数组或配置 options 进行一站式管理
@@ -55,31 +55,16 @@ function usePopupSchemaForm<TModel extends Recordable>(
   const { schema: _omittedSchema, ...restOptions } = options
 
   // register 对象：通过 v-bind 展开到 PopupSchemaForm 组件上
-  const register = {
+  const register = reactive({
     ...restOptions,
-    get 'model'() {
-      return model.value
-    },
-    set 'model'(val) {
-      model.value = val
-    },
+    model,
+    schema,
+    visible,
     'onUpdate:model': (val: TModel) => { model.value = val },
-    get 'schema'() {
-      return schema.value
-    },
-    set 'schema'(val) {
-      schema.value = val
-    },
     'onUpdate:schema': (val: DefineSchema<TModel>[]) => { schema.value = val },
-    get 'visible'() {
-      return visible.value
-    },
-    set 'visible'(val) {
-      visible.value = val
-    },
     'onUpdate:visible': (val: boolean) => { visible.value = val },
     'register': registerCallback,
-  } as unknown as UsePopupSchemaFormReturn<TModel>['register']
+  }) as unknown as UsePopupSchemaFormReturn<TModel>['register']
 
   // 代理表单实例方法
   const validate: PopupSchemaFormExpose['validate'] = (...args) => {

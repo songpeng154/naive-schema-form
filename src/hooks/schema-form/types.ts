@@ -1,12 +1,12 @@
 import type { Ref } from 'vue'
-import type { SchemaFormProps } from '@/schema-form/types/base.ts'
-import type { DefineSchema, SchemaFormCommonExpose } from '@/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared.ts'
+import type { SchemaFormProps } from '@/components/schema-form/types/base.ts'
+import type { DefineSchema, SchemaFormCommonExpose } from '@/components/schema-form/types/common.ts'
+import type { Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
 
 /**
  * schemaForm 的配置项类型（排除 model 和 register）
  */
-export type UseSchemaFormOptions<TModel extends Recordable> = Omit<SchemaFormProps<TModel>, 'model' | 'register' | 'schema'> & {
+export type UseSchemaFormOptions<TModel extends Recordable> = WrapWithMaybeRef<Omit<SchemaFormProps<TModel>, 'model' | 'register' | 'schema'>> & {
   schema?: DefineSchema<TModel>[]
 }
 

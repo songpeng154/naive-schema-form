@@ -1,5 +1,5 @@
 import type { Plugin } from 'vue'
-import type { NaiveSchemaFormConfig } from '@/config/types'
+import type { NaiveSchemaFormConfig } from '@/types/global.ts'
 import { NAIVE_SCHEMA_FORM_CONFIG_KEY } from '@/global.ts'
 
 /**

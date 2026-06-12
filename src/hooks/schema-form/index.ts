@@ -1,8 +1,8 @@
 import type { Ref } from 'vue'
 import type { UseSchemaFormArgs, UseSchemaFormOptions, UseSchemaFormReturn } from './types.ts'
-import type { DefineSchema, FieldPaths, SchemaFormCommonExpose } from '@/schema-form/types/common.ts'
+import type { DefineSchema, FieldPaths, SchemaFormCommonExpose } from '@/components/schema-form/types/common.ts'
 import type { Recordable } from '@/types/shared.ts'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 /**
  * 表单 Hook，通过直接传入 schema 数组或配置 options 进行一站式管理
@@ -51,24 +51,16 @@ function useSchemaForm<TModel extends Recordable>(
   const { schema: _omittedSchema, ...restOptions } = options
 
   // register 对象：通过 v-bind 展开到 SchemaForm 组件上
-  const register = {
+  // 使用 reactive 包装，实现对传入配置中 Refs/Computed 的自动解包，
+  // 并且内置 model 和 schema 作为 Ref 会被响应式代理处理。
+  const register = reactive({
     ...restOptions,
-    get 'model'() {
-      return model.value
-    },
-    set 'model'(val) {
-      model.value = val
-    },
+    model,
+    schema,
     'onUpdate:model': (val: TModel) => { model.value = val },
-    get 'schema'() {
-      return schema.value
-    },
-    set 'schema'(val) {
-      schema.value = val
-    },
     'onUpdate:schema': (val: DefineSchema<TModel>[]) => { schema.value = val },
     'register': registerCallback,
-  } as unknown as UseSchemaFormReturn<TModel>['register']
+  }) as UseSchemaFormReturn<TModel>['register']
 
   // 代理表单实例方法
   const validate: SchemaFormCommonExpose['validate'] = (...args) => {

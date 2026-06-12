@@ -1,21 +1,21 @@
 import type { Ref } from 'vue'
-import type { DefineSchema } from '@/schema-form/types/common'
-import type { SearchSchemaFormExpose, SearchSchemaFormProps } from '@/schema-form/types/search'
-import type { Recordable } from '@/types/shared'
+import type { DefineSchema } from '@/components/schema-form/types/common'
+import type { SearchSchemaFormExpose, SearchSchemaFormProps } from '@/components/schema-form/types/search'
+import type { Recordable, WrapWithMaybeRef } from '@/types/shared'
 
 /**
  * useSearchSchemaForm 的配置项类型（排除 model 和 register）
  */
-export type UseSearchSchemaFormOptions<TModel extends Recordable> = Omit<SearchSchemaFormProps<TModel>, 'model' | 'register' | 'schema'> & {
+export type UseSearchSchemaFormOptions<TModel extends Recordable> = WrapWithMaybeRef<Omit<SearchSchemaFormProps<TModel>, 'model' | 'register' | 'schema'>> & {
   schema?: DefineSchema<TModel>[]
 }
 
 /**
  * useSearchSchemaForm Hook 的第二参数联合类型
  */
-export type UseSearchSchemaFormArgs<TModel extends Recordable> =
-  | DefineSchema<TModel>[]
-  | UseSearchSchemaFormOptions<TModel>
+export type UseSearchSchemaFormArgs<TModel extends Recordable>
+  = | DefineSchema<TModel>[]
+    | UseSearchSchemaFormOptions<TModel>
 
 /**
  * useSearchSchemaForm 的返回值类型

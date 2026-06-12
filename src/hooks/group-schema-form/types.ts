@@ -1,20 +1,20 @@
 import type { Ref } from 'vue'
-import type { DefineGroupSchema, GroupSchemaFormExpose, GroupSchemaFormProps } from '@/schema-form/types/group'
-import type { Recordable } from '@/types/shared'
+import type { DefineGroupSchema, GroupSchemaFormExpose, GroupSchemaFormProps } from '@/components/schema-form/types/group'
+import type { Recordable, WrapWithMaybeRef } from '@/types/shared'
 
 /**
  * useGroupSchemaForm 的配置项类型（排除 model 和 register）
  */
-export type UseGroupSchemaFormOptions<TModel extends Recordable> = Omit<GroupSchemaFormProps, 'model' | 'register' | 'schema'> & {
+export type UseGroupSchemaFormOptions<TModel extends Recordable> = WrapWithMaybeRef<Omit<GroupSchemaFormProps, 'model' | 'register' | 'schema'>> & {
   schema?: DefineGroupSchema<TModel>[]
 }
 
 /**
  * useGroupSchemaForm Hook 的第二参数联合类型
  */
-export type UseGroupSchemaFormArgs<TModel extends Recordable> =
-  | DefineGroupSchema<TModel>[]
-  | UseGroupSchemaFormOptions<TModel>
+export type UseGroupSchemaFormArgs<TModel extends Recordable>
+  = | DefineGroupSchema<TModel>[]
+    | UseGroupSchemaFormOptions<TModel>
 
 /**
  * useGroupSchemaForm 的返回值类型

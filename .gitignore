@@ -6,3 +6,6 @@ dist
 .eslintcache
 docs/.vitepress/dist
 docs/.vitepress/cache
+
+.idea
+.claude

@@ -1,9 +1,9 @@
 import type { Ref } from 'vue'
 import type { UseGroupSchemaFormArgs, UseGroupSchemaFormOptions, UseGroupSchemaFormReturn } from './types'
-import type { FieldPaths } from '@/schema-form/types/common.ts'
-import type { DefineGroupSchema, GroupSchemaFormExpose } from '@/schema-form/types/group'
+import type { FieldPaths } from '@/components/schema-form/types/common.ts'
+import type { DefineGroupSchema, GroupSchemaFormExpose } from '@/components/schema-form/types/group'
 import type { Recordable } from '@/types/shared'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 /**
  * 分组表单 Hook，通过直接传入 schema 数组或配置 options 进行一站式管理
@@ -57,24 +57,14 @@ function useGroupSchemaForm<TModel extends Recordable>(
   const { schema: _omittedSchema, ...restOptions } = options
 
   // register 对象：通过 v-bind 展开到 GroupSchemaForm 组件上
-  const register = {
+  const register = reactive({
     ...restOptions,
-    get 'model'() {
-      return model.value
-    },
-    set 'model'(val) {
-      model.value = val
-    },
+    model,
+    schema,
     'onUpdate:model': (val: TModel) => { model.value = val },
-    get 'schema'() {
-      return schema.value
-    },
-    set 'schema'(val) {
-      schema.value = val
-    },
     'onUpdate:schema': (val: DefineGroupSchema<TModel>[]) => { schema.value = val },
     'register': registerCallback,
-  } as unknown as UseGroupSchemaFormReturn<TModel>['register']
+  }) as unknown as UseGroupSchemaFormReturn<TModel>['register']
 
   // 代理表单实例方法
   const validate: GroupSchemaFormExpose['validate'] = (...args) => {
