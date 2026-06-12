@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { FormLabelPlacement } from 'naive-ui'
+import type { FormProps } from 'naive-ui'
+type FormLabelPlacement = NonNullable<FormProps['labelPlacement']>
 import { NRadioButton, NRadioGroup, NSpace } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 import { SchemaForm, useSchemaForm } from '../../../../src/index'
@@ -11,7 +12,7 @@ const configState = reactive({
 })
 
 // 初始化 Model
-const model = ref({
+const model = ref<Record<string, any>>({
   firstName: '',
   middleName: '',
   lastName: '',
@@ -166,7 +167,7 @@ const { register } = useSchemaForm(model, {
       componentProps: { type: 'textarea', rows: 4 },
       gridItemProps: { span: 24 },
     },
-  ],
+  ] as any,
 })
 </script>
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { SchemaForm, useSchemaForm } from 'naive-schema-form'
+import { SchemaForm, useSchemaForm } from '../../../../src/index'
 import { NAlert, NButton, NSpace, useMessage } from 'naive-ui'
 import { ref } from 'vue'
 
 const message = useMessage()
 
 // 初始化 Model
-const model = ref({
+const model = ref<Record<string, any>>({
   // 自动校验字段
   autoRequiredStr: '',
   autoRequiredSelect: null,
@@ -114,8 +114,8 @@ const { register, validate, restoreValidation, resetFields } = useSchemaForm(mod
         message: '格式错误：需为 4 到 16 位的字母、数字、下划线',
         trigger: ['input', 'blur'],
       },
-    },
-  ],
+    }
+  ] as any,
 })
 
 // 外部触发校验（测试 Expose API）

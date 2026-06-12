@@ -11,7 +11,7 @@ export interface SchemaFormProps<TModel extends Recordable = Recordable> extends
   /**
    * schema 配置
    */
-  schema: DefineSchema<TModel>[]
+  schema?: DefineSchema<TModel>[]
 }
 
 export interface SchemaFormExpose extends SchemaFormCommonExpose {

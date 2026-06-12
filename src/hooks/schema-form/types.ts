@@ -3,6 +3,14 @@ import type { SchemaFormProps } from '@/components/schema-form/types/base.ts'
 import type { DefineSchema, SchemaFormCommonExpose } from '@/components/schema-form/types/common.ts'
 import type { Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
 
+export type SchemaFormRegisterProps<TModel extends Recordable> = Omit<SchemaFormProps<TModel>, 'model' | 'schema'> & {
+  'model': TModel
+  'schema': DefineSchema<TModel>[]
+  'onUpdate:model': (val: TModel) => void
+  'onUpdate:schema': (val: DefineSchema<TModel>[]) => void
+  'register': (instance: SchemaFormCommonExpose) => void
+}
+
 /**
  * schemaForm 的配置项类型（排除 model 和 register）
  */
@@ -28,13 +36,7 @@ export interface UseSchemaFormReturn<TModel extends Recordable> {
    * <SchemaForm v-bind="register" />
    * ```
    */
-  register: Omit<UseSchemaFormOptions<TModel>, 'schema'> & {
-    'model': TModel
-    'onUpdate:model': (val: TModel) => void
-    'schema': DefineSchema<TModel>[]
-    'onUpdate:schema': (val: DefineSchema<TModel>[]) => void
-    'register': (instance: SchemaFormCommonExpose) => void
-  }
+  register: SchemaFormRegisterProps<TModel>
 
   /**
    * 响应式 model 数据

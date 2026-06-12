@@ -1,7 +1,15 @@
 import type { Ref } from 'vue'
 import type { DefineSchema } from '@/components/schema-form/types/common'
 import type { SearchSchemaFormExpose, SearchSchemaFormProps } from '@/components/schema-form/types/search'
-import type { Recordable, WrapWithMaybeRef } from '@/types/shared'
+import type { Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
+
+export type SearchSchemaFormRegisterProps<TModel extends Recordable> = Omit<SearchSchemaFormProps<TModel>, 'model' | 'schema'> & {
+  'model': TModel
+  'schema': DefineSchema<TModel>[]
+  'onUpdate:model': (val: TModel) => void
+  'onUpdate:schema': (val: DefineSchema<TModel>[]) => void
+  'register': (instance: SearchSchemaFormExpose) => void
+}
 
 /**
  * useSearchSchemaForm 的配置项类型（排除 model 和 register）
@@ -24,13 +32,7 @@ export interface UseSearchSchemaFormReturn<TModel extends Recordable> {
   /**
    * 注册对象，通过 v-bind 绑定到 SearchSchemaForm 组件
    */
-  register: Omit<UseSearchSchemaFormOptions<TModel>, 'schema'> & {
-    'model': TModel
-    'onUpdate:model': (val: TModel) => void
-    'schema': DefineSchema<TModel>[]
-    'onUpdate:schema': (val: DefineSchema<TModel>[]) => void
-    'register': (instance: SearchSchemaFormExpose) => void
-  }
+  register: SearchSchemaFormRegisterProps<TModel>
 
   /**
    * 响应式 model 数据

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { SchemaForm, useSchemaForm } from 'naive-schema-form'
+import { SchemaForm, useSchemaForm } from '../../../../src/index'
 import { ref } from 'vue'
 
 // 1. 初始化 Model，包含更丰富的数据类型
-const model = ref({
+const model = ref<Record<string, any>>({
   username: '',
   password: '',
   role: null,
@@ -101,7 +101,7 @@ const { register } = useSchemaForm(model, {
       label: '主题色',
       component: 'colorPicker',
     },
-  ],
+  ] as any,
 })
 </script>
 
