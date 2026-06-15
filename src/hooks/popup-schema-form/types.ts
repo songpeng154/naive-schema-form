@@ -1,9 +1,9 @@
 import type { Ref } from 'vue'
 import type { DefineSchema } from '@/components/schema-form/types/common'
 import type { PopupSchemaFormExpose, PopupSchemaFormProps } from '@/components/schema-form/types/popup'
-import type { Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
+import type { WrapWithMaybeRef } from '@/types/shared.ts'
 
-export type PopupSchemaFormRegisterProps<TModel extends Recordable> = Omit<PopupSchemaFormProps<TModel>, 'model' | 'schema' | 'visible'> & {
+export type PopupSchemaFormRegisterProps<TModel extends object = any> = Omit<PopupSchemaFormProps<TModel>, 'model' | 'schema' | 'visible'> & {
   'model': TModel
   'schema': DefineSchema<TModel>[]
   'visible': boolean
@@ -16,21 +16,21 @@ export type PopupSchemaFormRegisterProps<TModel extends Recordable> = Omit<Popup
 /**
  * usePopupSchemaForm 的配置项类型（排除 model、register 和 visible，可见性由 Hook 内部接管）
  */
-export type UsePopupSchemaFormOptions<TModel extends Recordable> = WrapWithMaybeRef<Omit<PopupSchemaFormProps<TModel>, 'model' | 'register' | 'schema' | 'visible'>> & {
+export type UsePopupSchemaFormOptions<TModel extends object = any> = WrapWithMaybeRef<Omit<PopupSchemaFormProps<TModel>, 'model' | 'register' | 'schema' | 'visible'>> & {
   schema?: DefineSchema<TModel>[]
 }
 
 /**
  * usePopupSchemaForm Hook 的第二参数联合类型
  */
-export type UsePopupSchemaFormArgs<TModel extends Recordable>
+export type UsePopupSchemaFormArgs<TModel extends object = any>
   = | DefineSchema<TModel>[]
     | UsePopupSchemaFormOptions<TModel>
 
 /**
  * usePopupSchemaForm 的返回值类型
  */
-export interface UsePopupSchemaFormReturn<TModel extends Recordable> {
+export interface UsePopupSchemaFormReturn<TModel extends object = any> {
   /**
    * 注册对象，通过 v-bind 绑定到 PopupSchemaForm 组件
    */

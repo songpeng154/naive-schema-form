@@ -5,9 +5,8 @@ import type {
   SchemaFormCommonProps,
   SchemaFormCommonSlots,
 } from '@/components/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared.ts'
 
-export interface SchemaFormProps<TModel extends Recordable = Recordable> extends SchemaFormCommonProps<TModel> {
+export interface SchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
    */

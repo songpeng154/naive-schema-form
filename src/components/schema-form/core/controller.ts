@@ -1,14 +1,13 @@
 import type { ModelRef } from 'vue'
 import type { SchemaFormCoreOptions } from '@/components/schema-form/core/types.ts'
 import type { SchemaFormCommonExpose, SchemaFormCommonProps } from '@/components/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared.ts'
 import { useProvideSchemaFormContext } from '@/components/schema-form/hooks/context.ts'
 import useCommonExpose from '@/components/schema-form/hooks/expose.ts'
 import useOmitProps from '@/utils/omit-props.ts'
 
-export function useSchemaFormController<TProps extends SchemaFormCommonProps>(
+export function useSchemaFormController<TModel extends object, TProps extends SchemaFormCommonProps<TModel>>(
   props: TProps,
-  model: ModelRef<Recordable>,
+  model: ModelRef<TModel>,
   slots: Record<string, any>,
   options: SchemaFormCoreOptions<TProps> = {},
 ) {

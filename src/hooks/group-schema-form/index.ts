@@ -2,7 +2,6 @@ import type { Ref } from 'vue'
 import type { UseGroupSchemaFormArgs, UseGroupSchemaFormOptions, UseGroupSchemaFormReturn } from './types'
 import type { FieldPaths } from '@/components/schema-form/types/common.ts'
 import type { DefineGroupSchema, GroupSchemaFormExpose } from '@/components/schema-form/types/group'
-import type { Recordable } from '@/types/shared'
 import { reactive, ref } from 'vue'
 
 /**
@@ -32,7 +31,7 @@ import { reactive, ref } from 'vue'
  * <GroupSchemaForm v-bind="register" />
  * ```
  */
-function useGroupSchemaForm<TModel extends Recordable>(
+function useGroupSchemaForm<TModel extends object = any>(
   initialModel: Ref<TModel>,
   optionsOrSchema: UseGroupSchemaFormArgs<TModel>,
 ): UseGroupSchemaFormReturn<TModel> {
@@ -82,7 +81,7 @@ function useGroupSchemaForm<TModel extends Recordable>(
   }
 
   const scrollToField: GroupSchemaFormExpose['scrollToField'] = (field: FieldPaths<TModel>) => {
-    return formInstance.value?.scrollToField?.(field)
+    return formInstance.value?.scrollToField?.(field as string)
   }
 
   const toggleCollapsed: GroupSchemaFormExpose['toggleCollapsed'] = (index: number, isCollapsed?: boolean) => {

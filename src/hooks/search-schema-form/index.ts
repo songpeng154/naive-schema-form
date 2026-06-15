@@ -2,7 +2,6 @@ import type { Ref } from 'vue'
 import type { UseSearchSchemaFormArgs, UseSearchSchemaFormOptions, UseSearchSchemaFormReturn } from './types'
 import type { DefineSchema, FieldPaths } from '@/components/schema-form/types/common'
 import type { SearchSchemaFormExpose } from '@/components/schema-form/types/search'
-import type { Recordable } from '@/types/shared'
 import { reactive, ref } from 'vue'
 
 /**
@@ -27,7 +26,7 @@ import { reactive, ref } from 'vue'
  * <SearchSchemaForm v-bind="register" />
  * ```
  */
-function useSearchSchemaForm<TModel extends Recordable>(
+function useSearchSchemaForm<TModel extends object = any>(
   initialModel: Ref<TModel>,
   optionsOrSchema: UseSearchSchemaFormArgs<TModel>,
 ): UseSearchSchemaFormReturn<TModel> {
@@ -77,7 +76,7 @@ function useSearchSchemaForm<TModel extends Recordable>(
   }
 
   const scrollToField: SearchSchemaFormExpose['scrollToField'] = (field: FieldPaths<TModel>) => {
-    return formInstance.value?.scrollToField?.(field)
+    return formInstance.value?.scrollToField?.(field as string)
   }
 
   const toggleCollapsed: SearchSchemaFormExpose['toggleCollapsed'] = (isCollapsed: boolean) => {

@@ -9,13 +9,12 @@ import type {
   SchemaFormCommonSlots,
   UnwrapSchema,
 } from '@/components/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared.ts'
 
 /**
  * 回调参数
  */
 export interface GroupCallbackParams<
-  TForm extends Recordable = Recordable,
+  TForm extends object = any,
 > {
   group: GroupCallbackSchema<TForm>
 
@@ -26,13 +25,13 @@ export interface GroupCallbackParams<
  * 组回调参数
  */
 export type GroupCallbackParamsFunction<
-  TForm extends Recordable = Recordable,
+  TForm extends object = any,
   R = never,
 >
   = ((params: GroupCallbackParams<TForm>) => R)
 
 export interface DefineGroupSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > {
   /**
    * 模块标题
@@ -87,7 +86,7 @@ export interface DefineGroupSchema<
 }
 
 export interface UnwrapGroupSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > {
   title: string
   helpMessage?: string
@@ -102,7 +101,7 @@ export interface UnwrapGroupSchema<
 }
 
 export interface RuntimeGroupBaseSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > {
   key: string
   title: string
@@ -117,7 +116,7 @@ export interface RuntimeGroupBaseSchema<
 }
 
 export interface GroupCallbackSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > {
   key?: string
   title: string
@@ -132,12 +131,12 @@ export interface GroupCallbackSchema<
 }
 
 export interface RuntimeGroupSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > extends RuntimeGroupBaseSchema<TForm> {
   hide?: boolean | GroupCallbackParamsFunction<TForm, boolean>
 }
 
-export interface GroupSchemaFormProps<TModel extends Recordable = Recordable> extends SchemaFormCommonProps<TModel> {
+export interface GroupSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
    */

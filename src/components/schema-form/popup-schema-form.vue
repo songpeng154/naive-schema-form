@@ -5,7 +5,6 @@ import type {
   PopupSchemaFormProps,
   PopupSchemaFormSlots,
 } from '@/components/schema-form/types/popup.js'
-import type { Recordable } from '@/types/shared'
 import { createReusableTemplate } from '@vueuse/core'
 import { NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
 import SchemaFormActions from '@/components/schema-form/components/schema-form-actions.vue'
@@ -57,14 +56,14 @@ const drawerDefaultWidth = '500px'
 const modalDefaultWidth = '800px'
 const modalDefaultHeight = '70vh'
 
-const model = defineModel<Recordable>('model', { required: true })
+const model = defineModel<any>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 const visible = defineModel<boolean>('visible', { required: true })
 
 const [DefineActionButton, ActionButton] = createReusableTemplate()
 const [DefineForm, Form] = createReusableTemplate()
 
-const props = useMergeGlobalConfig('popup', rawProps)
+const props = useMergeGlobalConfig('popup', rawProps) as unknown as PopupSchemaFormProps
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: [
@@ -147,7 +146,7 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
       v-bind="formProps"
       :model="model"
     >
-      <SchemaFormContent :schema="schema" :grid-props="props.gridProps || {}">
+      <SchemaFormContent :schema="schema as any" :grid-props="props.gridProps || {}">
         <template v-for="(_, key) in formContentSlots" #[key]="scope">
           <slot :name="key as PopupSchemaFormSlots" v-bind="scope || {}" />
         </template>

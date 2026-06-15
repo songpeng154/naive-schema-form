@@ -1,7 +1,6 @@
 import type { Ref } from 'vue'
 import type { UseSchemaFormArgs, UseSchemaFormOptions, UseSchemaFormReturn } from './types.ts'
 import type { DefineSchema, FieldPaths, SchemaFormCommonExpose } from '@/components/schema-form/types/common.ts'
-import type { Recordable } from '@/types/shared.ts'
 import { reactive, ref } from 'vue'
 
 /**
@@ -26,7 +25,7 @@ import { reactive, ref } from 'vue'
  * <SchemaForm v-bind="register" />
  * ```
  */
-function useSchemaForm<TModel extends Recordable>(
+function useSchemaForm<TModel extends object = any>(
   initialModel: Ref<TModel>,
   optionsOrSchema: UseSchemaFormArgs<TModel>,
 ): UseSchemaFormReturn<TModel> {
@@ -78,7 +77,7 @@ function useSchemaForm<TModel extends Recordable>(
   }
 
   const scrollToField: SchemaFormCommonExpose['scrollToField'] = (field: FieldPaths<TModel>) => {
-    return formInstance.value?.scrollToField?.(field)
+    return formInstance.value?.scrollToField?.(field as string)
   }
 
   return {

@@ -8,11 +8,10 @@ import type {
   SchemaFormCommonSlots,
 } from '@/components/schema-form/types/common.ts'
 
-import type { Recordable } from '@/types/shared.ts'
 
 export type PopupType = 'drawer' | 'modal'
 
-export interface PopupSchemaFormProps<TModel extends Recordable = Recordable> extends SchemaFormCommonProps<TModel> {
+export interface PopupSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
    */

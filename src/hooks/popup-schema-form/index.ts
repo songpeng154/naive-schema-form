@@ -2,7 +2,6 @@ import type { Ref } from 'vue'
 import type { UsePopupSchemaFormArgs, UsePopupSchemaFormOptions, UsePopupSchemaFormReturn } from './types'
 import type { DefineSchema, FieldPaths } from '@/components/schema-form/types/common'
 import type { PopupSchemaFormExpose } from '@/components/schema-form/types/popup'
-import type { Recordable } from '@/types/shared'
 import { reactive, ref } from 'vue'
 
 /**
@@ -27,7 +26,7 @@ import { reactive, ref } from 'vue'
  * <PopupSchemaForm v-bind="register" />
  * ```
  */
-function usePopupSchemaForm<TModel extends Recordable>(
+function usePopupSchemaForm<TModel extends object = any>(
   initialModel: Ref<TModel>,
   optionsOrSchema: UsePopupSchemaFormArgs<TModel>,
 ): UsePopupSchemaFormReturn<TModel> {
@@ -82,7 +81,7 @@ function usePopupSchemaForm<TModel extends Recordable>(
   }
 
   const scrollToField: PopupSchemaFormExpose['scrollToField'] = (field: FieldPaths<TModel>) => {
-    return formInstance.value?.scrollToField?.(field)
+    return formInstance.value?.scrollToField?.(field as string)
   }
 
   const open = () => {

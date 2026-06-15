@@ -8,7 +8,6 @@ import type {
   GroupSchemaFormSlots,
   RuntimeGroupSchema,
 } from '@/components/schema-form/types/group.js'
-import type { Recordable } from '@/types/shared'
 import { Icon } from '@iconify/vue'
 import { isBoolean, isFunction } from 'es-toolkit'
 import { NButton, NTooltip, useThemeVars } from 'naive-ui'
@@ -52,10 +51,10 @@ const rawProps = withDefaults(defineProps<GroupSchemaFormProps>(), {
 })
 
 const slots = defineSlots<GroupSchemaFormSlots>()
-const model = defineModel<Recordable>('model', { required: true })
+const model = defineModel<any>('model', { required: true })
 const schema = defineModel<DefineGroupSchema[]>('schema', { required: true })
 
-const props = useMergeGlobalConfig('group', rawProps)
+const props = useMergeGlobalConfig('group', rawProps) as unknown as GroupSchemaFormProps
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: ['schema'],
@@ -74,7 +73,7 @@ function getGroupKey(config: DefineGroupSchema, index: number) {
 function createRuntimeGroupSchema(item: DefineGroupSchema, index: number): RuntimeGroupSchema {
   const key = getGroupKey(item, index)
   const userCollapsed = groupState.get(key)
-  const collapsed = userCollapsed ?? item.collapsed ?? props.defaultCollapsed
+  const collapsed = userCollapsed ?? item.collapsed ?? props.defaultCollapsed ?? false
   return {
     key,
     title: unref(item.title) || '',
@@ -84,7 +83,7 @@ function createRuntimeGroupSchema(item: DefineGroupSchema, index: number): Runti
     collapsed,
     collapsedRows: item.collapsedRows ?? props.defaultCollapsedRows ?? 2,
     hideCollapseButton: unref(item.hideCollapseButton),
-    disabled: unref(item.disabled),
+    disabled: unref(item.disabled) || false,
     gridItemProps: unref(item.gridItemProps),
     gridProps: unref(item.gridProps),
   }

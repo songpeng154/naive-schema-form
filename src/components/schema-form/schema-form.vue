@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { SchemaFormExpose, SchemaFormProps, SchemaFormSlots } from '@/components/schema-form/types/base.js'
 import type { DefineSchema } from '@/components/schema-form/types/common.js'
-import type { Recordable } from '@/types/shared'
 import GridItem from '@/components/grid/grid-item.vue'
 import SchemaFormActions from '@/components/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/components/schema-form/components/schema-form-content/index.vue'
@@ -33,10 +32,10 @@ const rawProps = withDefaults(defineProps<SchemaFormProps>(), {
   gridItemProps: 24,
 })
 const slots = defineSlots<SchemaFormSlots>()
-const model = defineModel<Recordable>('model', { required: true })
+const model = defineModel<any>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 
-const props = useMergeGlobalConfig('base', rawProps)
+const props = useMergeGlobalConfig('base', rawProps) as unknown as SchemaFormProps
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: ['schema'],

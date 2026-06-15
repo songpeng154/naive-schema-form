@@ -5,7 +5,6 @@ import type {
   SearchSchemaFormProps,
   SearchSchemaFormSlots,
 } from '@/components/schema-form/types/search.js'
-import type { Recordable } from '@/types/shared'
 import { take } from 'es-toolkit'
 import { NButton } from 'naive-ui'
 import { computed } from 'vue'
@@ -57,11 +56,11 @@ const rawProps = withDefaults(defineProps<SearchSchemaFormProps>(), {
 })
 
 const slots = defineSlots<SearchSchemaFormSlots>()
-const model = defineModel<Recordable>('model', { required: true })
+const model = defineModel<any>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 const collapsed = defineModel<boolean>('collapsed', { default: true })
 
-const props = useMergeGlobalConfig('search', rawProps)
+const props = useMergeGlobalConfig('search', rawProps) as unknown as SearchSchemaFormProps
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: ['searchShowNumber', 'schema', 'collapsed', 'enableCollapsed', 'collapsedText', 'expandedText'],
@@ -95,7 +94,7 @@ defineExpose<SearchSchemaFormExpose>(exposeSchemaForm<SearchSchemaFormExpose>(co
     v-bind="formProps"
     :model="model"
   >
-    <SchemaFormContent :schema="searchSchemas" :grid-props="props.gridProps || {}">
+    <SchemaFormContent :schema="searchSchemas as any" :grid-props="props.gridProps || {}">
       <template v-for="(_, key) in formContentSlots" #[key]="scope">
         <slot :name="key as SearchSchemaFormSlots" v-bind="scope || {}" />
       </template>

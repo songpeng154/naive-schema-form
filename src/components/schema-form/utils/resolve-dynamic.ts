@@ -28,7 +28,7 @@ export function resolveDynamicProp<T>(
  *
  * @param obj 可能包含 Ref 属性的对象，本身也可以是 MaybeRef
  */
-export function unrefObject<T extends Recordable>(obj: MaybeRef<T | undefined | null>): T {
+export function unrefObject<T extends object>(obj: MaybeRef<T | undefined | null>): T {
   const raw = unref(obj)
   if (!raw)
     return {} as T

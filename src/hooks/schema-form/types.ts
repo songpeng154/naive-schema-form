@@ -1,9 +1,9 @@
 import type { Ref } from 'vue'
 import type { SchemaFormProps } from '@/components/schema-form/types/base.ts'
 import type { DefineSchema, SchemaFormCommonExpose } from '@/components/schema-form/types/common.ts'
-import type { Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
+import type { WrapWithMaybeRef } from '@/types/shared.ts'
 
-export type SchemaFormRegisterProps<TModel extends Recordable> = Omit<SchemaFormProps<TModel>, 'model' | 'schema'> & {
+export type SchemaFormRegisterProps<TModel extends object = any> = Omit<SchemaFormProps<TModel>, 'model' | 'schema'> & {
   'model': TModel
   'schema': DefineSchema<TModel>[]
   'onUpdate:model': (val: TModel) => void
@@ -14,21 +14,21 @@ export type SchemaFormRegisterProps<TModel extends Recordable> = Omit<SchemaForm
 /**
  * schemaForm 的配置项类型（排除 model 和 register）
  */
-export type UseSchemaFormOptions<TModel extends Recordable> = WrapWithMaybeRef<Omit<SchemaFormProps<TModel>, 'model' | 'register' | 'schema'>> & {
+export type UseSchemaFormOptions<TModel extends object = any> = WrapWithMaybeRef<Omit<SchemaFormProps<TModel>, 'model' | 'register' | 'schema'>> & {
   schema?: DefineSchema<TModel>[]
 }
 
 /**
  * schemaForm Hook 的第二参数联合类型
  */
-export type UseSchemaFormArgs<TModel extends Recordable>
+export type UseSchemaFormArgs<TModel extends object = any>
   = | DefineSchema<TModel>[]
     | UseSchemaFormOptions<TModel>
 
 /**
  * schemaForm 的返回值类型
  */
-export interface UseSchemaFormReturn<TModel extends Recordable> {
+export interface UseSchemaFormReturn<TModel extends object = any> {
   /**
    * 注册对象，通过 v-bind 绑定到 SchemaForm 组件
    * @example

@@ -32,7 +32,7 @@ export interface SchemaItemData {
  * 回调参数
  */
 export interface CallbackParams<
-  TForm extends Recordable = Recordable,
+  TForm extends object = any,
 > {
   value: any
 
@@ -45,7 +45,7 @@ export interface CallbackParams<
  * 回调参数函数
  */
 export type CallbackParamsFunction<
-  TForm extends Recordable = Recordable,
+  TForm extends object = any,
   R = never,
 >
   = ((params: CallbackParams<TForm>) => R)
@@ -101,7 +101,7 @@ export type SafeComponentProps<T> = T extends Recordable ? T : never
 export type OptionType = Recordable
 
 export type CallbackSchemaBase<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > = Omit<
   Schema<TForm>,
   'label' | 'hide' | 'disabled' | 'componentSlots' | 'componentProps'
@@ -113,7 +113,7 @@ export type CallbackSchemaBase<
  * 常用组件属性映射
  */
 export interface CommonComponentPropsMap<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > {
   /**
    * 占位符
@@ -145,7 +145,7 @@ export interface CommonComponentPropsMap<
 /**
  * Schema 基础配置
  */
-export interface SchemaBaseConfig<TForm extends Recordable = any> extends CommonComponentPropsMap<TForm> {
+export interface SchemaBaseConfig<TForm extends object = any> extends CommonComponentPropsMap<TForm> {
   /**
    * 字段
    */
@@ -238,21 +238,21 @@ export type SchemaComponentLinkedType = {
  * schema 配置
  */
 export type Schema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 > = SchemaComponentLinkedType & SchemaBaseConfig<TForm>
 
 /**
  * 定义 Schema 项。
  */
 export type DefineSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 >
   = Schema<TForm>
 /**
  * 解包 JSON 格式配置
  */
 export type UnwrapSchema<
-  TForm extends Recordable = any,
+  TForm extends object = any,
 >
   = UnwrapRef<DefineSchema<TForm>>
 
@@ -266,7 +266,7 @@ export type FormRequireMarkPlacement = 'left' | 'right' | 'right-hanging'
 /**
  * 通用 props
  */
-export interface SchemaFormCommonProps<TModel extends Recordable = Recordable> {
+export interface SchemaFormCommonProps<TModel extends object = any> {
   /**
    * 表单类名
    */
@@ -539,7 +539,7 @@ export interface SchemaFormCommonSlots {
 /**
  * 通用方法
  */
-export interface SchemaFormCommonExpose<TForm extends Recordable = Recordable> extends FormInst {
+export interface SchemaFormCommonExpose<TForm extends object = any> extends FormInst {
   /**
    * 重置
    */

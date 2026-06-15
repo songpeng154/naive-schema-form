@@ -1,10 +1,9 @@
 import type { Ref } from 'vue'
 import type { GridBreakpoints, ResponsiveValue } from '@/components/grid/types'
-import type { Recordable } from '@/types/shared.ts'
 import { isObject } from 'es-toolkit/compat'
 import { computed } from 'vue'
 
-function responsivePropsValue<K extends Recordable>(
+function responsivePropsValue<K extends object>(
   width: Ref<number>,
   data: K,
   key: keyof K,
