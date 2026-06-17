@@ -25,6 +25,7 @@ export { default as Grid } from '@/components/grid/grid.vue'
 
 export * from '@/components/grid/types'
 export * from '@/components/schema-form/core/registry'
+export { registerSchemaComponent } from '@/components/schema-form/core/registry'
 export * from '@/components/schema-form/core/types'
 export { default as GroupSchemaForm } from '@/components/schema-form/group-schema-form.vue'
 export { default as PopupSchemaForm } from '@/components/schema-form/popup-schema-form.vue'
@@ -33,7 +34,8 @@ export { default as SearchSchemaForm } from '@/components/schema-form/search-sch
 export * from '@/components/schema-form/types/base'
 export * from '@/components/schema-form/types/common'
 export * from '@/components/schema-form/types/component'
-export * from '@/components/schema-form/types/group'
 
+export * from '@/components/schema-form/types/group'
 export * from '@/components/schema-form/types/popup'
+
 export * from '@/components/schema-form/types/search'

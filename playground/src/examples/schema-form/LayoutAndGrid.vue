@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { FormProps } from 'naive-ui'
-type FormLabelPlacement = NonNullable<FormProps['labelPlacement']>
 import { NRadioButton, NRadioGroup, NSpace } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 import { SchemaForm, useSchemaForm } from '../../../../src/index'
+
+type FormLabelPlacement = NonNullable<FormProps['labelPlacement']>
 
 // 配置状态切换
 const configState = reactive({

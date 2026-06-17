@@ -8,7 +8,6 @@ import type {
   SchemaFormCommonSlots,
 } from '@/components/schema-form/types/common.ts'
 
-
 export type PopupType = 'drawer' | 'modal'
 
 export interface PopupSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {

@@ -1,81 +1,56 @@
 import type { FormItemRule } from 'naive-ui'
-import type { RulePresets, RulePresetsType, Schema } from '@/components/schema-form/types/common.ts'
+import type { RulePresets, Schema } from '@/components/schema-form/types/common.ts'
 import { isString } from 'es-toolkit'
 import { isArray } from 'es-toolkit/compat'
 import { getSchemaComponentAdapter } from '@/components/schema-form/core/registry.ts'
+import { getLocale } from '@/components/schema-form/locales/index.ts'
 import RegUtils from '@/utils/reg.ts'
 
 /**
- * 规则预设
+ * 规则验证器逻辑预设
  */
-const rulePresets: RulePresetsType = {
-  mail: {
-    requiredMessage: '请输入邮箱',
-    incorrectMessage: '请输入合法邮箱',
-    validator: (value: string) => RegUtils.MATCH_EMAIL.test(value),
-  },
-  phone: {
-    requiredMessage: '请输入手机号',
-    incorrectMessage: '请输入合法手机号',
-    validator: (value: string) => RegUtils.MATCH_PHONE.test(value),
-  },
-  landline: {
-    requiredMessage: '请输入固定电话',
-    incorrectMessage: '请输入合法固定电话',
-    validator: (value: string) => RegUtils.MATCH_LANDLINE.test(value),
-  },
-  idCard: {
-    requiredMessage: '请输入身份证',
-    incorrectMessage: '请输入合法身份证',
-    validator: (value: string) => RegUtils.MATCH_ID_CARD.test(value),
-  },
-  url: {
-    requiredMessage: '请输入网址',
-    incorrectMessage: '请输入合法网址',
-    validator: (value: string) => RegUtils.MATCH_URL.test(value),
-  },
+const presetsValidators: Record<RulePresets, (value: string) => boolean> = {
+  mail: (value: string) => RegUtils.MATCH_EMAIL.test(value),
+  phone: (value: string) => RegUtils.MATCH_PHONE.test(value),
+  landline: (value: string) => RegUtils.MATCH_LANDLINE.test(value),
+  idCard: (value: string) => RegUtils.MATCH_ID_CARD.test(value),
+  url: (value: string) => RegUtils.MATCH_URL.test(value),
 }
 
-function defaultPlaceholder(label: Schema['label']) {
+export function generatePlaceholder(label: Schema['label'], component: string, localeName: string, type?: string) {
+  const adapter = getSchemaComponentAdapter(component)
+  const actionType = adapter?.actionType || 'default'
+  const locale = getLocale(localeName)
   const l = isString(label) ? label : ''
 
-  return {
-    daterange: ['开始日期', '结束日期'],
-    datetimerange: ['开始日期时间', '结束日期时间'],
-    input: `请输入${l}`,
-    pick: `请选择${l}`,
-    default: `${l}是必填项`,
-  }
-}
-
-export function generatePlaceholder(label: Schema['label'], component: string, type?: string) {
-  const placeholder = defaultPlaceholder(label)
-  const adapter = getSchemaComponentAdapter(component)
-
-  if (adapter?.valueType === 'date' && type?.includes('range')) {
-    const rangePlaceholder = placeholder[type as keyof typeof placeholder]
-    return isArray(rangePlaceholder) ? [rangePlaceholder[0], rangePlaceholder[1]] : undefined
+  if (actionType === 'date' && type?.includes('range')) {
+    return type === 'datetimerange' ? locale.placeholder.dateTimeRange : locale.placeholder.dateRange
   }
 
-  if (adapter?.valueType === 'input')
-    return placeholder.input
+  if (actionType === 'input')
+    return locale.placeholder.input(l)
 
-  if (adapter?.valueType === 'select')
-    return placeholder.pick
+  if (actionType === 'select')
+    return locale.placeholder.select(l)
+
+  return undefined
 }
 
-export function generateRule(label: string, component: string): FormItemRule {
-  const placeholder = defaultPlaceholder(label)
+export function generateRule(label: string, component: string, localeName: string): FormItemRule {
   const adapter = getSchemaComponentAdapter(component)
-  let message: string = placeholder.default
+  const actionType = adapter?.actionType || 'default'
+  const locale = getLocale(localeName)
+  const l = isString(label) ? label : ''
 
-  if (adapter?.valueType === 'input')
-    message = placeholder.input
-  else if (adapter?.valueType === 'select')
-    message = placeholder.pick
+  let message = locale.rule.required(l)
+
+  if (actionType === 'input')
+    message = locale.placeholder.input(l)
+  else if (actionType === 'select')
+    message = locale.placeholder.select(l)
 
   return {
-    required: true, // 仅用于显示必填星号，校验逻辑由 validator 统一处理
+    required: true,
     validator(_rule: FormItemRule, value: any) {
       const isEmpty = value === null
         || value === undefined
@@ -83,15 +58,18 @@ export function generateRule(label: string, component: string): FormItemRule {
         || (isArray(value) && value.length === 0)
       return isEmpty ? Promise.reject(message) : Promise.resolve()
     },
-    trigger: adapter?.valueType === 'input' ? 'blur' : 'change',
+    trigger: actionType === 'input' ? 'blur' : 'change',
   }
 }
 
-export function handleRulePresets(rule: RulePresets): FormItemRule {
+export function handleRulePresets(rule: RulePresets, localeName: string): FormItemRule {
   return {
     required: true,
     validator(_rule: FormItemRule, value: string) {
-      const { requiredMessage, incorrectMessage, validator } = rulePresets[rule]
+      const locale = getLocale(localeName)
+      const { requiredMessage, incorrectMessage } = locale.rulePresets[rule]
+      const validator = presetsValidators[rule]
+
       if (!value)
         return Promise.reject(requiredMessage)
       if (!validator(value))

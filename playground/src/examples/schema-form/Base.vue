@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SchemaForm, useSchemaForm } from '../../../../src/index'
 import { ref } from 'vue'
+import { SchemaForm, useSchemaForm } from '../../../../src/index'
 
 // 1. 初始化 Model，包含更丰富的数据类型
 const model = ref<Record<string, any>>({

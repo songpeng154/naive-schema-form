@@ -5,14 +5,12 @@ import {
   NAutoComplete,
   NCheckbox,
   NCheckboxGroup,
-  NDatePicker,
   NInput,
   NInputNumber,
   NRadio,
   NRadioGroup,
   NSelect,
   NSwitch,
-  NTimePicker,
 } from 'naive-ui'
 import { defineAsyncComponent } from 'vue'
 
@@ -27,97 +25,105 @@ function lazy(loader: () => Promise<Component>) {
 export const schemaComponentRegistry: SchemaComponentRegistry = {
   input: {
     component: NInput,
-    valueType: 'input',
+    actionType: 'input',
     mapPlaceholder: true,
   },
   select: {
     component: NSelect,
-    valueType: 'select',
+    actionType: 'select',
     mapPlaceholder: true,
     mapOptions: true,
   },
   autoComplete: {
     component: NAutoComplete,
-    valueType: 'input',
+    actionType: 'input',
     mapPlaceholder: true,
     mapOptions: true,
   },
   checkbox: {
     component: NCheckbox,
-    valueType: 'checked',
+    actionType: 'check',
     modelProp: 'checked',
   },
   checkboxGroup: {
     component: NCheckboxGroup,
+    actionType: 'check',
   },
   datePicker: {
-    component: NDatePicker,
-    valueType: 'date',
+    component: lazy(() => import('naive-ui/es/date-picker').then(m => m.NDatePicker)),
+    actionType: 'date',
     mapPlaceholder: true,
-    dateTypes: ['date', 'datetime', 'daterange', 'datetimerange'],
   },
   inputNumber: {
     component: NInputNumber,
-    valueType: 'input',
+    actionType: 'input',
     mapPlaceholder: true,
   },
   radio: {
     component: NRadio,
-    valueType: 'checked',
+    actionType: 'check',
     modelProp: 'checked',
   },
   radioGroup: {
     component: NRadioGroup,
+    actionType: 'check',
   },
   switch: {
     component: NSwitch,
+    actionType: 'check',
   },
   timePicker: {
-    component: NTimePicker,
-    valueType: 'time',
+    component: lazy(() => import('naive-ui/es/time-picker').then(m => m.NTimePicker)),
+    actionType: 'time',
     mapPlaceholder: true,
   },
   cascader: {
     component: lazy(() => import('naive-ui/es/cascader').then(m => m.NCascader)),
-    valueType: 'select',
+    actionType: 'select',
     mapPlaceholder: true,
     mapOptions: true,
   },
   colorPicker: {
     component: lazy(() => import('naive-ui/es/color-picker').then(m => m.NColorPicker)),
-    valueType: 'select',
+    actionType: 'select',
   },
   dynamicInput: {
     component: lazy(() => import('naive-ui/es/dynamic-input').then(m => m.NDynamicInput)),
+    actionType: 'input',
     mapPlaceholder: true,
   },
   dynamicTags: {
     component: lazy(() => import('naive-ui/es/dynamic-tags').then(m => m.NDynamicTags)),
+    actionType: 'input',
   },
   mention: {
     component: lazy(() => import('naive-ui/es/mention').then(m => m.NMention)),
-    valueType: 'input',
+    actionType: 'input',
     mapPlaceholder: true,
     mapOptions: true,
   },
   rate: {
     component: lazy(() => import('naive-ui/es/rate').then(m => m.NRate)),
+    actionType: 'default',
   },
   slider: {
     component: lazy(() => import('naive-ui/es/slider').then(m => m.NSlider)),
+    actionType: 'default',
   },
   transfer: {
     component: lazy(() => import('naive-ui/es/transfer').then(m => m.NTransfer)),
+    actionType: 'default',
     mapOptions: true,
   },
   treeSelect: {
     component: lazy(() => import('naive-ui/es/tree-select').then(m => m.NTreeSelect)),
-    valueType: 'select',
+    actionType: 'select',
     mapPlaceholder: true,
     mapOptions: true,
   },
   upload: {
     component: lazy(() => import('naive-ui/es/upload').then(m => m.NUpload)),
+    actionType: 'upload',
   },
 }
 
@@ -126,7 +132,7 @@ export function getSchemaComponentAdapter(component?: SchemaComponentName | stri
 }
 
 export function registerSchemaComponent(name: string, adapter: SchemaComponentAdapter) {
-  ;(schemaComponentRegistry as Record<string, SchemaComponentAdapter>)[name] = adapter
+  schemaComponentRegistry[name] = adapter
 }
 
 export function extendSchemaComponents(registry: SchemaComponentRegistry) {

@@ -36,9 +36,9 @@
     "dev": "tsdown --watch",
     "playground": "vite",
     "typecheck": "vue-tsc --noEmit",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
+    "docs:dev": "pnpm --dir docs dev",
+    "docs:build": "pnpm --dir docs build",
+    "docs:preview": "pnpm --dir docs preview",
     "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
   },
@@ -65,8 +65,6 @@
     "typescript": "^6.0.3",
     "unocss": "^66.7.0",
     "vite": "^8.0.11",
-    "vitepress": "^1.6.4",
-    "vitepress-plugin-demo": "^0.8.1",
     "vue": "^3.5.34",
     "vue-router": "^5.1.0",
     "vue-tsc": "^3.2.8"

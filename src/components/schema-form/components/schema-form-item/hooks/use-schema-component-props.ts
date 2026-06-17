@@ -8,6 +8,7 @@ import { computed, unref } from 'vue'
 import { getSchemaComponentAdapter } from '@/components/schema-form/core/registry.ts'
 import { generatePlaceholder } from '@/components/schema-form/core/rules.ts'
 import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
+import { useLocale } from '@/components/schema-form/hooks/use-locale.ts'
 
 export function useSchemaComponentProps(
   schema: DefineSchema,
@@ -23,6 +24,8 @@ export function useSchemaComponentProps(
    */
   globalComponentProps: Partial<SchemaComponentPropsMap>,
 ) {
+  const localeName = useLocale()
+
   // 获取当前字段类型对应的 Naive UI 组件适配器
   const adapter = computed(() => {
     return getSchemaComponentAdapter(schema.component)
@@ -49,18 +52,18 @@ export function useSchemaComponentProps(
     const currentAdapter = adapter.value
 
     if (component && currentAdapter) {
-      if (currentAdapter.valueType === 'date') {
+      if (currentAdapter.actionType === 'date') {
         mapProps.format = schemaFormProps.defaultDateFormat
         mapProps.valueFormat = schemaFormProps.defaultDateValueFormat
       }
 
-      if (currentAdapter.valueType === 'time') {
+      if (currentAdapter.actionType === 'time') {
         mapProps.format = schemaFormProps.defaultTimeFormat
         mapProps.valueFormat = schemaFormProps.defaultTimeValueFormat
       }
 
       if (schemaFormProps.autoPlaceholder && currentAdapter.mapPlaceholder && typeof resolvedLabel.value === 'string') {
-        const autoPlaceholder = generatePlaceholder(resolvedLabel.value, component, baseProps.type)
+        const autoPlaceholder = generatePlaceholder(resolvedLabel.value, component, localeName.value, baseProps.type)
         if (isArray(autoPlaceholder)) {
           mapProps.startPlaceholder = autoPlaceholder[0]
           mapProps.endPlaceholder = autoPlaceholder[1]
@@ -74,7 +77,7 @@ export function useSchemaComponentProps(
       if (unreffedPlaceholder && currentAdapter.mapPlaceholder)
         mapProps.placeholder = unreffedPlaceholder
 
-      if ((startPlaceholder || endPlaceholder) && currentAdapter.valueType === 'date' && baseProps.type?.includes?.('range')) {
+      if ((startPlaceholder || endPlaceholder) && currentAdapter.actionType === 'date' && baseProps.type?.includes?.('range')) {
         if (startPlaceholder)
           mapProps.startPlaceholder = startPlaceholder
         if (endPlaceholder)
@@ -108,11 +111,6 @@ export function useSchemaComponentProps(
     const currentAdapter = adapter.value
     if (!currentAdapter)
       return `SchemaForm: unknown component "${String(schema.component)}".`
-
-    const componentProps = resolvedComponentProps.value
-    if (currentAdapter.valueType === 'date' && componentProps.type && currentAdapter.dateTypes && !currentAdapter.dateTypes.includes(componentProps.type))
-      return `SchemaForm: datePicker.type only supports ${currentAdapter.dateTypes.join(', ')}.`
-
     return undefined
   })
 

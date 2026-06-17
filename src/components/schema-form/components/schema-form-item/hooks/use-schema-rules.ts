@@ -3,6 +3,7 @@ import type { CallbackParams, DefineSchema, SchemaFormCommonProps } from '@/comp
 import { computed, unref } from 'vue'
 import { generateRule, handleRulePresets } from '@/components/schema-form/core/rules.ts'
 import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
+import { useLocale } from '@/components/schema-form/hooks/use-locale.ts'
 
 export function useSchemaRules(
   schema: DefineSchema,
@@ -11,6 +12,8 @@ export function useSchemaRules(
   callbackParams: ComputedRef<CallbackParams>,
   schemaFormProps: SchemaFormCommonProps,
 ) {
+  const localeName = useLocale()
+
   // 动态解析并配置当前表单项校验规则
   // 优先级：用户自定义规则 > 预设字符串规则 > 语义化 required 自动生成规则
   const resolvedRules = computed(() => {
@@ -22,7 +25,7 @@ export function useSchemaRules(
 
     // 2. 用户写了预设规则字符串（如 'mail'/'phone'）
     if (typeof rules === 'string')
-      return handleRulePresets(rules)
+      return handleRulePresets(rules, localeName.value)
 
     // 3. 解析语义化必填 required
     const isRequired = schema.required !== undefined
@@ -39,7 +42,7 @@ export function useSchemaRules(
        */
       if (schemaFormProps.autoRequiredRule && resolvedComponent.value && typeof resolvedLabel.value === 'string') {
         // 自动生成带有友好提示的校验规则
-        return generateRule(resolvedLabel.value as string, schema.component!)
+        return generateRule(resolvedLabel.value as string, schema.component!, localeName.value)
       }
       // 降级使用基础必填标记
       return { required: true }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { SchemaForm, useSchemaForm } from '../../../../src/index'
 import { NAlert, NButton, NSpace, useMessage } from 'naive-ui'
 import { ref } from 'vue'
+import { SchemaForm, useSchemaForm } from '../../../../src/index'
 
 const message = useMessage()
 
@@ -114,7 +114,7 @@ const { register, validate, restoreValidation, resetFields } = useSchemaForm(mod
         message: '格式错误：需为 4 到 16 位的字母、数字、下划线',
         trigger: ['input', 'blur'],
       },
-    }
+    },
   ] as any,
 })
 

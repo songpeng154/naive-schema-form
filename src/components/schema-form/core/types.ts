@@ -3,17 +3,18 @@ import type { Component, ComputedRef, ModelRef, Ref } from 'vue'
 import type { SchemaFormCommonExpose, SchemaFormCommonProps } from '@/components/schema-form/types/common.ts'
 import type { Recordable } from '@/types/shared.ts'
 
-export type SchemaComponentValueType
+export type ComponentActionType
   = | 'input'
     | 'select'
     | 'date'
     | 'time'
-    | 'checked'
+    | 'upload'
+    | 'check'
     | 'default'
 
 export interface SchemaComponentAdapter {
   component: Component
-  valueType?: SchemaComponentValueType
+  actionType?: ComponentActionType
   modelProp?: string
   mapPlaceholder?: boolean
   mapOptions?: boolean

@@ -2,7 +2,7 @@
 import type { DefineSchema, OptionType, Schema } from '@/components/schema-form/types/common.js'
 import { isFunction, isString } from 'es-toolkit'
 import { isArray } from 'es-toolkit/compat'
-import { NAlert, NCheckbox, NRadio } from 'naive-ui'
+import { NCheckbox, NRadio } from 'naive-ui'
 import { isVNode, unref } from 'vue'
 import { useSchemaFormContext } from '@/components/schema-form/hooks/context.js'
 
@@ -61,7 +61,7 @@ function RenderSchemaComponent() {
 
   if (props.resolvedError) {
     console.error(props.resolvedError)
-    return <NAlert type="error" title="Schema component error">{props.resolvedError}</NAlert>
+    return
   }
 
   if (!RawComponent)
