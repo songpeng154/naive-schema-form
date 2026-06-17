@@ -15,8 +15,8 @@
 > [!TIP]
 > **关于 gridItemProps 的简写**
 > 
-> `gridItemProps` 既可以直接传入一个数字（作为 `span` 的简写），也可以传入一个完整对象（如 `{ span: 4, offset: 4 }`）。
-> 写法 `gridItemProps: 12` 完全等价于 `gridItemProps: { span: 12 }`。
+> `gridItemProps` 既可以直接传入一个数字（作为 `span` 的简写），也可以传入一个完整对象。
+> 例如写法 `gridItemProps: 12` 等价于传入具有 span 属性的对象。
 
 <demo src="../demos/schema-form/grid-two-columns.vue" title="两列等宽排版" description="自动对齐的两列表单。" />
 
@@ -37,3 +37,23 @@
 底层对齐了 Naive UI 最常用的十余种数据录入组件，统一了数据绑定的心智。
 
 <demo src="../demos/schema-form/all-components.vue" title="全组件矩阵" description="涵盖几乎所有原生输入组件类型的映射支持。" />
+
+## 动态联动与显隐
+
+在实际业务场景中，我们经常遇到表单项之间需要互相联动的需求（例如：勾选了某个开关，才显示某些额外输入框；或者选择不同选项时，输入框的占位符和限制条件随之改变）。
+
+在 `Schema` 中，你可以通过给属性传入一个以 `{ model }` 为参数的函数来实现响应式动态控制：
+- **`hide`**: 控制字段的显隐。传入 `({ model }) => boolean`。
+- **`componentProps`**: 动态设置组件属性（如 `disabled`, `max`, `placeholder` 等）。
+
+<demo src="../demos/schema-form/dynamic.vue" title="动态联动与显隐" description="通过函数式配置项，轻松实现字段间的依赖和状态响应。" />
+
+## 校验与预设规则
+
+校验是表单最为核心的功能之一。`SchemaForm` 提供了一套极简的校验配置方案：
+1. **自动必填校验 (`autoRequiredRule`)**: 只要配置 `autoRequiredRule: true` 且 schema 字段中声明了 `required: true`，组件会自动根据组件类型推导并附带合适的校验提示文字（例如“请输入...”或“请选择...”），无需手动书写冗余的 `rules`。
+2. **预设校验**: 支持直接传入常见校验格式（如手机号、邮箱、网址等，敬请期待内置丰富类型）。
+3. **自定义校验**: 支持直接配置 Naive UI 的 `FormItemRule` 规则。
+
+<demo src="../demos/schema-form/validation.vue" title="表单校验与规则验证" description="展示自动必填提示、正则校验以及跨字段自定义比对校验。" />
+

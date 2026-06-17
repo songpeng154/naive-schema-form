@@ -6,7 +6,7 @@
 
 它的 `schema` 结构和普通表单不同，第一层是分组的配置（如 `title`），第二层的 `form` 才是真正的表单项定义。
 
-<demo src="../demos/group-form/basic.vue" title="分组表单" description="支持独立折叠状态、动态隐藏分组内的表单。" />
+<!-- TODO: 添加基础用法 Demo -->
 
 ## 分组 Schema 属性
 

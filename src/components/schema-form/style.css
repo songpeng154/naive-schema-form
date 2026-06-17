@@ -15,6 +15,12 @@
     text-overflow: ellipsis;
 }
 
+.schema-form-item-label-inner{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .schema-form-item-help {
     margin-left: 5px;
     font-size: 12px;

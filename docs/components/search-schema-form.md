@@ -6,7 +6,7 @@
 
 设定 `searchShowNumber` 后，超出该数量的表单项将被自动隐藏，并显示“展开/收起”按钮。
 
-<demo src="../demos/search-form/basic.vue" title="可折叠的搜索表单" description="体验默认的折叠展开以及内置搜索按钮。" />
+<!-- TODO: 添加基础用法 Demo -->
 
 ## 常用 API
 

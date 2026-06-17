@@ -6,9 +6,7 @@
 
 你可以通过解构出来的 `openPopup()` 方法来唤起弹窗。
 
-<demo src="../demos/popup-form/basic.vue" title="模态框表单" description="尝试输入内容后点击右上角关闭，会触发防丢失拦截。" />
-
-<demo src="../demos/popup-form/drawer.vue" title="抽屉式表单" description="切换参数即可变身为右滑的 Drawer 侧边栏模式。" />
+<!-- TODO: 添加基础用法 Demo -->
 
 ## 核心配置
 
