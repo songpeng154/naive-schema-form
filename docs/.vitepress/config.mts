@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { demoMdPlugin } from 'vitepress-plugin-demo'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -38,6 +39,9 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/songpeng154/naive-schema-form' },
     ],
+  },
+  vite: {
+    plugins: [vueJsx()],
   },
   markdown: {
     config(md) {

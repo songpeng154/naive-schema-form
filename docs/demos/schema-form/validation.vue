@@ -6,6 +6,8 @@ import { ref } from 'vue'
 const message = useMessage()
 const model = ref({
   account: '',
+  phone: '',
+  email: '',
   password: '',
   confirmPassword: '',
 })
@@ -20,6 +22,19 @@ const { register, validate } = useSchemaForm(model, {
       label: '账号',
       component: 'input',
       required: true, // 仅仅设置 true，不用写繁琐的 rules，就会自动变成 "请输入账号"
+    },
+    {
+      field: 'phone',
+      label: '手机号',
+      component: 'input',
+      required: true,
+      rules: 'phone', // 使用预设的手机号格式校验
+    },
+    {
+      field: 'email',
+      label: '邮箱',
+      component: 'input',
+      rules: 'mail', // 使用预设的邮箱格式校验
     },
     {
       field: 'password',
@@ -49,6 +64,7 @@ const { register, validate } = useSchemaForm(model, {
     },
   ],
 })
+
 
 async function handleSubmit() {
   try {

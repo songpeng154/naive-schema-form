@@ -18,7 +18,6 @@ export function useSchemaFormExposeController(options: SchemaFormExposeControlle
 
   // 滚动到目标字段
   function scrollToField(field: string) {
-    console.log(formItemData)
     const target = Object.entries(formItemData)
       .map(([,value]) => value)
       .find(value => value.field === field)
@@ -26,11 +25,9 @@ export function useSchemaFormExposeController(options: SchemaFormExposeControlle
     if (!target)
       return console.error(`目标字段不存在：${field}`)
 
-    console.log(target)
-
     target.el.scrollIntoView({
       behavior: 'smooth',
-      block: 'nearest',
+      block: 'start',
     })
   }
 
