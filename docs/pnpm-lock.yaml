@@ -10,7 +10,7 @@ importers:
     dependencies:
       naive-schema-form:
         specifier: latest
-        version: 0.0.13(naive-ui@2.44.1(vue@3.5.38(typescript@6.0.3)))(vue@3.5.38(typescript@6.0.3))
+        version: 0.0.14(naive-ui@2.44.1(vue@3.5.38(typescript@6.0.3)))(vue@3.5.38(typescript@6.0.3))
       naive-ui:
         specifier: ^2.44.1
         version: 2.44.1(vue@3.5.38(typescript@6.0.3))
@@ -1122,8 +1122,8 @@ packages:
   muggle-string@0.4.1:
     resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==}
 
-  naive-schema-form@0.0.13:
-    resolution: {integrity: sha512-M52KJ/ImEFBFgEsQWIUGxbTBrqrCikBU5f0h05NTU/qcpfDrMssmbNsAaQ1VulXMOoH7Is2HFh3F4QKasApNEA==}
+  naive-schema-form@0.0.14:
+    resolution: {integrity: sha512-ksErJJBoZqMpAAOEiormm5s+Mt72a1IHByj3FSaw9BghZ/QZS/8AQ7twKx4XUdto4g0owM5vgvYp90EM7dXgFw==}
     peerDependencies:
       naive-ui: ^2.44.0
       vue: ^3.0.0
@@ -2534,7 +2534,7 @@ snapshots:
 
   muggle-string@0.4.1: {}
 
-  naive-schema-form@0.0.13(naive-ui@2.44.1(vue@3.5.38(typescript@6.0.3)))(vue@3.5.38(typescript@6.0.3)):
+  naive-schema-form@0.0.14(naive-ui@2.44.1(vue@3.5.38(typescript@6.0.3)))(vue@3.5.38(typescript@6.0.3)):
     dependencies:
       '@iconify/vue': 5.0.1(vue@3.5.38(typescript@6.0.3))
       '@vueuse/core': 14.3.0(vue@3.5.38(typescript@6.0.3))

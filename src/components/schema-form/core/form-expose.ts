@@ -16,6 +16,19 @@ export function useSchemaFormExposeController(options: SchemaFormExposeControlle
   const { model, formItemData } = useSchemaFormContext()!
   const initialModel = cloneDeep(model.value)
 
+  function getScrollParent(node: HTMLElement | null): HTMLElement | null {
+    if (!node || node === document.body || node === document.documentElement) {
+      return null
+    }
+    if (node.scrollHeight > node.clientHeight) {
+      const overflowY = window.getComputedStyle(node).overflowY
+      if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
+        return node
+      }
+    }
+    return getScrollParent(node.parentElement)
+  }
+
   // 滚动到目标字段
   function scrollToField(field: string) {
     const target = Object.entries(formItemData)
@@ -25,10 +38,19 @@ export function useSchemaFormExposeController(options: SchemaFormExposeControlle
     if (!target)
       return console.error(`目标字段不存在：${field}`)
 
-    target.el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
+    const scrollParent = getScrollParent(target.el)
+    if (scrollParent) {
+      const targetRect = target.el.getBoundingClientRect()
+      const parentRect = scrollParent.getBoundingClientRect()
+      const offset = targetRect.top - parentRect.top
+      scrollParent.scrollBy({ top: offset, behavior: 'smooth' })
+    } else {
+      // 如果没有独立的滚动父容器，则退化使用原生 API
+      target.el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
   }
 
   function restoreValidation() {
