@@ -7,8 +7,22 @@
   "author": "songpeng <419626398@qq.com>",
   "license": "MIT",
   "homepage": "https://github.com/songpeng154/naive-schema-form",
-  "repository": {},
-  "bugs": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/songpeng154/naive-schema-form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/songpeng154/naive-schema-form/issues"
+  },
+  "keywords": [
+    "naive-ui",
+    "vue",
+    "vue3",
+    "schema-form",
+    "form",
+    "dynamic-form",
+    "typescript"
+  ],
   "sideEffects": [
     "**/*.css"
   ],

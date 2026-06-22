@@ -2,10 +2,15 @@
   "name": "docs",
   "version": "1.0.0",
   "packageManager": "pnpm@10.11.0",
-  "description": "",
-  "author": "",
-  "license": "ISC",
-  "keywords": [],
+  "description": "Documentation for naive-schema-form.",
+  "author": "songpeng <419626398@qq.com>",
+  "license": "MIT",
+  "keywords": [
+    "naive-ui",
+    "vue",
+    "schema-form",
+    "docs"
+  ],
   "main": "index.js",
   "scripts": {
     "dev": "vitepress dev .",
