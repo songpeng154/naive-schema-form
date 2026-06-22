@@ -6,7 +6,7 @@ import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynam
 import { useLocale } from '@/components/schema-form/hooks/use-locale.ts'
 
 export function useSchemaRules(
-  schema: DefineSchema,
+  schemaRef: ComputedRef<DefineSchema>,
   resolvedLabel: ComputedRef<any>,
   resolvedComponent: ComputedRef<any>,
   callbackParams: ComputedRef<CallbackParams>,
@@ -17,7 +17,7 @@ export function useSchemaRules(
   // 动态解析并配置当前表单项校验规则
   // 优先级：用户自定义规则 > 预设字符串规则 > 语义化 required 自动生成规则
   const resolvedRules = computed(() => {
-    const rules = unref(schema.rules)
+    const rules = unref(schemaRef.value.rules)
 
     // 1. 用户写了自定义规则对象/数组，直接使用
     if (rules && typeof rules !== 'string')
@@ -28,8 +28,8 @@ export function useSchemaRules(
       return handleRulePresets(rules, localeName.value)
 
     // 3. 解析语义化必填 required
-    const isRequired = schema.required !== undefined
-      ? resolveDynamicProp(schema.required, callbackParams.value)
+    const isRequired = schemaRef.value.required !== undefined
+      ? resolveDynamicProp(schemaRef.value.required, callbackParams.value)
       : false
 
     // 4. 根据 required 状态生成规则
@@ -42,7 +42,7 @@ export function useSchemaRules(
        */
       if (schemaFormProps.autoRequiredRule && resolvedComponent.value && typeof resolvedLabel.value === 'string') {
         // 自动生成带有友好提示的校验规则
-        return generateRule(resolvedLabel.value as string, schema.component!, localeName.value)
+        return generateRule(resolvedLabel.value as string, schemaRef.value.component!, localeName.value)
       }
       // 降级使用基础必填标记
       return { required: true }

@@ -1,5 +1,4 @@
 import type { ComputedRef } from 'vue'
-import type { SchemaFormItemProps } from '@/components/schema-form/components/schema-form-item/types/type.ts'
 import type { CallbackParams, DefineSchema, SchemaFormCommonProps } from '@/components/schema-form/types/common.ts'
 import type { SchemaComponentPropsMap } from '@/components/schema-form/types/component.ts'
 import type { Recordable } from '@/types/shared.ts'
@@ -7,12 +6,11 @@ import { isArray } from 'es-toolkit/compat'
 import { computed, unref } from 'vue'
 import { getSchemaComponentAdapter } from '@/components/schema-form/core/registry.ts'
 import { generatePlaceholder } from '@/components/schema-form/core/rules.ts'
-import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
 import { useLocale } from '@/components/schema-form/hooks/use-locale.ts'
+import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
 
 export function useSchemaComponentProps(
-  schema: DefineSchema,
-  props: SchemaFormItemProps,
+  schemaRef: ComputedRef<DefineSchema>,
   callbackParams: ComputedRef<CallbackParams>,
   resolvedLabel: ComputedRef<any>,
   /**
@@ -28,7 +26,7 @@ export function useSchemaComponentProps(
 
   // 获取当前字段类型对应的 Naive UI 组件适配器
   const adapter = computed(() => {
-    return getSchemaComponentAdapter(schema.component)
+    return getSchemaComponentAdapter(schemaRef.value.component)
   })
 
   // 解析出真实的渲染组件类型（如 NInput 等）
@@ -38,7 +36,7 @@ export function useSchemaComponentProps(
 
   // 动态聚合与解析组件的 Props（集成全局默认值、自动 Placeholder、时间格式、禁用状态等联动属性）
   const resolvedComponentProps = computed(() => {
-    const { component, componentProps, placeholder, startPlaceholder, endPlaceholder, options, disabled: itemDisabled } = schema
+    const { component, componentProps, placeholder, startPlaceholder, endPlaceholder, options, disabled: itemDisabled } = schemaRef.value
 
     // 先合并全局组件默认值，使得 Schema 级别的属性可以覆盖它们。
 
@@ -89,11 +87,12 @@ export function useSchemaComponentProps(
         mapProps.options = unreffedOptions
 
       const resolvedDisabledVal = unref(itemDisabled)
-      if (resolvedDisabledVal !== undefined || props.disabled !== undefined || schemaFormProps.disabled !== undefined) {
+      if (resolvedDisabledVal !== undefined || schemaFormProps.disabled !== undefined) {
         const resolvedItemDisabled = resolvedDisabledVal !== undefined
           ? resolveDynamicProp(itemDisabled, callbackParams.value)
           : undefined
-        mapProps.disabled = resolvedItemDisabled ?? props.disabled ?? schemaFormProps.disabled
+
+        mapProps.disabled = resolvedItemDisabled ?? schemaFormProps.disabled
       }
     }
 
@@ -105,12 +104,12 @@ export function useSchemaComponentProps(
 
   // 检查 Schema 的基础组件配置是否存在逻辑矛盾（如不支持的时间选择类型等）
   const resolvedError = computed(() => {
-    if (!schema.component)
+    if (!schemaRef.value.component)
       return undefined
 
     const currentAdapter = adapter.value
     if (!currentAdapter)
-      return `SchemaForm: unknown component "${String(schema.component)}".`
+      return `SchemaForm: unknown component "${String(schemaRef.value.component)}".`
     return undefined
   })
 

@@ -146,7 +146,7 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
       v-bind="formProps"
       :model="model"
     >
-      <SchemaFormContent :schema="schema as any" :grid-props="props.gridProps || {}">
+      <SchemaFormContent :grid-props="props.gridProps || {}" :schema="schema">
         <template v-for="(_, key) in formContentSlots" #[key]="scope">
           <slot :name="key as PopupSchemaFormSlots" v-bind="scope || {}" />
         </template>

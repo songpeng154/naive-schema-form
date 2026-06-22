@@ -1,6 +1,6 @@
 /* --------------分组表单-------------- */
 
-import type { MaybeRef } from 'vue'
+import type { MaybeRef, UnwrapRef } from 'vue'
 import type { GridItemProps, GridProps } from '@/components/grid/types'
 import type {
   DefineSchema,
@@ -70,7 +70,6 @@ export interface DefineGroupSchema<
 
   /**
    * 禁用表单
-   * TODO: 未完成
    */
   disabled?: MaybeRef<boolean>
 
@@ -85,35 +84,7 @@ export interface DefineGroupSchema<
   gridProps?: MaybeRef<GridProps>
 }
 
-export interface UnwrapGroupSchema<
-  TForm extends object = any,
-> {
-  title: string
-  helpMessage?: string
-  hide?: boolean | GroupCallbackParamsFunction<TForm, boolean>
-  form: DefineSchema<TForm>[] | UnwrapSchema<TForm>[]
-  collapsed?: boolean
-  collapsedRows?: number
-  hideCollapseButton?: boolean
-  disabled?: boolean
-  gridItemProps?: number | GridItemProps
-  gridProps?: GridProps
-}
-
-export interface RuntimeGroupBaseSchema<
-  TForm extends object = any,
-> {
-  key: string
-  title: string
-  helpMessage?: string
-  form: DefineSchema<TForm>[] | UnwrapSchema<TForm>[]
-  collapsed: boolean
-  collapsedRows: number
-  hideCollapseButton?: boolean
-  disabled?: boolean
-  gridItemProps?: number | GridItemProps
-  gridProps?: GridProps
-}
+export type UnwrapGroupSchema<TForm extends object = any> = UnwrapRef<DefineGroupSchema<TForm>>
 
 export interface GroupCallbackSchema<
   TForm extends object = any,
@@ -128,12 +99,6 @@ export interface GroupCallbackSchema<
   disabled?: boolean
   gridItemProps?: number | GridItemProps
   gridProps?: GridProps
-}
-
-export interface RuntimeGroupSchema<
-  TForm extends object = any,
-> extends RuntimeGroupBaseSchema<TForm> {
-  hide?: boolean | GroupCallbackParamsFunction<TForm, boolean>
 }
 
 export interface GroupSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
@@ -171,14 +136,14 @@ export interface GroupSchemaFormSlots extends SchemaFormCommonSlots {
   /**
    * 自定义 group 标题
    */
-  groupTitle: (props: { config: RuntimeGroupSchema }) => any
+  groupTitle: (props: { config: UnwrapGroupSchema }) => any
 
   /**
    * 自定义折叠按钮
    */
   collapsedButton: (props: {
-    config: RuntimeGroupSchema
+    config: UnwrapGroupSchema
     overflow: boolean
-    toggleCollapsed: (config: RuntimeGroupSchema, isCollapsed?: boolean) => void
+    toggleCollapsed: (config: UnwrapGroupSchema, isCollapsed?: boolean) => void
   }) => any
 }

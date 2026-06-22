@@ -4,7 +4,8 @@ import { useId } from 'vue'
 import Grid from '@/components/grid/grid.vue'
 import SchemaFormItem from '@/components/schema-form/components/schema-form-item/index.vue'
 
-const { schema, gridProps, gridItemProps, disabled } = defineProps<SchemaFormContent>()
+const { schema, gridProps } = defineProps<SchemaFormContent>()
+
 const id = useId()
 </script>
 
@@ -18,9 +19,7 @@ const id = useId()
         v-if="config.component || config.formItemSlot || config.slot"
         :id="id"
         :index="index"
-        :grid-item-props="gridItemProps"
         :schema="config"
-        :disabled="disabled"
       >
         <slot v-if="config.formItemSlot" :name="config.formItemSlot" />
         <template v-if="config.slot" #[config.slot]="scope">

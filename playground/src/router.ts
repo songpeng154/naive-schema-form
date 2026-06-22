@@ -26,6 +26,19 @@ export const router = createRouter({
       component: () => import('./examples/schema-form/Validation.vue'),
       meta: { title: '多维校验组合', group: 'SchemaForm' },
     },
+    {
+      path: '/schema-form/getter-demo',
+      name: 'SchemaForm-GetterDemo',
+      component: () => import('./examples/schema-form/GetterDemo.vue'),
+      meta: { title: 'Getter性能测试', group: 'SchemaForm' },
+    },
+    // GroupSchemaForm
+    {
+      path: '/group-form/base',
+      name: 'GroupForm-Base',
+      component: () => import('./examples/group-form/Base.vue'),
+      meta: { title: '分组表单基础用法', group: 'GroupSchemaForm' },
+    },
     // You can add more routes here later as we build them out
   ],
 })

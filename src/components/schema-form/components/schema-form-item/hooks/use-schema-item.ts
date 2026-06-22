@@ -16,6 +16,7 @@ export function useSchemaItem(
   itemEl: Ref<HTMLElement | undefined>,
 ) {
   const { getModelValue, schemaFormProps, globalComponentProps, model, setFormItemData } = useSchemaFormContext()!
+
   const id = useId()
   // 唯一标识
   const uniqueIdentifier = computed(() => `${props.id}-${id}`)
@@ -32,7 +33,7 @@ export function useSchemaItem(
 
   // 获取当前栅格项的布局配置
   const gridItemPropsMap = computed(() => {
-    const item = unref(props.schema.gridItemProps) ?? props.gridItemProps ?? schemaFormProps.gridItemProps
+    const item = unref(props.schema.gridItemProps) ?? schemaFormProps.gridItemProps
     return (isNumber(item) ? { span: item } : item || {}) as GridItemProps
   })
 
@@ -52,10 +53,11 @@ export function useSchemaItem(
     uniqueIdentifier,
   )
 
+  const schemaRef = computed(() => props.schema)
+
   // 解析和组装真正传给底层 UI 控件的 Props
   const { adapter, resolvedComponent, resolvedComponentProps, resolvedError } = useSchemaComponentProps(
-    props.schema,
-    props,
+    schemaRef,
     callbackParams,
     resolvedLabel,
     schemaFormProps,
@@ -64,7 +66,7 @@ export function useSchemaItem(
 
   // 解析表单校验规则（支持预设与 semantics required）
   const { resolvedRules } = useSchemaRules(
-    props.schema,
+    schemaRef,
     resolvedLabel,
     resolvedComponent,
     callbackParams,

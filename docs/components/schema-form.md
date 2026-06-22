@@ -6,9 +6,15 @@
 
 默认情况下，表单项会独占一行。只需极少的配置，即可生成表单，并且会自动推导出 `placeholder`。
 
-<demo src="../demos/schema-form/basic.vue" title="基础单列用法" description="最简洁的纵向表单布局。" />
+<demo src="../demos/schema-form/basic.vue" title="基础用法" description="最简单的一个表单，仅需提供 model 和 schema 配置。" />
 
-## 两列布局
+## 表单整体属性
+
+除了针对单个表单项的局部配置，你还可以直接在 `SchemaForm` 组件标签上（或 `useSchemaForm` 的第二个配置对象中）传递任意 Naive UI 原生 `NForm` 支持的属性，用于控制整个表单实例的状态与外观。
+
+<demo src="../demos/schema-form/form-props.vue" title="表单整体属性" description="演示如何一键控制行内模式、全局禁用、组件尺寸和标签位置。" />
+
+## 两列排版
 
 利用底层 24 列的栅格系统，只需在表单全局配置中下发 `gridItemProps: 12` 即可轻松实现完美的等宽两列排版。
 

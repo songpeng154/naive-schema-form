@@ -35,7 +35,7 @@ const slots = defineSlots<SchemaFormSlots>()
 const model = defineModel<any>('model', { required: true })
 const schema = defineModel<DefineSchema[]>('schema', { required: true })
 
-const props = useMergeGlobalConfig('base', rawProps) as unknown as SchemaFormProps
+const props = useMergeGlobalConfig('base', rawProps)
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
   omitFormProps: ['schema'],
@@ -55,7 +55,7 @@ defineExpose<SchemaFormExpose>(exposeSchemaForm<SchemaFormExpose>(commonExpose))
     v-bind="formProps"
     :model="model"
   >
-    <SchemaFormContent :schema="schema" :grid-props="props.gridProps || {}">
+    <SchemaFormContent :grid-props="props.gridProps" :schema="schema">
       <template v-for="(_, key) in formContentSlots" #[key]="scope">
         <slot :name="key as SchemaFormSlots" v-bind="scope || {}" />
       </template>

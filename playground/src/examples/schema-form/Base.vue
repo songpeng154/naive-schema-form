@@ -20,6 +20,7 @@ const model = ref<Record<string, any>>({
 
 // 2. 严格只传 model 和 schema，但扩充 schema 以测试各种原生组件的基础渲染情况
 const { register } = useSchemaForm(model, {
+  disabled: true,
   schema: [
     {
       field: 'username',
