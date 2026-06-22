@@ -133,7 +133,7 @@ export interface CommonComponentPropsMap<
   /**
    * 选项
    */
-  options?: MaybeRef<OptionType[]>
+  options?: MaybeRef<OptionType[] | undefined>
 
   /**
    * 禁用

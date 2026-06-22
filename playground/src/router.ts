@@ -26,18 +26,6 @@ export const router = createRouter({
       component: () => import('./examples/schema-form/Validation.vue'),
       meta: { title: '多维校验组合', group: 'SchemaForm' },
     },
-    {
-      path: '/schema-form/getter-demo',
-      name: 'SchemaForm-GetterDemo',
-      component: () => import('./examples/schema-form/GetterDemo.vue'),
-      meta: { title: 'Getter性能测试', group: 'SchemaForm' },
-    },
-    {
-      path: '/schema-form/scroll-demo',
-      name: 'SchemaForm-ScrollDemo',
-      component: () => import('./examples/schema-form/ScrollDemo.vue'),
-      meta: { title: '全局滚动测试', group: 'SchemaForm' },
-    },
     // GroupSchemaForm
     {
       path: '/group-form/base',
