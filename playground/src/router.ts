@@ -45,6 +45,13 @@ export const router = createRouter({
       component: () => import('./examples/group-form/Base.vue'),
       meta: { title: '分组表单基础用法', group: 'GroupSchemaForm' },
     },
+    // SearchSchemaForm
+    {
+      path: '/search-form/base',
+      name: 'SearchForm-Base',
+      component: () => import('./examples/search-form/Base.vue'),
+      meta: { title: '查询表单基础与折叠', group: 'SearchSchemaForm' },
+    },
     // You can add more routes here later as we build them out
   ],
 })

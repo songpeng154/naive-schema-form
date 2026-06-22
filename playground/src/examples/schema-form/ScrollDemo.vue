@@ -37,10 +37,6 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <!-- 模拟一个类似于 VitePress 的固定导航栏（遮挡物） -->
-  <div style="position: fixed; top: 54px; left: 260px; right: 0; height: 80px; background: rgba(255, 0, 0, 0.8); color: white; z-index: 999; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); backdrop-filter: blur(8px); pointer-events: none;">
-    我是模拟的顶部巨型固定遮挡栏 (高度 80px)
-  </div>
 
   <div style="padding: 24px; max-width: 800px; margin: 0 auto; margin-top: 100px;">
     <NCard title="全局滚动测试（超长表单）" style="margin-bottom: 24px">

@@ -32,9 +32,9 @@ export function useSchemaItem(
   })
 
   // 获取当前栅格项的布局配置
-  const gridItemPropsMap = computed(() => {
+  const gridItemPropsMap = computed<GridItemProps>(() => {
     const item = unref(props.schema.gridItemProps) ?? schemaFormProps.gridItemProps
-    return (isNumber(item) ? { span: item } : item || {}) as GridItemProps
+    return isNumber(item) ? { span: item } : (item || {})
   })
 
   // 解析需要真正传给 NFormItem 包装容器的 props（通过 schema.formItemProps 传入）

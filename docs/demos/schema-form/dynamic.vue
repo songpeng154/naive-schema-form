@@ -12,6 +12,9 @@ const model = ref({
   hasExperience: false,
   role: 'developer',
   dynamicRequiredField: '',
+  systemRole: null,
+  reason: '',
+  adminSecret: '',
 })
 
 // 2. 外部的 Vue Ref 和 Computed 也可以直接参与 schema 动态配置
@@ -85,6 +88,32 @@ const { register } = useSchemaForm(model, {
           autosize: { minRows: 2, maxRows: 4 }
         }
       }
+    },
+    {
+      field: 'systemRole',
+      label: '系统角色申请',
+      component: 'select',
+      options: [
+        { label: '普通用户 (Guest)', value: 'guest' },
+        { label: '系统管理员 (Admin)', value: 'admin' },
+      ],
+      placeholder: '选择系统管理员将触发更多联动必填项',
+    },
+    {
+      field: 'reason',
+      label: '管理员申请理由',
+      component: 'input',
+      componentProps: { type: 'textarea' },
+      hide: ({ model }) => model.systemRole !== 'admin',
+      required: ({ model }) => model.systemRole === 'admin',
+    },
+    {
+      field: 'adminSecret',
+      label: '高级特权密钥',
+      component: 'input',
+      componentProps: { type: 'password', showPasswordOn: 'click' },
+      hide: ({ model }) => model.systemRole !== 'admin',
+      required: ({ model }) => model.systemRole === 'admin',
     },
   ],
 })

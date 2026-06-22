@@ -5,7 +5,7 @@ import type {
   SearchSchemaFormProps,
   SearchSchemaFormSlots,
 } from '@/components/schema-form/types/search.js'
-import { take } from 'es-toolkit'
+import { isNumber, take } from 'es-toolkit'
 import { NButton } from 'naive-ui'
 import { computed } from 'vue'
 import GridItem from '@/components/grid/grid-item.vue'
@@ -77,6 +77,8 @@ const text = computed(() => !collapsed.value ? props.expandedText : props.collap
 
 const collapsedVisible = computed(() => props.enableCollapsed && schema.value.length > (props.searchShowNumber ?? 0))
 
+const actionGridSpan = computed(() => isNumber(props.gridItemProps) ? props.gridItemProps : props.gridItemProps?.span || 6)
+
 function toggleCollapsed(isCollapsed?: boolean) {
   collapsed.value = isCollapsed ?? !collapsed.value
 }
@@ -100,7 +102,7 @@ defineExpose<SearchSchemaFormExpose>(exposeSchemaForm<SearchSchemaFormExpose>(co
       </template>
       <GridItem
         v-if="props.showActions"
-        :span="6"
+        :span="actionGridSpan"
         suffix
       >
         <SchemaFormActions

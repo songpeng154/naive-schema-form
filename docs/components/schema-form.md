@@ -88,6 +88,14 @@
 
 <demo src="../demos/schema-form/validation.vue" title="表单校验与规则验证" description="展示自动必填提示、正则校验以及跨字段自定义比对校验。" />
 
+## 异步后端校验
+
+除纯前端同步校验外，当配置了 `trigger: 'blur'` 并在 `rules.validator` 中返回 `Promise` 时，即可无缝实现**异步后端查重**等复杂业务。
+
+<demo src="../demos/schema-form/async-validation.vue" title="异步后端查重校验" description="演示失去焦点时请求后端接口，验证用户名是否已被占用。" />
+
+
+
 ## 嵌套多级数据双向绑定
 
 在实际企业级业务中，表单的数据结构通常是非常复杂且多层级嵌套的 JSON 对象（如 `info.personal.name`），而不是扁平的单一对象。
@@ -120,11 +128,7 @@
 
 <demo src="../demos/schema-form/custom-actions.vue" title="自定义操作区" description="演示在默认表单按钮前后追加自定义操作按钮。" />
 
-## 声明式事件拦截与生命周期
 
-相比于每次都在自定义按钮点击时手动调用 `validate()` 这种命令式写法，`SchemaForm` 原生提供了完善的事件抛出流：`@submit` -> 触发底层校验 -> 成功则触发 `@finish` / 失败则触发 `@finish-failed`。你可以直接监听这三个关键事件，大大减少胶水代码。
-
-<demo src="../demos/schema-form/lifecycle-events.vue" title="事件拦截与数据流转" description="演示利用内置表单事件实现优雅的提交与错误拦截处理。" />
 
 ## 外部调用方法
 
