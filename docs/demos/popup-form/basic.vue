@@ -14,8 +14,17 @@ const { register, openPopup } = usePopupSchemaForm(model, {
   confirmOnClose: true,
   resetOnClose: true,
   schema: [
-    { field: 'account', label: '账号', component: 'input', required: true },
-    { field: 'email', label: '邮箱', component: 'input' },
+    { 
+      field: 'account', 
+      label: '账号', 
+      component: 'input', 
+      required: true 
+    },
+    { 
+      field: 'email', 
+      label: '邮箱', 
+      component: 'input' 
+    },
   ],
   onSubmit: async (validate) => {
     await validate()

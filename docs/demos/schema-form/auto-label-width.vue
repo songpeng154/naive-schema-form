@@ -14,10 +14,23 @@ const model = ref({
 const { register } = useSchemaForm(model, {
   // autoLabelWidth 会在挂载时计算最长文本的真实 DOM 宽度，从而完美对齐
   autoLabelWidth: isAuto,
+  labelPlacement: 'left', // 必须在左侧对齐时，自动计算宽度的效果才明显
   schema: [
-    { field: 'short', label: '短', component: 'input' },
-    { field: 'veryLooooooooooongLabel', label: '我是一个非常非常非常非常非常非常长的标签', component: 'input' },
-    { field: 'normalLabel', label: '正常长度标签', component: 'input' },
+    { 
+      field: 'short', 
+      label: '短', 
+      component: 'input' 
+    },
+    { 
+      field: 'veryLooooooooooongLabel', 
+      label: '我是一个非常非常非常非常非常非常长的标签', 
+      component: 'input' 
+    },
+    { 
+      field: 'normalLabel', 
+      label: '正常长度标签', 
+      component: 'input' 
+    },
   ],
 })
 </script>

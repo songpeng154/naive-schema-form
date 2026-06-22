@@ -48,7 +48,7 @@ export function useSchemaFormExposeController(options: SchemaFormExposeControlle
       // 如果没有独立的滚动父容器，则退化使用原生 API
       target.el.scrollIntoView({
         behavior: 'smooth',
-        block: 'start',
+        block: 'nearest',
       })
     }
   }

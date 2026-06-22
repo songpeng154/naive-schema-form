@@ -14,6 +14,12 @@
 
 <demo src="../demos/schema-form/form-props.vue" title="表单整体属性" description="演示如何一键控制行内模式、全局禁用、组件尺寸和标签位置。" />
 
+## 自动计算标签宽度
+
+如果你的表单项 Label 长短不一，手动指定 `labelWidth` 可能会导致短标签过远或长标签换行。配置 `autoLabelWidth: true`，组件会在内部计算并自动对齐。
+
+<demo src="../demos/schema-form/auto-label-width.vue" title="自动计算标签宽度" description="无需手动指定宽度，根据最长文本自动对齐。" />
+
 ## 两列排版
 
 利用底层 24 列的栅格系统，只需在表单全局配置中下发 `gridItemProps: 12` 即可轻松实现完美的等宽两列排版。
@@ -38,11 +44,23 @@
 
 <demo src="../demos/schema-form/hide-label.vue" title="隐藏 Label 展示" description="去除了 Label 的紧凑表单。" />
 
+## Tooltip 与自定义 Label
+
+通过在 Schema 中配置 `tooltip` 属性，可以非常简单地在标签旁生成问号帮助图标。如果需要极其个性的标签（例如改变颜色或插入图标），你可以将 `label` 设置为返回 VNode 或 TSX 的渲染函数。
+
+<demo src="../demos/schema-form/tooltip-label.vue" title="Tooltip 与动态 Label" description="在标签旁添加帮助提示，或使用渲染函数高度定制标签样式。" />
+
 ## 所有内置表单类型一览
 
 底层对齐了 Naive UI 最常用的十余种数据录入组件，统一了数据绑定的心智。
 
 <demo src="../demos/schema-form/all-components.vue" title="全组件矩阵" description="涵盖几乎所有原生输入组件类型的映射支持。" />
+
+## 异步数据获取 (远程搜索/字典加载)
+
+在企业级应用中，下拉框（Select）、复选框（Checkbox）的 `options` 选项数据往往来自服务端。你只需将 `options` 绑定给一个普通的 Vue `ref` 响应式对象即可，无论何时网络请求返回并赋值，组件都会自动更新渲染。
+
+<demo src="../demos/schema-form/async-options.vue" title="异步选项加载" description="演示进入交互后异步向后端请求字典，并动态刷新下拉选项。" />
 
 ## 动态联动与显隐
 
@@ -102,17 +120,35 @@
 
 <demo src="../demos/schema-form/custom-actions.vue" title="自定义操作区" description="演示在默认表单按钮前后追加自定义操作按钮。" />
 
+## 声明式事件拦截与生命周期
+
+相比于每次都在自定义按钮点击时手动调用 `validate()` 这种命令式写法，`SchemaForm` 原生提供了完善的事件抛出流：`@submit` -> 触发底层校验 -> 成功则触发 `@finish` / 失败则触发 `@finish-failed`。你可以直接监听这三个关键事件，大大减少胶水代码。
+
+<demo src="../demos/schema-form/lifecycle-events.vue" title="事件拦截与数据流转" description="演示利用内置表单事件实现优雅的提交与错误拦截处理。" />
+
 ## 外部调用方法
 
 `useSchemaForm` 暴露了 `validate`、`restoreValidation` 和 `resetFields` 方法，无需使用 `ref` 引用即可在外部控制表单的校验与数据重置。
 
 <demo src="../demos/schema-form/method-validate.vue" title="外部调用方法" description="演示手动触发全量校验、清除报错提示以及重置表单数据。" />
 
+当然，如果默认提供的底部按钮不满足需求，你也可以完全屏蔽默认操作区（`showActions: false`），并在完全属于外部的代码区域，通过实例方法灵活指挥表单行为：
+
+<demo src="../demos/schema-form/manual-operations.vue" title="脱离操作区的外部控制" description="隐藏默认动作区，通过外部按钮实现手动调用与控制。" />
+
+如果在某些重置或清空场景下，你想局部还原某个特定字段的错误状态：
+
+<demo src="../demos/schema-form/method-restore-validation.vue" title="指定字段清理校验" description="演示针对特定字段的错误记录进行清空处理。" />
+
 ## 滚动定位
 
 `SchemaForm` 默认开启了 `scrollToFirstError: true` 参数。当触发 `validate` 且校验失败时，页面会自动滚动到第一个报错的输入框位置。此外，也可以通过暴露的 `scrollToField` 方法手动滚动到任意指定字段。
 
 <demo src="../demos/schema-form/method-scroll.vue" title="滚动定位" description="演示校验失败时的自动滚动，以及通过方法手动滚动到特定字段的位置。" />
+
+如果你想精确模拟“一旦有错误，立刻让视图平滑定位过去”的具体反馈，也可以结合校验 API 手动玩转：
+
+<demo src="../demos/schema-form/scroll-to-error.vue" title="错误定位演示" description="校验报错时让视口滑动到最顶部错误的展示。" />
 
 ## Props
 

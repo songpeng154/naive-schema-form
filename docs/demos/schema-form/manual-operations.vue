@@ -13,15 +13,47 @@ const model = ref({
 })
 
 const { register, validate, resetFields, restoreValidation, scrollToField } = useSchemaForm(model, {
+  showActions: false,
   labelWidth: 100,
   // SchemaForm 默认 scrollToFirstError: true
   schema: [
-    { field: 'field1', label: '必填项 1', component: 'input', required: true },
-    { field: 'field2', label: '必填项 2', component: 'input', required: true },
-    { field: 'placeholder', label: '超长占位区', component: 'input', formItemSlot: 'space', gridItemProps: 24 },
-    { field: 'field3', label: '必填项 3', component: 'input', required: true },
-    { field: 'field4', label: '必填项 4', component: 'input', required: true },
-    { field: 'field5', label: '必填项 5', component: 'input', required: true },
+    { 
+      field: 'field1', 
+      label: '必填项 1', 
+      component: 'input', 
+      required: true 
+    },
+    { 
+      field: 'field2', 
+      label: '必填项 2', 
+      component: 'input', 
+      required: true 
+    },
+    { 
+      field: 'placeholder', 
+      label: '超长占位区', 
+      component: 'input', 
+      formItemSlot: 'space', 
+      gridItemProps: 24 
+    },
+    { 
+      field: 'field3', 
+      label: '必填项 3', 
+      component: 'input', 
+      required: true 
+    },
+    { 
+      field: 'field4', 
+      label: '必填项 4', 
+      component: 'input', 
+      required: true 
+    },
+    { 
+      field: 'field5', 
+      label: '必填项 5', 
+      component: 'input', 
+      required: true 
+    },
   ],
 })
 
@@ -53,7 +85,7 @@ function handleScrollTo() {
 <template>
   <!-- 外部套一个定高容器并开启滚动，方便演示自动定位功能 -->
   <div style="height: 350px; overflow-y: auto; padding: 4px; border: 1px solid rgba(128,128,128,0.2); border-radius: 8px;">
-    <SchemaForm v-bind="register" :show-actions="false">
+    <SchemaForm v-bind="register">
       <!-- 利用自定义表单项造一个超长的空白墙 -->
       <template #space>
         <div style="height: 600px; background: rgba(128,128,128,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">

@@ -58,13 +58,13 @@ const { register, validate } = useSchemaForm(model, {
         validator: (rule, value) => {
           return value === model.value.password
         },
+        required: true,
         message: '两次输入的密码不一致',
         trigger: ['input', 'blur'],
       },
     },
   ],
 })
-
 
 async function handleSubmit() {
   try {

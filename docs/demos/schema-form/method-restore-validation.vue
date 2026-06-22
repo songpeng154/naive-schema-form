@@ -8,9 +8,15 @@ const model = ref({
 })
 
 const { register, validate, restoreValidation } = useSchemaForm(model, {
+  showActions: false,
   labelWidth: 100,
   schema: [
-    { field: 'username', label: '用户名', component: 'input', required: true },
+    { 
+      field: 'username', 
+      label: '用户名', 
+      component: 'input', 
+      required: true 
+    },
   ],
 })
 
@@ -24,7 +30,7 @@ function handleRestore() {
 </script>
 
 <template>
-  <SchemaForm v-bind="register" :show-actions="false" />
+  <SchemaForm v-bind="register" />
   
   <NSpace style="margin-top: 16px;">
     <NButton type="primary" @click="handleValidate">触发校验</NButton>
