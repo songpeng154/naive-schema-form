@@ -2,6 +2,9 @@ import type { Ref } from 'vue'
 import type { DefineGroupSchema, GroupSchemaFormExpose, GroupSchemaFormProps } from '@/components/schema-form/types/group'
 import type { WrapWithMaybeRef } from '@/types/shared.ts'
 
+/**
+ * GroupSchemaForm 的 register 绑定属性类型
+ */
 export type GroupSchemaFormRegisterProps<TModel extends object = any> = Omit<GroupSchemaFormProps, 'model' | 'schema'> & {
   'model': TModel
   'schema': DefineGroupSchema<TModel>[]

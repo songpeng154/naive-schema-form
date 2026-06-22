@@ -29,7 +29,7 @@ const { register } = useSearchSchemaForm(model, {
     {
       field: 'date',
       label: '创建时间',
-      component: 'datePicker',
+      component: 'date-picker',
     },
   ],
   onSubmit: async (validate, currentModel) => {

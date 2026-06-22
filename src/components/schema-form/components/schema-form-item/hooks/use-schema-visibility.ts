@@ -4,6 +4,11 @@ import type { CallbackParams } from '@/components/schema-form/types/common.ts'
 import { computed, unref } from 'vue'
 import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
 
+/**
+ * 封装控制当前字段组件的显示/隐藏（支持布尔值或联动回调函数）
+ * @param props 组件属性
+ * @param callbackParams 动态执行时需要的参数上下文
+ */
 export function useSchemaVisibility(
   props: SchemaFormItemProps,
   callbackParams: ComputedRef<CallbackParams>,

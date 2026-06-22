@@ -42,7 +42,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'date',
       label: '发布日期',
-      component: 'datePicker',
+      component: 'date-picker',
       gridItemProps: 8
     },
     {
@@ -58,7 +58,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'tags',
       label: '文章标签',
-      component: 'checkboxGroup',
+      component: 'checkbox-group',
       options: [
         { label: 'Vue', value: 'vue' },
         { label: 'React', value: 'react' },

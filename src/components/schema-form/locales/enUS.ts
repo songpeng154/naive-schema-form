@@ -1,5 +1,8 @@
 import type { SchemaFormLocale } from './types.ts'
 
+/**
+ * 英文国际化配置
+ */
 export const enUS: SchemaFormLocale = {
   name: 'en-US',
   placeholder: {

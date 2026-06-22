@@ -9,6 +9,14 @@ import { generatePlaceholder } from '@/components/schema-form/core/rules.ts'
 import { useLocale } from '@/components/schema-form/hooks/use-locale.ts'
 import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
 
+/**
+ * 集中解析和组装底层 UI 组件所需要的动态 Props
+ * @param schemaRef 表单项的 schema 定义
+ * @param callbackParams 获取动态属性时注入的上下文参数
+ * @param resolvedLabel 解析后的标签名
+ * @param schemaFormProps 顶层容器的属性
+ * @param globalComponentProps 全局组件默认属性
+ */
 export function useSchemaComponentProps(
   schemaRef: ComputedRef<DefineSchema>,
   callbackParams: ComputedRef<CallbackParams>,

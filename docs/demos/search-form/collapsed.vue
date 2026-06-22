@@ -30,7 +30,7 @@ const { register } = useSearchSchemaForm(model, {
       component: 'select',
       options: [{ label: '启用', value: 1 }, { label: '禁用', value: 0 }]
     },
-    { field: 'date', label: '创建时间', component: 'datePicker' },
+    { field: 'date', label: '创建时间', component: 'date-picker' },
     { field: 'creator', label: '创建人', component: 'input' },
   ],
 })

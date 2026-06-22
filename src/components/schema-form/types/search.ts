@@ -7,6 +7,9 @@ import type {
   SchemaFormCommonSlots,
 } from '@/components/schema-form/types/common.ts'
 
+/**
+ * 搜索表单组件的 Props 类型
+ */
 export interface SearchSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
@@ -39,10 +42,16 @@ export interface SearchSchemaFormProps<TModel extends object = any> extends Sche
   expandedText?: string
 }
 
+/**
+ * 搜索表单向外暴露的方法实例
+ */
 export interface SearchSchemaFormExpose extends SchemaFormCommonExpose {
   toggleCollapsed: (isCollapsed: boolean) => void
 }
 
+/**
+ * 搜索表单支持的插槽定义
+ */
 export interface SearchSchemaFormSlots extends SchemaFormCommonSlots {
 
 }

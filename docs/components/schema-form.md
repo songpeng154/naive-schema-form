@@ -104,6 +104,12 @@
 
 <demo src="../demos/schema-form/nested-data.vue" title="嵌套多级数据绑定" description="演示如何使用点号语法轻松绑定和操作深层对象数据。" />
 
+## 分步向导表单
+
+结合 `SchemaForm` 强大的动态 `hide` 能力与底层组件的联动校验，你可以非常轻松地搭建出体验极佳的分步向导表单。不同步骤独立校验，无缝流转。
+
+<demo src="../demos/schema-form/step-form.vue" title="分步向导表单" description="演示如何通过动态显隐与局部校验构建向导式多步表单。" />
+
 ## 基础组件插槽
 
 当需要在基础输入组件（如 `NInput`, `NSelect` 等）内部注入额外内容（如前缀图标、后缀按钮）时，直接在 schema 中配置 `componentSlots` 即可。这种方式会把插槽内容直接透传给底层组件，是最轻量、最原生的自定义方式。
@@ -121,6 +127,12 @@
 如果需要在表单的中间插入一段纯粹的 UI 区块（例如标题分割线、警告提示框等），这些区块根本不需要 Label 或校验外壳。此时可通过配置 `formItemSlot` 彻底替换掉底层的 `NFormItem`，实现整个表单项的自定义。
 
 <demo src="../demos/schema-form/custom-form-item-slot.vue" title="自定义表单项" description="使用 formItemSlot 插入一段不受表单布局和 Label 束缚的警告提示块。" />
+
+## 自定义组件双向绑定
+
+你可以通过 `slot` 插槽配合从作用域解构出来的 `model` 与 `field` 参数，完全接管特定字段的渲染机制，并让你的自定义组件（或复杂嵌套组件）拥有极其顺滑的原生双向绑定体验。
+
+<demo src="../demos/schema-form/custom-vmodel-component.vue" title="自定义双向绑定组件" description="演示在插槽内结合 v-model 直接操作底层模型状态。" />
 
 ## 自定义操作区
 

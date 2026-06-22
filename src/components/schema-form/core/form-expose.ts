@@ -11,6 +11,10 @@ function replaceReactiveObject(target: Recordable, source: Recordable) {
   Object.assign(target, source)
 }
 
+/**
+ * Schema 表单内部暴露控制台，组装所有给外部调用的原生表单代理方法
+ * @param options 初始化选项，包含 props 和 formRef
+ */
 export function useSchemaFormExposeController(options: SchemaFormExposeControllerOptions) {
   const { props, formRef } = options
   const { model, formItemData } = useSchemaFormContext()!

@@ -6,21 +6,21 @@ Schema-driven form components for Vue 3 + Naive UI.
 
 ### Motivation
 
-Building complex forms in enterprise applications (B2B/Admin dashboards) is traditionally a massive time sink. Handling intricate validations, responsive layouts, nested fields, and dynamic visibilities using raw template syntax often results in monolithic, unmaintainable Vue files.
+Building forms in enterprise applications often involves handling validations, responsive layouts, nested fields, and dynamic visibilities. Managing these through raw template syntax can lead to complex and hard-to-maintain Vue files.
 
-`naive-schema-form` was born to solve this. By shifting form definitions from HTML templates to **JSON schemas**, it frees you from DOM manipulation and lets you focus on what really matters: your business data flow.
+`naive-schema-form` addresses this by shifting form definitions from HTML templates to **JSON schemas**, allowing you to manage forms programmatically and separate UI from data flow.
 
 ### Core Features
 
-- **Schema-Driven**: Describe dynamic forms using pure JS objects to keep your Vue templates clean and maintainable.
-- **Hooks Architecture**: Fully embraces the Composition API (`useSchemaForm`, etc.) to decouple form state and actions from the UI layer.
-- **Business-Ready Variants**: Out-of-the-box solutions for high-frequency scenarios:
-  - **Search Form**: Perfect for table headers with built-in auto-collapse and expand logic.
-  - **Group Form**: Designed for massive configuration pages, split into independent card sections.
-  - **Popup Form**: Seamlessly embed forms into Modals or Drawers with unsaved-changes protection.
-- **Flawless TypeScript Inference**: Enjoy perfect type inference—defining `component: 'select'` instantly grants you `naive-ui`'s native `SelectProps` autocomplete.
-- **Responsive Grid Engine**: Manage complex responsive layouts effortlessly with the built-in highly flexible Grid system.
-- **Extensible Ecosystem**: Register your own business components globally with a single line of code, while retaining full TypeScript support.
+- **Schema-Driven**: Define forms using JavaScript objects instead of template markup.
+- **Hooks Architecture**: Uses Composition API (`useSchemaForm`) to separate form state from the UI.
+- **Form Variants**: Includes components for common scenarios:
+  - **Search Form**: Includes auto-collapse functionality for table filters.
+  - **Group Form**: Splits large forms into independent card sections.
+  - **Popup Form**: Embeds forms into Modals or Drawers with unsaved-changes prompts.
+- **TypeScript Support**: Provides type inference for component props based on the selected component type.
+- **Grid Layout**: Built-in Grid system for responsive form layouts.
+- **Custom Components**: Register custom components globally with type support.
 
 ---
 
@@ -91,7 +91,7 @@ const onSubmit = async () => {
 ### 🎯 Form Variants Examples
 
 #### 1. SearchSchemaForm (Table Query Headers)
-Automatically collapses excess query fields and provides built-in Search/Reset buttons.
+Collapses excess query fields and provides Search/Reset buttons.
 
 ```vue
 <script setup lang="ts">
@@ -116,7 +116,7 @@ const { register } = useSearchSchemaForm(model, {
 ```
 
 #### 2. PopupSchemaForm (Modal/Drawer Forms)
-Manage modal visibility and loading states automatically without cluttering your template.
+Manages modal visibility and loading states.
 
 ```vue
 <script setup lang="ts">
@@ -144,7 +144,7 @@ const { register, openPopup } = usePopupSchemaForm(model, {
 ```
 
 #### 3. GroupSchemaForm (Complex Grouped Forms)
-Ideal for massive configuration pages split into sections.
+Splits large configuration forms into sections.
 
 ```vue
 <script setup lang="ts">
@@ -176,25 +176,45 @@ const { register } = useGroupSchemaForm(model, {
 
 ### 🧩 Custom Components
 
-You can easily register custom components and extend their types:
+Register custom components and extend their types:
 
 ```ts
 import { registerSchemaComponent } from 'naive-schema-form'
 import BadgeInput from './BadgeInput.vue'
+import CustomSelect from './CustomSelect.vue'
 
 // 1. Extend Types
 declare module 'naive-schema-form' {
   interface SchemaCustomComponentPropsMap {
-    badgeInput: {
+    'badge-input': {
       prefix?: string
+    }
+    'custom-select': {
+      multiple?: boolean
     }
   }
 }
 
-// 2. Register Runtime Component
-registerSchemaComponent('badgeInput', {
+// 2. Register Runtime Component(s)
+
+// Single Registration
+registerSchemaComponent('badge-input', {
   component: BadgeInput,
-  valueType: 'input',
+  actionType: 'input',
   mapPlaceholder: true,
+})
+
+// Batch Registration
+registerSchemaComponent({
+  'badge-input': {
+    component: BadgeInput,
+    actionType: 'input',
+    mapPlaceholder: true,
+  },
+  'custom-select': {
+    component: CustomSelect,
+    actionType: 'select',
+    mapOptions: true,
+  }
 })
 ```

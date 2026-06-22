@@ -11,6 +11,11 @@ import { useSchemaLabel } from './use-schema-label.ts'
 import { useSchemaRules } from './use-schema-rules.ts'
 import { useSchemaVisibility } from './use-schema-visibility.ts'
 
+/**
+ * 封装表单项的全部业务逻辑，串联各个功能 Hook，向组件模板输出响应式的计算结果
+ * @param props 组件属性
+ * @param itemEl 当前 DOM 元素的引用
+ */
 export function useSchemaItem(
   props: SchemaFormItemProps,
   itemEl: Ref<HTMLElement | undefined>,

@@ -65,14 +65,14 @@ const { register } = useSchemaForm(model, {
     {
       field: 'birthDate',
       label: '出生日期',
-      component: 'datePicker',
+      component: 'date-picker',
       componentProps: { type: 'date', style: { width: '100%' } },
       gridItemProps: { span: 12 },
     },
     {
       field: 'joinTime',
       label: '入职时间',
-      component: 'timePicker',
+      component: 'time-picker',
       componentProps: { style: { width: '100%' } },
       gridItemProps: { span: 12 },
     },
@@ -113,7 +113,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'skills',
       label: '专业技能',
-      component: 'checkboxGroup',
+      component: 'checkbox-group',
       options: [
         { label: 'Vue3', value: 'vue3' },
         { label: 'TypeScript', value: 'ts' },
@@ -138,7 +138,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'baseSalary',
       label: '基本薪资',
-      component: 'inputNumber',
+      component: 'input-number',
       componentProps: { step: 1000 },
       // 故意设置偏移测试：前面的组件占 8 列，这里 offset 8，使其靠右对齐
       gridItemProps: { span: 8, offset: 8 },
@@ -158,7 +158,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'themeColor',
       label: '后台主题色偏好',
-      component: 'colorPicker',
+      component: 'color-picker',
       gridItemProps: { span: 12 },
     },
     {

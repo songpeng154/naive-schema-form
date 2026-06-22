@@ -1,5 +1,8 @@
 import type { SchemaFormLocale } from './types.ts'
 
+/**
+ * 中文国际化配置
+ */
 export const zhCN: SchemaFormLocale = {
   name: 'zh-CN',
   placeholder: {

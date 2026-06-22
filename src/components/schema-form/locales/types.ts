@@ -1,10 +1,16 @@
 import type { RulePresets } from '@/components/schema-form/types/common.ts'
 
+/**
+ * 国际化预设规则消息类型
+ */
 export type LocaleRulePresets = Record<RulePresets, {
   requiredMessage: string
   incorrectMessage: string
 }>
 
+/**
+ * 表单国际化配置结构
+ */
 export interface SchemaFormLocale {
   name: string
   placeholder: {

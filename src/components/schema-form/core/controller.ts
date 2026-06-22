@@ -5,6 +5,13 @@ import { useProvideSchemaFormContext } from '@/components/schema-form/hooks/cont
 import useCommonExpose from '@/components/schema-form/hooks/expose.ts'
 import useOmitProps from '@/utils/omit-props.ts'
 
+/**
+ * Schema 表单核心控制器，负责处理属性过滤、插槽分离并挂载 Context
+ * @param props 表单组件的属性
+ * @param model 双向绑定的表单数据
+ * @param slots 组件的作用域插槽
+ * @param options 额外的控制参数
+ */
 export function useSchemaFormController<TModel extends object, TProps extends SchemaFormCommonProps<TModel>>(
   props: TProps,
   model: ModelRef<TModel>,
@@ -30,6 +37,11 @@ export function useSchemaFormController<TModel extends object, TProps extends Sc
   }
 }
 
+/**
+ * 提供一种统一的方式去扩展和合并暴露出来的实例方法
+ * @param commonExpose 基础暴露实例
+ * @param extend 扩展的特有方法
+ */
 export function exposeSchemaForm<TExpose extends SchemaFormCommonExpose>(commonExpose: SchemaFormCommonExpose, extend?: Partial<TExpose>) {
   return {
     ...commonExpose,

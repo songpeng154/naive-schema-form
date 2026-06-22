@@ -1,5 +1,10 @@
 import type { GridItemData } from '@/components/grid/types'
 
+/**
+ * 解析计算栅格项的宽度、偏移等结构化信息
+ * @param cols 当前环境的栅格列数
+ * @param props 栅格项配置数据
+ */
 export function resolveItemData(cols: number, props: GridItemData): GridItemData {
   const originSpan = props.span ?? 1
   const originOffset = props.offset ?? 0
@@ -12,6 +17,13 @@ export function resolveItemData(cols: number, props: GridItemData): GridItemData
   }
 }
 
+/**
+ * 计算具有折叠功能的栅格环境中，哪些项应当显示或折叠，并判断是否产生溢出
+ * @param cols 栅格总列数
+ * @param collapsed 是否处于折叠状态
+ * @param notCollapsedRows 允许不折叠展示的最大行数
+ * @param itemDataList 每个栅格项的元数据集合
+ */
 export function setItemVisible(cols: number, collapsed: boolean, notCollapsedRows: number, itemDataList: GridItemData[]) {
   const isOverflow = (span: number) => Math.ceil(span / cols) > notCollapsedRows
 

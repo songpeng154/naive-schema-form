@@ -7,6 +7,9 @@ import type { BreakpointType } from '@/types/shared.ts'
  */
 export type RowResponsive = 'self' | 'screen'
 
+/**
+ * 响应式属性值，支持基于 BreakpointType 提供不同断点下的不同值
+ */
 export type ResponsiveValue<K extends number = number> = Partial<Record<BreakpointType, K>>
 
 /**
@@ -35,6 +38,9 @@ export interface GridBreakpoints {
   xl: number
 }
 
+/**
+ * 栅格容器 Grid 的 Props 类型
+ */
 export interface GridProps {
   /**
    * 列数量，默认 24
@@ -74,6 +80,9 @@ export interface GridProps {
   breakpoints?: Partial<GridBreakpoints>
 }
 
+/**
+ * 栅格项 GridItem 的 Props 类型
+ */
 export interface GridItemProps {
   /**
    * 栅格占据的列数
@@ -92,6 +101,9 @@ export interface GridItemProps {
   suffix?: boolean
 }
 
+/**
+ * 栅格项在计算和注入时的内部数据结构
+ */
 export interface GridItemData {
   span: number
 

@@ -3,6 +3,9 @@ import type { SchemaFormProps } from '@/components/schema-form/types/base.ts'
 import type { DefineSchema, SchemaFormCommonExpose } from '@/components/schema-form/types/common.ts'
 import type { WrapWithMaybeRef } from '@/types/shared.ts'
 
+/**
+ * SchemaForm 的 register 绑定属性类型
+ */
 export type SchemaFormRegisterProps<TModel extends object = any> = Omit<SchemaFormProps<TModel>, 'model' | 'schema'> & {
   'model': TModel
   'schema': DefineSchema<TModel>[]

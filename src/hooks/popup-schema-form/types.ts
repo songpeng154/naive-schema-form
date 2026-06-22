@@ -3,6 +3,9 @@ import type { DefineSchema } from '@/components/schema-form/types/common'
 import type { PopupSchemaFormExpose, PopupSchemaFormProps } from '@/components/schema-form/types/popup'
 import type { WrapWithMaybeRef } from '@/types/shared.ts'
 
+/**
+ * PopupSchemaForm 的 register 绑定属性类型
+ */
 export type PopupSchemaFormRegisterProps<TModel extends object = any> = Omit<PopupSchemaFormProps<TModel>, 'model' | 'schema' | 'visible'> & {
   'model': TModel
   'schema': DefineSchema<TModel>[]

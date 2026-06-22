@@ -6,21 +6,21 @@
 
 ### 为什么选择 Naive Schema Form？
 
-在中后台业务开发中，表单往往占据了巨大的开发成本。复杂的逻辑校验、响应式栅格布局、表单嵌套、动态联动……如果依靠传统的 HTML 模板语法，很容易导致 Vue 文件迅速膨胀至成百上千行，不仅难以阅读，维护更是灾难。
+在中后台业务开发中，表单通常涉及逻辑校验、响应式布局、嵌套和动态联动等需求。使用传统的 HTML 模板语法管理这些逻辑，容易导致 Vue 文件变得臃肿且难以维护。
 
-**Naive Schema Form** 旨在通过 **JSON 配置（Schema）** 的方式接管表单开发。它能让你从繁杂的 DOM 模板中彻底解脱出来，将关注点重新聚焦于核心的业务数据流。
+**Naive Schema Form** 通过 **JSON 配置（Schema）** 的方式定义表单，将表单结构与模板分离，便于集中管理业务逻辑。
 
 ### 核心特性
 
 - **Schema 驱动**：使用纯 JS 对象描述动态表单，保持 Vue 模板清爽可读。
 - **Hooks 架构**：提供 `useSchemaForm` 等组合式 API，将表单状态、操作与 UI 渲染解耦。
-- **内置业务形态**：提供开箱即用的高频业务表单组件：
-  - **SearchSchemaForm**：自带高级折叠/展开逻辑的查询表单。
+- **内置业务形态**：提供常用的业务表单组件：
+  - **SearchSchemaForm**：带折叠/展开功能的查询表单。
   - **GroupSchemaForm**：按卡片区块分割配置的分组表单。
-  - **PopupSchemaForm**：无缝嵌入 Modal 或 Drawer，自带防误触关闭保护的弹窗表单。
-- **完美的 TypeScript 提示**：无论是组件配置还是方法调用，均提供精确的智能推导。
-- **自适应栅格**：内置无缝整合的 Grid 系统，轻松掌控全局及局部响应式布局。
-- **自定义组件扩展**：提供极简的全局注册机制，轻松接入业务组件并保留完整的 TS 类型提示。
+  - **PopupSchemaForm**：结合 Modal 或 Drawer 的弹窗表单，支持关闭提醒。
+- **TypeScript 支持**：提供组件配置和方法调用的类型推导。
+- **自适应栅格**：内置 Grid 系统，支持响应式布局。
+- **自定义组件扩展**：支持全局注册业务组件并保留类型提示。
 
 ---
 
@@ -90,7 +90,7 @@ const onSubmit = async () => {
 ### 🎯 进阶变体表单示例
 
 #### 1. SearchSchemaForm (查询表单)
-常用于表格顶部的条件筛选，自带“查询/重置”按钮，并支持字段超出数量自动折叠。
+常用于条件筛选，提供查询/重置操作，并支持超出指定数量的字段折叠。
 
 ```vue
 <script setup lang="ts">
@@ -115,7 +115,7 @@ const { register } = useSearchSchemaForm(model, {
 ```
 
 #### 2. PopupSchemaForm (弹窗表单)
-将表单完美融合进 Modal 或 Drawer 中，免去你手动维护 `visible` 和按钮 `loading` 的烦恼，且支持极其贴心的 `confirmOnClose` 机制防误触。
+结合 Modal 或 Drawer 使用，内置 `visible` 和 `loading` 状态管理，并支持 `confirmOnClose` 机制。
 
 ```vue
 <script setup lang="ts">
@@ -143,7 +143,7 @@ const { register, openPopup } = usePopupSchemaForm(model, {
 ```
 
 #### 3. GroupSchemaForm (分组表单)
-适用于非常长、需要分成多个区块（Card）展示的复杂表单页面。
+适用于需要分成多个区块展示的长表单页面。
 
 ```vue
 <script setup lang="ts">
@@ -175,26 +175,46 @@ const { register } = useGroupSchemaForm(model, {
 
 ### 🧩 注册自定义组件
 
-在使用自定义业务组件时，建议同时注册**运行时组件**和**增强类型**，以获得完美的代码提示：
+注册自定义业务组件时，建议同时注册**运行时组件**和**增强类型**：
 
 ```ts
 import { registerSchemaComponent } from 'naive-schema-form'
 import BadgeInput from './BadgeInput.vue'
+import CustomSelect from './CustomSelect.vue'
 
 // 1. 增强类型声明
 declare module 'naive-schema-form' {
   interface SchemaCustomComponentPropsMap {
-    badgeInput: {
+    'badge-input': {
       prefix?: string
+    }
+    'custom-select': {
+      multiple?: boolean
     }
   }
 }
 
-// 2. 注册组件
-registerSchemaComponent('badgeInput', {
+// 2. 注册组件 (支持单个或批量注册)
+
+// 单个注册
+registerSchemaComponent('badge-input', {
   component: BadgeInput,
-  valueType: 'input',
+  actionType: 'input',
   mapPlaceholder: true, // 自动映射 placeholder
 })
+
+// 批量注册
+registerSchemaComponent({
+  'badge-input': {
+    component: BadgeInput,
+    actionType: 'input',
+    mapPlaceholder: true,
+  },
+  'custom-select': {
+    component: CustomSelect,
+    actionType: 'select',
+    mapOptions: true,
+  }
+})
 ```
-注册完成后，在你的 Schema 中将 `component` 设为 `'badgeInput'`，`componentProps` 将自动获得提示。
+注册完成后，在你的 Schema 中将 `component` 设为 `'badge-input'`，`componentProps` 将自动获得提示。

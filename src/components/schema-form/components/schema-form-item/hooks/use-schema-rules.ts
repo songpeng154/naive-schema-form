@@ -5,6 +5,15 @@ import { generateRule, handleRulePresets } from '@/components/schema-form/core/r
 import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic.ts'
 import { useLocale } from '@/components/schema-form/hooks/use-locale.ts'
 
+/**
+ * 解析表单字段的验证规则
+ * 处理优先级：用户自定义规则 > 预设规则字符串 > required 隐式生成的必填规则
+ * @param schemaRef 表单项的 schema 定义
+ * @param resolvedLabel 解析后的标签名，用于生成友好的校验文案
+ * @param resolvedComponent 真实的 UI 渲染组件，用于判断默认触发时机
+ * @param callbackParams 动态执行时需要的参数上下文
+ * @param schemaFormProps 顶层容器的属性配置
+ */
 export function useSchemaRules(
   schemaRef: ComputedRef<DefineSchema>,
   resolvedLabel: ComputedRef<any>,

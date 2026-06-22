@@ -30,6 +30,9 @@ export type GroupCallbackParamsFunction<
 >
   = ((params: GroupCallbackParams<TForm>) => R)
 
+/**
+ * 定义分组表单的 Schema 结构
+ */
 export interface DefineGroupSchema<
   TForm extends object = any,
 > {
@@ -84,8 +87,14 @@ export interface DefineGroupSchema<
   gridProps?: MaybeRef<GridProps>
 }
 
+/**
+ * 解包后的分组 Schema 结构，移除 MaybeRef
+ */
 export type UnwrapGroupSchema<TForm extends object = any> = UnwrapRef<DefineGroupSchema<TForm>>
 
+/**
+ * 分组回调函数中的 Schema 结构
+ */
 export interface GroupCallbackSchema<
   TForm extends object = any,
 > {
@@ -101,6 +110,9 @@ export interface GroupCallbackSchema<
   gridProps?: GridProps
 }
 
+/**
+ * 分组表单组件的 Props 类型
+ */
 export interface GroupSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
@@ -128,10 +140,16 @@ export interface GroupSchemaFormProps<TModel extends object = any> extends Schem
   expandedText?: string
 }
 
+/**
+ * 分组表单向外暴露的方法实例
+ */
 export interface GroupSchemaFormExpose extends SchemaFormCommonExpose {
   toggleCollapsed: (index: number, isCollapsed?: boolean) => void
 }
 
+/**
+ * 分组表单支持的插槽定义
+ */
 export interface GroupSchemaFormSlots extends SchemaFormCommonSlots {
   /**
    * 自定义 group 标题

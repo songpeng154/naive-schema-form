@@ -9,7 +9,7 @@ import type {
   SchemaComponentName,
   SchemaComponentPropsMap,
 } from '@/components/schema-form/types/component.ts'
-import type { Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
+import type { MaybeReadonlyRef, Recordable, WrapWithMaybeRef } from '@/types/shared.ts'
 
 export interface SchemaItemData {
   /**
@@ -74,8 +74,14 @@ export type ComponentSlots = {
  */
 export type RulePresets = 'mail' | 'phone' | 'landline' | 'idCard' | 'url'
 
+/**
+ * 表单字段的路径（支持对象深层嵌套路径推导及普通的字符串类型降级）
+ */
 export type FieldPaths<TModel> = Paths<TModel> | (string & {})
 
+/**
+ * 预设验证规则的具体结构与错误信息
+ */
 export type RulePresetsType = Record<RulePresets, {
   /**
    * 必填信息
@@ -93,6 +99,9 @@ export type RulePresetsType = Record<RulePresets, {
   validator: (value: string) => boolean
 }>
 
+/**
+ * 获取安全的组件 Props 类型，过滤掉非 Recordable 类型的属性
+ */
 export type SafeComponentProps<T> = T extends Recordable ? T : never
 
 /**
@@ -133,7 +142,7 @@ export interface CommonComponentPropsMap<
   /**
    * 选项
    */
-  options?: MaybeRef<OptionType[] | undefined>
+  options?: MaybeReadonlyRef<any[] | undefined>
 
   /**
    * 禁用
@@ -258,9 +267,21 @@ export type UnwrapSchema<
 
 /* --------------通用类型-------------- */
 
+/**
+ * 表单标签的位置
+ */
 export type FormLabelPlacement = 'left' | 'top'
+/**
+ * 表单标签的对齐方式
+ */
 export type FormLabelAlign = 'left' | 'right'
+/**
+ * 表单的整体尺寸
+ */
 export type FormSize = 'small' | 'medium' | 'large'
+/**
+ * 必填星号标记的位置
+ */
 export type FormRequireMarkPlacement = 'left' | 'right' | 'right-hanging'
 
 /**
@@ -482,6 +503,9 @@ export interface SchemaFormCommonProps<TModel extends object = any> {
   register?: (instance: SchemaFormCommonExpose) => void
 }
 
+/**
+ * 表单通用的事件抛出定义
+ */
 export interface SchemaFormCommonEmits {
   /**
    * 提交表单

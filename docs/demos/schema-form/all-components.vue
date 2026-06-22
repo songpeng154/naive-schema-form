@@ -40,7 +40,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'inputNumber',
       label: '数字输入',
-      component: 'inputNumber'
+      component: 'input-number'
     },
     {
       field: 'select',
@@ -54,12 +54,12 @@ const { register } = useSchemaForm(model, {
     {
       field: 'datePicker',
       label: '日期选择',
-      component: 'datePicker'
+      component: 'date-picker'
     },
     {
       field: 'timePicker',
       label: '时间选择',
-      component: 'timePicker'
+      component: 'time-picker'
     },
     {
       field: 'switch',
@@ -69,7 +69,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'radioGroup',
       label: '单选组',
-      component: 'radioGroup',
+      component: 'radio-group',
       options: [
         { label: '单选A', value: 'a' },
         { label: '单选B', value: 'b' }
@@ -78,7 +78,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'checkboxGroup',
       label: '多选组',
-      component: 'checkboxGroup',
+      component: 'checkbox-group',
       options: [
         { label: '多选A', value: 'a' },
         { label: '多选B', value: 'b' }
@@ -97,7 +97,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'colorPicker',
       label: '颜色选择',
-      component: 'colorPicker'
+      component: 'color-picker'
     }
   ]
 })

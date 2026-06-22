@@ -8,8 +8,14 @@ import type {
   SchemaFormCommonSlots,
 } from '@/components/schema-form/types/common.ts'
 
+/**
+ * 弹框的类型：抽屉或者模态框
+ */
 export type PopupType = 'drawer' | 'modal'
 
+/**
+ * 弹窗表单组件的 Props 类型
+ */
 export interface PopupSchemaFormProps<TModel extends object = any> extends SchemaFormCommonProps<TModel> {
   /**
    * schema 配置
@@ -87,9 +93,15 @@ export interface PopupSchemaFormProps<TModel extends object = any> extends Schem
   confirmContent?: string
 }
 
+/**
+ * 弹窗表单向外暴露的方法实例
+ */
 export interface PopupSchemaFormExpose extends SchemaFormCommonExpose {
 }
 
+/**
+ * 弹窗表单支持的插槽定义
+ */
 export interface PopupSchemaFormSlots extends SchemaFormCommonSlots {
   /**
    * 弹框头部

@@ -3,6 +3,9 @@ import type { DefineSchema } from '@/components/schema-form/types/common'
 import type { SearchSchemaFormExpose, SearchSchemaFormProps } from '@/components/schema-form/types/search'
 import type { WrapWithMaybeRef } from '@/types/shared.ts'
 
+/**
+ * SearchSchemaForm 的 register 绑定属性类型
+ */
 export type SearchSchemaFormRegisterProps<TModel extends object = any> = Omit<SearchSchemaFormProps<TModel>, 'model' | 'schema'> & {
   'model': TModel
   'schema': DefineSchema<TModel>[]

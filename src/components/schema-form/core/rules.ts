@@ -17,6 +17,13 @@ const presetsValidators: Record<RulePresets, (value: string) => boolean> = {
   url: (value: string) => RegUtils.MATCH_URL.test(value),
 }
 
+/**
+ * 根据组件类型和国际化配置生成对应的 placeholder (如 "请输入 xxx", "请选择 xxx")
+ * @param label 字段的文本标签
+ * @param component 组件名称
+ * @param localeName 语言区域名称
+ * @param type 组件内部的具体类型（如 daterange）
+ */
 export function generatePlaceholder(label: Schema['label'], component: string, localeName: string, type?: string) {
   const adapter = getSchemaComponentAdapter(component)
   const actionType = adapter?.actionType || 'default'
@@ -36,6 +43,12 @@ export function generatePlaceholder(label: Schema['label'], component: string, l
   return undefined
 }
 
+/**
+ * 为表单项生成基础必填校验规则
+ * @param label 字段的文本标签
+ * @param component 组件名称
+ * @param localeName 语言区域名称
+ */
 export function generateRule(label: string, component: string, localeName: string): FormItemRule {
   const adapter = getSchemaComponentAdapter(component)
   const actionType = adapter?.actionType || 'default'
@@ -62,6 +75,11 @@ export function generateRule(label: string, component: string, localeName: strin
   }
 }
 
+/**
+ * 处理内置的预设校验规则（如邮箱、手机号等）
+ * @param rule 预设规则的名称
+ * @param localeName 语言区域名称
+ */
 export function handleRulePresets(rule: RulePresets, localeName: string): FormItemRule {
   return {
     required: true,

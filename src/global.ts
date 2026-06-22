@@ -5,6 +5,9 @@ import { reactiveComputed } from '@vueuse/core'
 import { merge } from 'es-toolkit'
 import { inject, provide } from 'vue'
 
+/**
+ * 全局配置的依赖注入 Key
+ */
 export const NAIVE_SCHEMA_FORM_CONFIG_KEY: InjectionKey<Readonly<NaiveSchemaFormConfig>> = Symbol('naive-schema-form-config')
 
 /**

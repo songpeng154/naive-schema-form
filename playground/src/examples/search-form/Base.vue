@@ -48,7 +48,7 @@ const { register } = useSearchSchemaForm(model, {
     {
       field: 'dateRange',
       label: '创建时间',
-      component: 'datePicker',
+      component: 'date-picker',
       componentProps: { type: 'daterange', clearable: true },
     },
     {

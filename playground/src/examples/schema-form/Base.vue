@@ -48,7 +48,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'gender',
       label: '性别',
-      component: 'radioGroup',
+      component: 'radio-group',
       options: [
         { label: '男', value: 'male' },
         { label: '女', value: 'female' },
@@ -57,7 +57,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'hobbies',
       label: '爱好',
-      component: 'checkboxGroup',
+      component: 'checkbox-group',
       options: [
         { label: '编程', value: 'coding' },
         { label: '阅读', value: 'reading' },
@@ -67,7 +67,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'birthday',
       label: '出生日期',
-      component: 'datePicker',
+      component: 'date-picker',
       componentProps: {
         type: 'date',
       },
@@ -75,7 +75,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'workTime',
       label: '工作时间',
-      component: 'timePicker',
+      component: 'time-picker',
     },
     {
       field: 'isActive',
@@ -85,7 +85,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'age',
       label: '年龄',
-      component: 'inputNumber',
+      component: 'input-number',
     },
     {
       field: 'score',
@@ -100,7 +100,7 @@ const { register } = useSchemaForm(model, {
     {
       field: 'themeColor',
       label: '主题色',
-      component: 'colorPicker',
+      component: 'color-picker',
     },
   ] as any,
 })
