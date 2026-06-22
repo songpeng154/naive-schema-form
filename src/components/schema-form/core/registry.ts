@@ -131,8 +131,20 @@ export function getSchemaComponentAdapter(component?: SchemaComponentName | stri
   return component ? (schemaComponentRegistry as Record<string, SchemaComponentAdapter>)[component] : undefined
 }
 
-export function registerSchemaComponent(name: string, adapter: SchemaComponentAdapter) {
-  schemaComponentRegistry[name] = adapter
+export function registerSchemaComponent(name: string, adapter: SchemaComponentAdapter): void
+export function registerSchemaComponent(components: SchemaComponentRegistry): void
+export function registerSchemaComponent(
+  nameOrComponents: string | SchemaComponentRegistry,
+  adapter?: SchemaComponentAdapter,
+) {
+  if (typeof nameOrComponents === 'string') {
+    if (adapter) {
+      schemaComponentRegistry[nameOrComponents] = adapter
+    }
+  }
+  else {
+    Object.assign(schemaComponentRegistry, nameOrComponents)
+  }
 }
 
 export function extendSchemaComponents(registry: SchemaComponentRegistry) {
