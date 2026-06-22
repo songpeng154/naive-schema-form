@@ -20,7 +20,7 @@ function lazy(loader: () => Promise<Component>) {
     delay: 200,
     timeout: 3000,
   })
-
+}
 
 /**
  * 全局 Schema 组件注册表，存储内置及外部注册的组件适配器
@@ -161,12 +161,4 @@ export function registerSchemaComponent(
   else {
     Object.assign(schemaComponentRegistry, nameOrComponents)
   }
-}
-
-/**
- * 扩展/覆盖内置 Schema 组件配置
- * @param registry 新的组件注册字典
- */
-export function extendSchemaComponents(registry: SchemaComponentRegistry) {
-  Object.assign(schemaComponentRegistry, registry)
 }

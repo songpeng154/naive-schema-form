@@ -32,8 +32,8 @@ function renderComponentSlots() {
   const raw = props.schema
   const componentSlots = raw.componentSlots
   const unreffedOptions = unref(raw.options)
-  const isOptionsTransformCheckbox = raw.component === 'checkboxGroup' && unreffedOptions
-  const isOptionsTransformRadio = raw.component === 'radioGroup' && unreffedOptions
+  const isOptionsTransformCheckbox = raw.component === 'checkbox-group' && unreffedOptions
+  const isOptionsTransformRadio = raw.component === 'radio-group' && unreffedOptions
 
   if (!componentSlots && !isOptionsTransformCheckbox && !isOptionsTransformRadio)
     return undefined
