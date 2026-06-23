@@ -45,8 +45,8 @@ const rawProps = withDefaults(defineProps<PopupSchemaFormProps>(), {
   maskClosable: true,
   resetOnClose: true,
   confirmOnClose: true,
-  confirmTitle: '关闭提示',
-  confirmContent: '您确定要关闭它吗？',
+  confirmTitle: '确认关闭',
+  confirmContent: '当前内容已修改，关闭将丢失未保存的更改，是否继续？',
   drawerContentProps: () => ({
     closable: true,
   }),
@@ -101,7 +101,7 @@ function showConfirmModal() {
   dialog.warning({
     title: props.confirmTitle,
     content: props.confirmContent,
-    positiveText: '确定',
+    positiveText: '确认关闭',
     negativeText: '取消',
     onPositiveClick: () => {
       closeAndReset()
