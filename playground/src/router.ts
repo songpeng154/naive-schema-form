@@ -47,6 +47,12 @@ export const router = createRouter({
       component: () => import('./examples/popup-form/Base.vue'),
       meta: { title: '弹窗表单确认机制', group: 'PopupSchemaForm' },
     },
+    {
+      path: '/popup-form/complex',
+      name: 'PopupForm-Complex',
+      component: () => import('./examples/popup-form/Complex.vue'),
+      meta: { title: '复杂弹窗表单', group: 'PopupSchemaForm' },
+    },
     // You can add more routes here later as we build them out
   ],
 })

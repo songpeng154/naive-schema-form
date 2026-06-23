@@ -8,7 +8,7 @@ import type {
 import { createReusableTemplate } from '@vueuse/core'
 import { cloneDeep, isEqual } from 'es-toolkit'
 import { NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import SchemaFormActions from '@/components/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/components/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/components/schema-form/components/schema-form-wrap/index.vue'
@@ -110,8 +110,9 @@ function showConfirmModal() {
   })
 }
 
-watch(visible, (val) => {
+watch(visible, async (val) => {
   if (val) {
+    await nextTick()
     modelSnapshot.value = cloneDeep(model.value)
   }
 }, { immediate: true })
