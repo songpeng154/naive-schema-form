@@ -40,6 +40,13 @@ export const router = createRouter({
       component: () => import('./examples/search-form/Base.vue'),
       meta: { title: '查询表单基础与折叠', group: 'SearchSchemaForm' },
     },
+    // PopupSchemaForm
+    {
+      path: '/popup-form/base',
+      name: 'PopupForm-Base',
+      component: () => import('./examples/popup-form/Base.vue'),
+      meta: { title: '弹窗表单确认机制', group: 'PopupSchemaForm' },
+    },
     // You can add more routes here later as we build them out
   ],
 })

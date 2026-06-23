@@ -6,7 +6,9 @@ import type {
   PopupSchemaFormSlots,
 } from '@/components/schema-form/types/popup.js'
 import { createReusableTemplate } from '@vueuse/core'
+import { cloneDeep, isEqual } from 'es-toolkit'
 import { NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
+import { ref, watch } from 'vue'
 import SchemaFormActions from '@/components/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/components/schema-form/components/schema-form-content/index.vue'
 import SchemaFormWrap from '@/components/schema-form/components/schema-form-wrap/index.vue'
@@ -63,6 +65,8 @@ const visible = defineModel<boolean>('visible', { required: true })
 const [DefineActionButton, ActionButton] = createReusableTemplate()
 const [DefineForm, Form] = createReusableTemplate()
 
+const modelSnapshot = ref()
+
 const props = useMergeGlobalConfig('popup', rawProps) as unknown as PopupSchemaFormProps
 
 const { formRef, commonExpose, formProps, formContentSlots } = useSchemaFormController(props, model, slots, {
@@ -106,10 +110,16 @@ function showConfirmModal() {
   })
 }
 
+watch(visible, (val) => {
+  if (val) {
+    modelSnapshot.value = cloneDeep(model.value)
+  }
+}, { immediate: true })
+
 function onUpdateShow(isShow: boolean) {
   if (isShow)
     return
-  if (props.confirmOnClose)
+  if (props.confirmOnClose && !isEqual(model.value, modelSnapshot.value))
     return showConfirmModal()
   closeAndReset()
 }

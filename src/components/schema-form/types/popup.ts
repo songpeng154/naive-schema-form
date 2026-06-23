@@ -78,7 +78,7 @@ export interface PopupSchemaFormProps<TModel extends object = any> extends Schem
   resetOnClose?: boolean
 
   /**
-   * 关闭模态框和抽屉时弹框确认是否关闭
+   * 当数据修改后，关闭模态框和抽屉时弹框确认是否关闭
    */
   confirmOnClose?: boolean
 
