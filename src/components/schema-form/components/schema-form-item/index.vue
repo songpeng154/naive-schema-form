@@ -7,6 +7,7 @@ import { useCurrentElement } from '@vueuse/core'
 import { NFormItem, NTooltip } from 'naive-ui'
 import { ref, unref, useSlots } from 'vue'
 import GridItem from '@/components/grid/grid-item.vue'
+import { resolveDynamicProp } from '@/components/schema-form/utils/resolve-dynamic'
 import SchemaComponent from './components/schema-component.vue'
 import { useSchemaItem } from './hooks/use-schema-item'
 
@@ -62,18 +63,27 @@ function FormItem() {
   const fieldVal = unref(props.schema.field)
 
   const defaultSlot = () => {
-    return () => unref(props.schema.formItemSlot)
-      ? slots.default?.()
-      : (
-          <SchemaComponent
-            schema={props.schema}
-            resolvedComponent={resolvedComponent.value}
-            resolvedComponentProps={resolvedComponentProps.value}
-            resolvedError={resolvedError.value}
-            adapter={adapter.value}
-            callbackParams={callbackParams.value}
-          />
-        )
+    // 1. 优先 formItemRender（支持静态 VNode 或回调函数）
+    if (props.schema.formItemRender) {
+      const resolved = resolveDynamicProp(props.schema.formItemRender, callbackParams.value)
+      return () => resolved
+    }
+
+    // 2. 降级 formItemSlot（字符串插槽名，由父级传入）
+    if (unref(props.schema.formItemSlot))
+      return () => slots.default?.(callbackParams.value)
+
+    // 3. 默认渲染内置 SchemaComponent
+    return () => (
+      <SchemaComponent
+        schema={props.schema}
+        resolvedComponent={resolvedComponent.value}
+        resolvedComponentProps={resolvedComponentProps.value}
+        resolvedError={resolvedError.value}
+        adapter={adapter.value}
+        callbackParams={callbackParams.value}
+      />
+    )
   }
 
   const labelSlot = () => {
@@ -111,11 +121,26 @@ function FormItem() {
     />
   )
 }
+
+// 外层渲染入口，优先级：render > slot（字符串插槽，透传 callbackParams 作为 scope）> FormItem
+function RenderItem() {
+  // 1. 优先 render（支持静态 VNode 或回调函数）
+  if (props.schema.render) {
+    return resolveDynamicProp(props.schema.render, callbackParams.value)
+  }
+
+  // 2. 降级 slot（字符串插槽名，将 callbackParams 作为 scope 传给父级）
+  const slotName = unref(props.schema.slot)
+  if (slotName)
+    return slots[slotName]?.(callbackParams.value)
+
+  // 3. 默认渲染 NFormItem 包裹的表单项
+  return <FormItem />
+}
 </script>
 
 <template>
   <GridItem v-if="isVisible" v-bind="gridItemPropsMap">
-    <FormItem v-if="!unref(schema.slot)" />
-    <slot v-else :name="unref(schema.slot)" />
+    <RenderItem />
   </GridItem>
 </template>

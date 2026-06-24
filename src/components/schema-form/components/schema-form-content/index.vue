@@ -13,15 +13,17 @@ const id = useId()
   <Grid v-bind="gridProps">
     <template
       v-for="(config, index) in schema"
-      :key="config.field || config.slot || config.formItemSlot || `${id}-${index}`"
+      :key="config.field || config.slot || config.formItemSlot || config.render || config.formItemRender || `${id}-${index}`"
     >
       <SchemaFormItem
-        v-if="config.component || config.formItemSlot || config.slot"
+        v-if="config.component || config.formItemSlot || config.slot || config.render || config.formItemRender"
         :id="id"
         :index="index"
         :schema="config"
       >
-        <slot v-if="config.formItemSlot" :name="config.formItemSlot" />
+        <template v-if="config.formItemSlot" #default="scope">
+          <slot :name="config.formItemSlot" v-bind="scope || {}" />
+        </template>
         <template v-if="config.slot" #[config.slot]="scope">
           <slot :name="config.slot" v-bind="scope || {}" />
         </template>

@@ -26,6 +26,12 @@ export const router = createRouter({
       component: () => import('./examples/schema-form/Validation.vue'),
       meta: { title: '多维校验组合', group: 'SchemaForm' },
     },
+    {
+      path: '/schema-form/custom-render',
+      name: 'SchemaForm-CustomRender',
+      component: () => import('./examples/schema-form/CustomRender.vue'),
+      meta: { title: '自定义渲染', group: 'SchemaForm' },
+    },
     // GroupSchemaForm
     {
       path: '/group-form/base',

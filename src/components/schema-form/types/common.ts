@@ -178,14 +178,26 @@ export interface SchemaBaseConfig<TForm extends object = any> extends CommonComp
     | ((callbackParams: CallbackParams<TForm>) => SlotsContent | ComponentSlots)
 
   /**
-   * 自定义插槽
+   * 自定义插槽（字符串，引用模板中的具名插槽）
    */
   slot?: MaybeRef<string>
 
   /**
-   * formItem 插槽
+   * formItem 插槽（字符串，引用模板中的具名插槽）
    */
   formItemSlot?: MaybeRef<string>
+
+  /**
+   * 自定义渲染内容，替换整个表单项。
+   * 优先级高于 slot，当 render 存在时 slot 将被忽略。
+   */
+  render?: SlotsContent | CallbackParamsFunction<TForm, SlotsContent>
+
+  /**
+   * 自定义渲染内容，替换 NFormItem 内部的组件区域（保留 label、校验等）。
+   * 优先级高于 formItemSlot，当 formItemRender 存在时 formItemSlot 将被忽略。
+   */
+  formItemRender?: SlotsContent | CallbackParamsFunction<TForm, SlotsContent>
 
   /**
    * grid item 组件属性
