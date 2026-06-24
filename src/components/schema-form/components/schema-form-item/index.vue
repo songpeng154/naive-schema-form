@@ -41,7 +41,7 @@ function renderTooltip(tooltip?: string) {
     <NTooltip>
       { {
         default: () => t,
-        trigger: () => <Icon icon="mdi:help-circle-outline" class="schema-form-item-help" />,
+        trigger: () => <Icon icon="ic:baseline-help" class="schema-form-item-help" />,
       } }
     </NTooltip>
   )
