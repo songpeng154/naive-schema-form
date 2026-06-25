@@ -7,7 +7,7 @@ import type {
 } from '@/components/schema-form/types/popup.js'
 import { createReusableTemplate } from '@vueuse/core'
 import { cloneDeep, isEqual } from 'es-toolkit'
-import { NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
+import { NButton, NCard, NDrawer, NDrawerContent, NModal, useDialog } from 'naive-ui'
 import { ref, watch } from 'vue'
 import SchemaFormActions from '@/components/schema-form/components/schema-form-actions.vue'
 import SchemaFormContent from '@/components/schema-form/components/schema-form-content/index.vue'
