@@ -91,6 +91,21 @@ export interface PopupSchemaFormProps<TModel extends object = any> extends Schem
    * 确认弹框内容
    */
   confirmContent?: string
+
+  /**
+   * 是否显示取消按钮
+   */
+  showCancel?: boolean
+
+  /**
+   * 取消按钮文字
+   */
+  cancelText?: string
+
+  /**
+   * 取消事件回调
+   */
+  onCancel?: () => void
 }
 
 /**

@@ -23,10 +23,12 @@ const rawProps = withDefaults(defineProps<PopupSchemaFormProps>(), {
   showActions: true,
   showLabel: true,
   showFeedback: true,
-  showReset: true,
+  showReset: false,
   showRequireMark: undefined,
   submitText: '提交',
   resetText: '重置',
+  showCancel: true,
+  cancelText: '取消',
   defaultDateFormat: 'yyyy-MM-dd HH:mm:ss',
   defaultTimeFormat: 'HH:mm:ss',
   defaultDateValueFormat: 'yyyy-MM-dd HH:mm:ss',
@@ -97,6 +99,15 @@ function closeAndReset() {
   visible.value = false
 }
 
+function handleCancel() {
+  if (props.onCancel) {
+    props.onCancel()
+  }
+  else {
+    visible.value = false
+  }
+}
+
 function showConfirmModal() {
   dialog.warning({
     title: props.confirmTitle,
@@ -140,6 +151,12 @@ defineExpose<PopupSchemaFormExpose>(exposeSchemaForm<PopupSchemaFormExpose>(comm
     >
       <template #actionsBefore>
         <slot name="actionsBefore" />
+        <NButton
+          v-if="props.showCancel !== false && !$slots.actions"
+          @click="handleCancel"
+        >
+          {{ props.cancelText }}
+        </NButton>
       </template>
       <template v-if="$slots.actions" #actions>
         <slot name="actions" />
