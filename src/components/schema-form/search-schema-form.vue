@@ -22,7 +22,7 @@ const rawProps = withDefaults(defineProps<SearchSchemaFormProps>(), {
   autoLabelWidth: true,
   showActions: true,
   showLabel: true,
-  showFeedback: true,
+  showFeedback: false,
   showReset: true,
   showRequireMark: undefined,
   submitText: '搜索', // 搜索变体默认值为 '搜索'
@@ -73,6 +73,14 @@ const searchSchemas = computed(() => {
   return take(schema.value, props.searchShowNumber ?? 0)
 })
 
+const searchGridProps = computed(() => {
+  const base = props.gridProps || {}
+  if (props.showFeedback === false && base.yGap === undefined) {
+    return { ...base, yGap: 12 }
+  }
+  return base
+})
+
 const text = computed(() => !collapsed.value ? props.expandedText : props.collapsedText)
 
 const collapsedVisible = computed(() => props.enableCollapsed && schema.value.length > (props.searchShowNumber ?? 0))
@@ -96,7 +104,7 @@ defineExpose<SearchSchemaFormExpose>(exposeSchemaForm<SearchSchemaFormExpose>(co
     v-bind="formProps"
     :model="model"
   >
-    <SchemaFormContent :grid-props="props.gridProps || {}" :schema="searchSchemas">
+    <SchemaFormContent :grid-props="searchGridProps" :schema="searchSchemas">
       <template v-for="(_, key) in formContentSlots" #[key]="scope">
         <slot :name="key as SearchSchemaFormSlots" v-bind="scope || {}" />
       </template>
