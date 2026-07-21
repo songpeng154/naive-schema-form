@@ -71,7 +71,9 @@ function RenderSchemaComponent() {
   const fieldVal = unref(item.field)
   const modelBind = fieldVal
     ? {
-        [modelProp]: getModelValue(fieldVal),
+        // Naive UI 组件将 undefined 视为非受控模式，会回退到内部缓存的旧值，
+        // 导致重置为 undefined 后组件不清空。这里归一化为 null，保证组件始终受控。
+        [modelProp]: getModelValue(fieldVal) ?? null,
         [`onUpdate:${modelProp}`]: (v: any) => setModelValue(fieldVal, v),
       }
     : {}
